@@ -16,10 +16,6 @@ class Bit:
         return x + y
 
     @staticmethod
-    def right_shift(value, offset):
-        return value >> offset
-
-    @staticmethod
     def get_bit(value, position):
         return value & (1 << position)
 
