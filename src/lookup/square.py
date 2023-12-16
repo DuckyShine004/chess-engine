@@ -64,9 +64,3 @@ square = {
     "g1": 62,
     "h1": 63,
 }
-
-# a = ["a", "b", "c", "d", "e", "f", "g", "h"]
-
-# for i in range(8):
-#     for j in range(8):
-#         print(f'"{a[j]}{8-i}":{j + 8 * i}, ', end="")
