@@ -12,6 +12,7 @@ from src.constants.board_constants import (
 class TableManager:
     def __init__(self):
         self.pawn_attack_table = [[0] * SQUARES for _ in range(SIDES)]
+        self.knight_attack_table = [0] * SQUARES
 
         self.initialize()
 
@@ -19,12 +20,13 @@ class TableManager:
         self.initialize_leaper_attack_tables()
 
     def initialize_leaper_attack_tables(self):
-        self.initialize_pawn_attack_table()
-
-    def initialize_pawn_attack_table(self):
         for square in range(SQUARES):
             white_pawn_attacks = Attack.get_pawn_attacks(colors["white"], square)
             black_pawn_attacks = Attack.get_pawn_attacks(colors["black"], square)
 
+            knight_attacks = Attack.get_knight_attacks(square)
+
             self.pawn_attack_table[colors["white"]][square] = white_pawn_attacks
             self.pawn_attack_table[colors["black"]][square] = black_pawn_attacks
+
+            self.knight_attack_table[square] = knight_attacks
