@@ -1,6 +1,8 @@
 from src.utilities.bit import Bit
 
 from src.constants.board_constants import (
+    RANKS,
+    FILES,
     NOT_A_FILE,
     NOT_H_FILE,
     NOT_HG_FILE,
@@ -91,5 +93,50 @@ class Attack:
 
         if NOT_A_FILE & Bit.left_shift(bitboard, 1):
             attacks |= Bit.left_shift(bitboard, 1)
+
+        return attacks
+
+    @staticmethod
+    def get_bishop_attacks(square):
+        attacks = 0
+
+        target_rank = square // RANKS
+        target_file = square % FILES
+
+        rank = target_rank + 1
+        file = target_file + 1
+
+        while rank <= 6 and file <= 6:
+            attacks = Bit.set_bit(attacks, rank * 8 + file)
+
+            rank += 1
+            file += 1
+
+        rank = target_rank - 1
+        file = target_file + 1
+
+        while rank >= 1 and file <= 6:
+            attacks = Bit.set_bit(attacks, rank * 8 + file)
+
+            rank -= 1
+            file += 1
+
+        rank = target_rank + 1
+        file = target_file - 1
+
+        while rank <= 6 and file >= 1:
+            attacks = Bit.set_bit(attacks, rank * 8 + file)
+
+            rank += 1
+            file -= 1
+
+        rank = target_rank - 1
+        file = target_file - 1
+
+        while rank >= 1 and file >= 1:
+            attacks = Bit.set_bit(attacks, rank * 8 + file)
+
+            rank -= 1
+            file -= 1
 
         return attacks
