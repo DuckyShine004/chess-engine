@@ -9,12 +9,10 @@ class Console:
         print()
 
         for rank in range(RANKS):
+            print(f"  {8 - rank} ", end="")
+
             for file in range(FILES):
                 square = rank * 8 + file
-
-                if not file:
-                    print(f"  {8 - rank} ", end="")
-
                 print(f" {1 if Bit.get_bit(bitboard, square) else 0}", end="")
 
             print()

@@ -18,3 +18,7 @@ class Bit:
     @staticmethod
     def get_bit(value, position):
         return value & (1 << position)
+
+    @staticmethod
+    def set_bit(value, position):
+        return
