@@ -22,12 +22,14 @@ class Bit:
 
     @staticmethod
     def get_bit(value, position):
-        return value & (1 << position)
+        return value & Bit.left_shift(1, position)
 
     @staticmethod
     def set_bit(value, position):
-        return value | (1 << position)
+        return value | Bit.left_shift(1, position)
 
     @staticmethod
     def pop_bit(value, position):
-        return value ^ (1 << position) if Bit.get_bit(value, position) else value
+        bit = Bit.get_bit(value, position)
+
+        return value ^ Bit.left_shift(1, position) if bit else value

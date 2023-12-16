@@ -7,11 +7,10 @@ from src.utilities.console import Console
 
 table_manager = TableManager()
 
-tmp = table_manager.king_attack_table
+tmp = table_manager.bishop_attack_table
 
 # Console.print_bitboard(pawn_attacks(squares["h4"], colors["black"]))
 for i in range(64):
-    Console.print_bitboard(tmp[i])
-# Console.print_bitboard(Attack.get_knight_attacks(squares["a1"]))
+    Console.print_bitboard(Attack.get_bishop_attacks(i))
 
-# Console.print_bitboard(Attack.get_king_attacks(squares["h8"]))
+# Console.print_bitboard(Attack.get_bishop_attacks(squares["d4"]))

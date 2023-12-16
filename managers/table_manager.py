@@ -13,6 +13,7 @@ class TableManager:
     def __init__(self):
         self.pawn_attack_table = [[0] * SQUARES for _ in range(SIDES)]
         self.king_attack_table = [0] * SQUARES
+        self.bishop_attack_table = [0] * SQUARES
         self.knight_attack_table = [0] * SQUARES
 
         self.initialize()
