@@ -15,11 +15,12 @@ tmp = table_manager.bishop_attack_table
 
 block = 0
 
-block = Bit.set_bit(block, squares["b6"])
-block = Bit.set_bit(block, squares["g7"])
-block = Bit.set_bit(block, squares["e3"])
-block = Bit.set_bit(block, squares["b2"])
+block = Bit.set_bit(block, squares["d7"])
+block = Bit.set_bit(block, squares["d2"])
+block = Bit.set_bit(block, squares["d1"])
+block = Bit.set_bit(block, squares["b4"])
+block = Bit.set_bit(block, squares["g4"])
 
 Console.print_bitboard(block)
 
-Console.print_bitboard(Attack.get_bishop_attacks_on_the_fly(squares["d4"], block))
+Console.print_bitboard(Attack.get_rook_attacks_on_the_fly(squares["d4"], block))
