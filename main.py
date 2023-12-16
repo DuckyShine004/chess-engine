@@ -1,15 +1,9 @@
-from src.lookup.square import square
-
+from managers.table_manager import TableManager
 from src.utilities.bit import Bit
 from src.utilities.console import Console
 
+table_manager = TableManager()
 
-bitboard = 0
-bitboard |= 1 << square["e4"]
-bitboard |= 1 << square["c3"]
-bitboard |= 1 << square["f2"]
+tmp = table_manager.pawn_attack_table
 
-bitboard = Bit.pop_bit(bitboard, square["e4"])
-# bitboard = Bit.pop_bit(bitboard, square["e4"])
-
-Console.print_bitboard(bitboard)
+# Console.print_bitboard(pawn_attacks(squares["h4"], colors["black"]))
