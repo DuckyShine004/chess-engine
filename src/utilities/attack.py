@@ -16,17 +16,17 @@ class Attack:
         bitboard = Bit.set_bit(bitboard, square)
 
         if not side:
-            if NOT_A_FILE & (bitboard >> 7):
-                attacks |= bitboard >> 7
+            if NOT_A_FILE & Bit.right_shift(bitboard, 7):
+                attacks |= Bit.right_shift(bitboard, 7)
 
-            if NOT_H_FILE & (bitboard >> 9):
-                attacks |= bitboard >> 9
+            if NOT_H_FILE & Bit.right_shift(bitboard, 9):
+                attacks |= Bit.right_shift(bitboard, 9)
         else:
-            if NOT_H_FILE & (bitboard << 7):
-                attacks |= bitboard << 7
+            if NOT_H_FILE & Bit.left_shift(bitboard, 7):
+                attacks |= Bit.left_shift(bitboard, 7)
 
-            if NOT_A_FILE & (bitboard << 9):
-                attacks |= bitboard << 9
+            if NOT_A_FILE & Bit.left_shift(bitboard, 9):
+                attacks |= Bit.left_shift(bitboard, 9)
 
         return attacks
 
@@ -36,28 +36,60 @@ class Attack:
 
         bitboard = Bit.set_bit(bitboard, square)
 
-        if NOT_H_FILE & (bitboard >> 17):
-            attacks |= bitboard >> 17
+        if NOT_H_FILE & Bit.right_shift(bitboard, 17):
+            attacks |= Bit.right_shift(bitboard, 17)
 
-        if NOT_A_FILE & (bitboard >> 15):
-            attacks |= bitboard >> 15
+        if NOT_A_FILE & Bit.right_shift(bitboard, 15):
+            attacks |= Bit.right_shift(bitboard, 15)
 
-        if NOT_HG_FILE & (bitboard >> 10):
-            attacks |= bitboard >> 10
+        if NOT_HG_FILE & Bit.right_shift(bitboard, 10):
+            attacks |= Bit.right_shift(bitboard, 10)
 
-        if NOT_AB_FILE & (bitboard >> 6):
-            attacks |= bitboard >> 6
+        if NOT_AB_FILE & Bit.right_shift(bitboard, 6):
+            attacks |= Bit.right_shift(bitboard, 6)
 
-        if NOT_A_FILE & (bitboard << 17):
-            attacks |= bitboard << 17
+        if NOT_A_FILE & Bit.left_shift(bitboard, 17):
+            attacks |= Bit.left_shift(bitboard, 17)
 
-        if NOT_H_FILE & (bitboard << 15):
-            attacks |= bitboard << 15
+        if NOT_H_FILE & Bit.left_shift(bitboard, 15):
+            attacks |= Bit.left_shift(bitboard, 15)
 
-        if NOT_AB_FILE & (bitboard << 10):
-            attacks |= bitboard << 10
+        if NOT_AB_FILE & Bit.left_shift(bitboard, 10):
+            attacks |= Bit.left_shift(bitboard, 10)
 
-        if NOT_HG_FILE & (bitboard << 6):
-            attacks |= bitboard << 6
+        if NOT_HG_FILE & Bit.left_shift(bitboard, 6):
+            attacks |= Bit.left_shift(bitboard, 6)
+
+        return attacks
+
+    @staticmethod
+    def get_king_attacks(square):
+        attacks = bitboard = 0
+
+        bitboard = Bit.set_bit(bitboard, square)
+
+        if Bit.right_shift(bitboard, 8):
+            attacks |= Bit.right_shift(bitboard, 8)
+
+        if NOT_H_FILE & Bit.right_shift(bitboard, 9):
+            attacks |= Bit.right_shift(bitboard, 9)
+
+        if NOT_A_FILE & Bit.right_shift(bitboard, 7):
+            attacks |= Bit.right_shift(bitboard, 7)
+
+        if NOT_H_FILE & Bit.right_shift(bitboard, 1):
+            attacks |= Bit.right_shift(bitboard, 1)
+
+        if Bit.left_shift(bitboard, 8):
+            attacks |= Bit.left_shift(bitboard, 8)
+
+        if NOT_A_FILE & (Bit.left_shift(bitboard, 9)):
+            attacks |= Bit.left_shift(bitboard, 9)
+
+        if NOT_H_FILE & Bit.left_shift(bitboard, 7):
+            attacks |= Bit.left_shift(bitboard, 7)
+
+        if NOT_A_FILE & Bit.left_shift(bitboard, 1):
+            attacks |= Bit.left_shift(bitboard, 1)
 
         return attacks
