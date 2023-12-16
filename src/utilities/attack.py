@@ -140,3 +140,24 @@ class Attack:
             file -= 1
 
         return attacks
+
+    @staticmethod
+    def get_rook_attacks(square):
+        attacks = 0
+
+        target_rank = square // RANKS
+        target_file = square % FILES
+
+        for rank in range(target_rank + 1, 7):
+            attacks = Bit.set_bit(attacks, rank * 8 + target_file)
+
+        for rank in range(target_rank - 1, 0, -1):
+            attacks = Bit.set_bit(attacks, rank * 8 + target_file)
+
+        for file in range(target_file + 1, 7):
+            attacks = Bit.set_bit(attacks, target_rank * 8 + file)
+
+        for file in range(target_file - 1, 0, -1):
+            attacks = Bit.set_bit(attacks, target_rank * 8 + file)
+
+        return attacks
