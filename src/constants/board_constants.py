@@ -1,0 +1,2 @@
+RANKS = 8
+FILES = 8
