@@ -1,6 +1,8 @@
 from managers.table_manager import TableManager
 
 from src.lookup.squares import squares
+from src.lookup.coordinates import coordinates
+
 from src.utilities.attack import Attack
 from src.utilities.bit import Bit
 from src.utilities.console import Console
@@ -14,15 +16,19 @@ tmp = table_manager.bishop_attack_table
 #     Console.print_bitboard(Attack.get_rook_attacks(i))
 
 block = 0
-
 block = Bit.set_bit(block, squares["d7"])
 block = Bit.set_bit(block, squares["d2"])
 block = Bit.set_bit(block, squares["d1"])
 block = Bit.set_bit(block, squares["b4"])
 block = Bit.set_bit(block, squares["g4"])
-
 Console.print_bitboard(block)
 
-print(Bit.count_bits(block))
+pos = Bit.get_least_significant_first_bit(block)
+print(pos, coordinates[pos])
+
+test = 0
+test = Bit.set_bit(test, Bit.get_least_significant_first_bit(block))
+
+Console.print_bitboard(test)
 
 Console.print_bitboard(Attack.get_rook_attacks_on_the_fly(squares["d4"], block))

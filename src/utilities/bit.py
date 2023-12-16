@@ -4,7 +4,7 @@ from src.constants.bit_constants import BIT_64_MASK
 def convert_to_uint64(func):
     def wrapper(*args, **kwargs):
         result = func(*args, **kwargs)
-        return result & 0xFFFFFFFFFFFFFFFF
+        return result & BIT_64_MASK
 
     return wrapper
 
@@ -35,7 +35,7 @@ class Bit:
         return value ^ Bit.left_shift(1, position) if bit else value
 
     @staticmethod
-    def count_bits(bitboard):
+    def get_bit_count(bitboard):
         count = 0
 
         while bitboard:
@@ -43,3 +43,10 @@ class Bit:
             count += 1
 
         return count
+
+    @staticmethod
+    def get_least_significant_first_bit(bitboard):
+        if bitboard:
+            return Bit.get_bit_count((bitboard & -bitboard) - 1)
+        else:
+            return -1
