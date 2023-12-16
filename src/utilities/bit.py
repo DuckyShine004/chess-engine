@@ -12,8 +12,13 @@ def convert_to_uint64(func):
 class Bit:
     @convert_to_uint64
     @staticmethod
-    def add(x, y):
-        return x + y
+    def left_shift(value, offset):
+        return value << offset
+
+    @convert_to_uint64
+    @staticmethod
+    def right_shift(value, offset):
+        return value >> offset
 
     @staticmethod
     def get_bit(value, position):
