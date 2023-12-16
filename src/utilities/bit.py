@@ -50,3 +50,16 @@ class Bit:
             return Bit.get_bit_count((bitboard & -bitboard) - 1)
         else:
             return -1
+
+    @staticmethod
+    def set_occupancy(index, bits_in_mask, attack_mask):
+        occupancy = 0
+
+        for count in range(bits_in_mask):
+            square = Bit.get_least_significant_first_bit(attack_mask)
+            attack_mask = Bit.pop_bit(attack_mask, square)
+
+            if Bit.get_bit(index, count):
+                occupancy = Bit.set_bit(occupancy, square)
+
+        return occupancy
