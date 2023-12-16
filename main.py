@@ -1,15 +1,29 @@
-from src.lookup.square import square
+from src.lookup.squares import squares
+from src.lookup.colors import colors
 
 from src.utilities.bit import Bit
 from src.utilities.console import Console
 
+from src.constants.board_constants import (
+    NOT_A_FILE,
+    NOT_H_FILE,
+    NOT_HG_FILE,
+    NOT_AB_FILE,
+)
 
-bitboard = 0
-bitboard |= 1 << square["e4"]
-bitboard |= 1 << square["c3"]
-bitboard |= 1 << square["f2"]
 
-bitboard = Bit.pop_bit(bitboard, square["e4"])
-# bitboard = Bit.pop_bit(bitboard, square["e4"])
+def pawn_attacks(square, side):
+    attacks = bitboard = 0
 
-Console.print_bitboard(bitboard)
+    bitboard = Bit.set_bit(bitboard, square)
+
+    if not side:
+        attacks = Bit.right_shift(bitboard, 7)
+    else:
+        pass
+
+    return attacks
+
+
+# bitboard = 0
+# Console.print_bitboard(bitboard)
