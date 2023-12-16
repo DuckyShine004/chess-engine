@@ -33,3 +33,13 @@ class Bit:
         bit = Bit.get_bit(value, position)
 
         return value ^ Bit.left_shift(1, position) if bit else value
+
+    @staticmethod
+    def count_bits(bitboard):
+        count = 0
+
+        while bitboard:
+            bitboard &= bitboard - 1
+            count += 1
+
+        return count

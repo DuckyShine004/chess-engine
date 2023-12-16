@@ -23,4 +23,6 @@ block = Bit.set_bit(block, squares["g4"])
 
 Console.print_bitboard(block)
 
+print(Bit.count_bits(block))
+
 Console.print_bitboard(Attack.get_rook_attacks_on_the_fly(squares["d4"], block))
