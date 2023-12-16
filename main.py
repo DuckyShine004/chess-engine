@@ -10,7 +10,16 @@ table_manager = TableManager()
 tmp = table_manager.bishop_attack_table
 
 # Console.print_bitboard(pawn_attacks(squares["h4"], colors["black"]))
-for i in range(64):
-    Console.print_bitboard(Attack.get_rook_attacks(i))
+# for i in range(64):
+#     Console.print_bitboard(Attack.get_rook_attacks(i))
 
-# Console.print_bitboard(Attack.get_bishop_attacks(squares["d4"]))
+block = 0
+
+block = Bit.set_bit(block, squares["b6"])
+block = Bit.set_bit(block, squares["g7"])
+block = Bit.set_bit(block, squares["e3"])
+block = Bit.set_bit(block, squares["b2"])
+
+Console.print_bitboard(block)
+
+Console.print_bitboard(Attack.get_bishop_attacks_on_the_fly(squares["d4"], block))

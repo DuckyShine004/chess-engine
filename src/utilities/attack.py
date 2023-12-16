@@ -161,3 +161,60 @@ class Attack:
             attacks = Bit.set_bit(attacks, target_rank * 8 + file)
 
         return attacks
+
+    @staticmethod
+    def get_bishop_attacks_on_the_fly(square, occupancy_bitboard):
+        attacks = 0
+
+        target_rank = square // RANKS
+        target_file = square % FILES
+
+        rank = target_rank + 1
+        file = target_file + 1
+
+        while rank <= 7 and file <= 7:
+            attacks = Bit.set_bit(attacks, rank * 8 + file)
+
+            if Bit.get_bit(occupancy_bitboard, rank * 8 + file):
+                break
+
+            rank += 1
+            file += 1
+
+        rank = target_rank - 1
+        file = target_file + 1
+
+        while rank >= 0 and file <= 7:
+            attacks = Bit.set_bit(attacks, rank * 8 + file)
+
+            if Bit.get_bit(occupancy_bitboard, rank * 8 + file):
+                break
+
+            rank -= 1
+            file += 1
+
+        rank = target_rank + 1
+        file = target_file - 1
+
+        while rank <= 7 and file >= 0:
+            attacks = Bit.set_bit(attacks, rank * 8 + file)
+
+            if Bit.get_bit(occupancy_bitboard, rank * 8 + file):
+                break
+
+            rank += 1
+            file -= 1
+
+        rank = target_rank - 1
+        file = target_file - 1
+
+        while rank >= 0 and file >= 0:
+            attacks = Bit.set_bit(attacks, rank * 8 + file)
+
+            if Bit.get_bit(occupancy_bitboard, rank * 8 + file):
+                break
+
+            rank -= 1
+            file -= 1
+
+        return attacks
