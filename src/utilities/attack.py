@@ -1,4 +1,8 @@
 from src.utilities.bit import Bit
+from src.utilities.math import Math
+
+from src.lookup.magic_numbers import BISHOP_MAGIC_NUMBERS, ROOK_MAGIC_NUMBERS
+from src.lookup.relevant_bits import BISHOP_RELEVANT_BITS, ROOK_RELEVANT_BITS
 
 from src.constants.board_constants import (
     RANKS,
@@ -251,3 +255,11 @@ class Attack:
                 break
 
         return attacks
+
+    @staticmethod
+    def get_attack_masks(square, occupancy, attack_table, attack_masks):
+        occupancy &= attack_masks[square]
+        occupancy = Math.multiply(occupancy, BISHOP_MAGIC_NUMBERS[square])
+        occupancy = Bit.right_shift(occupancy, 64 - BISHOP_RELEVANT_BITS[square])
+
+        return attack_table[square][occupancy]
