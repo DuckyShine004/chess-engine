@@ -1,3 +1,5 @@
+from src.wrappers.wrapper import Wrapper
+
 from src.utilities.bit import Bit
 
 from src.constants.bit_constants import BIT_16_MASK
@@ -6,6 +8,11 @@ from src.constants.board_constants import STATE
 
 class Math:
     state = STATE
+
+    @Wrapper.uint64
+    @staticmethod
+    def multiply(x, y):
+        return x * y
 
     @staticmethod
     def get_random_uint32():
