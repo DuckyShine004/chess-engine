@@ -1,3 +1,5 @@
+STATE = 1804289383
+
 SIDES = 2
 
 RANKS = 8
