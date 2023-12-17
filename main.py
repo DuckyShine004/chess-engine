@@ -22,7 +22,7 @@ with cProfile.Profile() as profile:
     occupancy = Bit.set_bit(occupancy, squares["e7"])
 
     Console.print_bitboard(
-        Attack.get_attack_masks(
+        Attack.get_rook_attack_masks(
             squares["e5"],
             occupancy,
             table_manager.rook_attack_table,
