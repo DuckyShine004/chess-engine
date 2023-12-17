@@ -1,21 +1,23 @@
-from src.constants.bit_constants import BIT_64_MASK
-
-
-def convert_to_uint64(func):
-    def wrapper(*args, **kwargs):
-        result = func(*args, **kwargs)
-        return result & BIT_64_MASK
-
-    return wrapper
+from src.wrappers.wrapper import Wrapper
 
 
 class Bit:
-    @convert_to_uint64
+    @Wrapper.uint32
+    @staticmethod
+    def left_shift32(value, offset):
+        return value << offset
+
+    @Wrapper.uint32
+    @staticmethod
+    def right_shift32(value, offset):
+        return value >> offset
+
+    @Wrapper.uint64
     @staticmethod
     def left_shift(value, offset):
         return value << offset
 
-    @convert_to_uint64
+    @Wrapper.uint64
     @staticmethod
     def right_shift(value, offset):
         return value >> offset
