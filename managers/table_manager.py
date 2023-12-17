@@ -7,10 +7,12 @@ from src.lookup.squares import squares
 from src.utilities.bit import Bit
 from src.utilities.math import Math
 
+from src.lookup.sliders import sliders
+
 from src.lookup.magic_numbers import BISHOP_MAGIC_NUMBERS, ROOK_MAGIC_NUMBERS
 from src.lookup.relevant_bits import BISHOP_RELEVANT_BITS, ROOK_RELEVANT_BITS
 
-from src.constants.constants import OCCUPANCIES, MAGIC_NUMBERS
+from src.constants.bit_constants import OCCUPANCIES, MAGIC_NUMBERS
 from src.constants.board_constants import SIDES, SQUARES
 
 
@@ -18,8 +20,8 @@ class TableManager:
     def __init__(self):
         self.pawn_attack_table = [[0] * SQUARES for _ in range(SIDES)]
         self.king_attack_table = [0] * SQUARES
-        self.rook_attack_table = [[0] * SQUARES for _ in range(MAGIC_NUMBERS)]
-        self.bishop_attack_table = [[0] * SQUARES for _ in range(OCCUPANCIES)]
+        self.rook_attack_table = [[0] * MAGIC_NUMBERS for _ in range(SQUARES)]
+        self.bishop_attack_table = [[0] * OCCUPANCIES for _ in range(SQUARES)]
         self.knight_attack_table = [0] * SQUARES
 
         self.rook_attack_masks = [0] * SQUARES
@@ -29,7 +31,9 @@ class TableManager:
 
     def initialize(self):
         self.initialize_leaper_attack_tables()
-        # self.initialize_slider_attack_tables(is_bishop)
+
+        self.initialize_slider_attack_tables(sliders["bishop"])
+        self.initialize_slider_attack_tables(sliders["rook"])
 
     def initialize_leaper_attack_tables(self):
         for square in range(SQUARES):
