@@ -17,8 +17,10 @@ tmp = table_manager.bishop_attack_table
 
 attack_mask = Attack.get_rook_attacks(squares["d4"])
 
-for i in range(100):
-    Console.print_bitboard(
-        Bit.set_occupancy(i, Bit.get_bit_count(attack_mask), attack_mask)
-    )
+for rank in range(8):
+    for file in range(8):
+        square = rank * 8 + file
+        print(Bit.get_bit_count(Attack.get_rook_attacks(square)), end=", ")
+
+    print()
 # Console.print_bitboard(occupancy)
