@@ -23,6 +23,4 @@ attack_mask = Attack.get_rook_attacks(squares["d4"])
 Console.print_bitboard(Math.get_random_uint32())
 Console.print_bitboard(Math.get_random_uint32() & 0xFFFF)
 Console.print_bitboard(Math.get_random_uint64())
-Console.print_bitboard(
-    Math.get_random_uint64() & Math.get_random_uint64() & Math.get_random_uint64()
-)
+Console.print_bitboard(Math.get_magic_number())

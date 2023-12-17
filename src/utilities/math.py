@@ -23,3 +23,11 @@ class Math:
         z = Math.get_random_uint32() & BIT_16_MASK
 
         return w | Bit.left_shift(x, 16) | Bit.left_shift(y, 32) | Bit.left_shift(z, 48)
+
+    @staticmethod
+    def get_magic_number():
+        x = Math.get_random_uint64()
+        y = Math.get_random_uint64()
+        z = Math.get_random_uint64()
+
+        return x & y & z
