@@ -16,12 +16,17 @@ with cProfile.Profile() as profile:
     # table_manager = TableManager()
     bitboard_manager = BitboardManager()
     bitboards = bitboard_manager.bitboards
-
     piece = PIECES["P"]
+    bitboards[piece] = Bit.set_bit(bitboards[piece], SQUARES["a2"])
+    bitboards[piece] = Bit.set_bit(bitboards[piece], SQUARES["b2"])
+    bitboards[piece] = Bit.set_bit(bitboards[piece], SQUARES["c2"])
+    bitboards[piece] = Bit.set_bit(bitboards[piece], SQUARES["d2"])
     bitboards[piece] = Bit.set_bit(bitboards[piece], SQUARES["e2"])
+    bitboards[piece] = Bit.set_bit(bitboards[piece], SQUARES["f2"])
+    bitboards[piece] = Bit.set_bit(bitboards[piece], SQUARES["g2"])
+    bitboards[piece] = Bit.set_bit(bitboards[piece], SQUARES["h2"])
     Console.print_bitboard(bitboards[piece])
-    print("piece:", ASCII_PIECES[piece])
-    print("piece:", UNICODE_PIECES[piece])
+    Console.print_board(bitboards, 64, bitboard_manager.castle, 1)
 
 
 stats = pstats.Stats(profile)
