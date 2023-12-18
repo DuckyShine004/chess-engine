@@ -1,5 +1,4 @@
-from src.lookup.colors import colors
-from src.lookup.squares import squares
+from src.lookup.piece_lookup import SQUARES
 
 
 class BitboardManager:
@@ -7,4 +6,5 @@ class BitboardManager:
         self.bitboards = [0] * 12
         self.occupancies = [0] * 3
         self.side_to_move = -1
-        self.enpassant = squares["NULL_SQUARE"]
+        self.enpassant = SQUARES["NULL_SQUARE"]
+        self.castle = 0

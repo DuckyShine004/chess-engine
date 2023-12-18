@@ -1,54 +1,49 @@
-from src.utilities.attack import Attack
-
-from src.lookup.colors import colors
-from src.lookup.squares import squares
-
-
 from src.utilities.bit import Bit
 from src.utilities.math import Math
+from src.utilities.attack import Attack
 
-from src.lookup.sliders import sliders
-
-from src.lookup.magic_numbers import BISHOP_MAGIC_NUMBERS, ROOK_MAGIC_NUMBERS
-from src.lookup.relevant_bits import BISHOP_RELEVANT_BITS, ROOK_RELEVANT_BITS
+from src.lookup.bit_lookup import BISHOP_RELEVANT_BITS, ROOK_RELEVANT_BITS
+from src.lookup.piece_lookup import SIDES, SLIDERS
+from src.lookup.board_lookup import SQUARES
+from src.lookup.number_lookup import BISHOP_MAGIC_NUMBERS, ROOK_MAGIC_NUMBERS
 
 from src.constants.bit_constants import OCCUPANCIES, MAGIC_NUMBERS
-from src.constants.board_constants import SIDES, SQUARES
+from src.constants.board_constants import NUMBER_OF_SIDES, NUMBER_OF_SQUARES
 
 
 class TableManager:
     def __init__(self):
-        self.pawn_attack_table = [[0] * SQUARES for _ in range(SIDES)]
-        self.king_attack_table = [0] * SQUARES
-        self.rook_attack_table = [[0] * MAGIC_NUMBERS for _ in range(SQUARES)]
-        self.bishop_attack_table = [[0] * OCCUPANCIES for _ in range(SQUARES)]
-        self.knight_attack_table = [0] * SQUARES
+        self.pawn_attack_table = [[0] * NUMBER_OF_SQUARES for _ in range(NUMBER_OF_SIDES)]
+        self.king_attack_table = [0] * NUMBER_OF_SQUARES
+        self.rook_attack_table = [[0] * MAGIC_NUMBERS for _ in range(NUMBER_OF_SQUARES)]
+        self.bishop_attack_table = [[0] * OCCUPANCIES for _ in range(NUMBER_OF_SQUARES)]
+        self.knight_attack_table = [0] * NUMBER_OF_SQUARES
 
-        self.rook_attack_masks = [0] * SQUARES
-        self.bishop_attack_masks = [0] * SQUARES
+        self.rook_attack_masks = [0] * NUMBER_OF_SQUARES
+        self.bishop_attack_masks = [0] * NUMBER_OF_SQUARES
 
         self.initialize()
 
     def initialize(self):
         self.initialize_leaper_attack_tables()
 
-        self.initialize_slider_attack_tables(sliders["bishop"])
-        self.initialize_slider_attack_tables(sliders["rook"])
+        self.initialize_slider_attack_tables(SLIDERS["bishop"])
+        self.initialize_slider_attack_tables(SLIDERS["rook"])
 
     def initialize_leaper_attack_tables(self):
-        for square in range(SQUARES):
-            white_pawn_attacks = Attack.get_pawn_attacks(colors["white"], square)
-            black_pawn_attacks = Attack.get_pawn_attacks(colors["black"], square)
+        for square in range(NUMBER_OF_SQUARES):
+            white_pawn_attacks = Attack.get_pawn_attacks(SIDES["white"], square)
+            black_pawn_attacks = Attack.get_pawn_attacks(SIDES["black"], square)
             king_attacks = Attack.get_king_attacks(square)
             knight_attacks = Attack.get_knight_attacks(square)
 
-            self.pawn_attack_table[colors["white"]][square] = white_pawn_attacks
-            self.pawn_attack_table[colors["black"]][square] = black_pawn_attacks
+            self.pawn_attack_table[SIDES["white"]][square] = white_pawn_attacks
+            self.pawn_attack_table[SIDES["black"]][square] = black_pawn_attacks
             self.king_attack_table[square] = king_attacks
             self.knight_attack_table[square] = knight_attacks
 
     def initialize_slider_attack_tables(self, is_bishop):
-        for square in range(SQUARES):
+        for square in range(NUMBER_OF_SQUARES):
             self.bishop_attack_masks[square] = Attack.get_bishop_attacks(square)
             self.rook_attack_masks[square] = Attack.get_rook_attacks(square)
 
