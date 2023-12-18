@@ -1,8 +1,8 @@
 from src.utilities.bit import Bit
 from src.utilities.math import Math
 
-from src.lookup.magic_numbers import BISHOP_MAGIC_NUMBERS, ROOK_MAGIC_NUMBERS
-from src.lookup.relevant_bits import BISHOP_RELEVANT_BITS, ROOK_RELEVANT_BITS
+from src.lookup.bit_lookup import BISHOP_RELEVANT_BITS, ROOK_RELEVANT_BITS
+from src.lookup.number_lookup import BISHOP_MAGIC_NUMBERS, ROOK_MAGIC_NUMBERS
 
 from src.constants.board_constants import (
     RANKS,

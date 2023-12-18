@@ -2,33 +2,27 @@ import cProfile
 import pstats
 
 from managers.table_manager import TableManager
+from managers.bitboard_manager import BitboardManager
+
 from src.utilities.bit import Bit
-from src.utilities.attack import Attack
+
+# from src.utilities.attack import Attack
 from src.utilities.console import Console
-from src.lookup.squares import squares
+from src.lookup.piece_lookup import PIECES, ASCII_PIECES, UNICODE_PIECES
+from src.lookup.board_lookup import SQUARES
 from src.constants.file_constants import PROFILE_NAME
 
 with cProfile.Profile() as profile:
-    table_manager = TableManager()
+    # table_manager = TableManager()
+    bitboard_manager = BitboardManager()
+    bitboards = bitboard_manager.bitboards
 
-    occupancy = 0
+    piece = PIECES["P"]
+    bitboards[piece] = Bit.set_bit(bitboards[piece], SQUARES["e2"])
+    Console.print_bitboard(bitboards[piece])
+    print("piece:", ASCII_PIECES[piece])
+    print("piece:", UNICODE_PIECES[piece])
 
-    occupancy = Bit.set_bit(occupancy, squares["c5"])
-    occupancy = Bit.set_bit(occupancy, squares["f2"])
-    occupancy = Bit.set_bit(occupancy, squares["g7"])
-    occupancy = Bit.set_bit(occupancy, squares["b2"])
-    occupancy = Bit.set_bit(occupancy, squares["g5"])
-    occupancy = Bit.set_bit(occupancy, squares["e2"])
-    occupancy = Bit.set_bit(occupancy, squares["e7"])
-
-    Console.print_bitboard(
-        Attack.get_rook_attack_masks(
-            squares["e5"],
-            occupancy,
-            table_manager.rook_attack_table,
-            table_manager.rook_attack_masks,
-        )
-    )
 
 stats = pstats.Stats(profile)
 stats.sort_stats(pstats.SortKey.TIME)

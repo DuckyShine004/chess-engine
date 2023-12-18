@@ -1,7 +1,4 @@
-from src.constants.bit_constants import (
-    BIT_32_MASK,
-    BIT_64_MASK,
-)
+from src.constants.bit_constants import BIT_32_MASK, BIT_64_MASK
 
 
 class Wrapper:
