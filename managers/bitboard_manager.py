@@ -1,4 +1,4 @@
-from src.lookup.piece_lookup import SQUARES
+from src.lookup.board_lookup import SQUARES
 
 
 class BitboardManager:

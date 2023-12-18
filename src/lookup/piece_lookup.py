@@ -30,3 +30,6 @@ PIECES = {
     "q": 10,
     "k": 11,
 }
+
+ASCII_PIECES = "PNBRQKpnbrqk"
+UNICODE_PIECES = "♙♘♗♖♕♔♟♞♝♜♛♚"
