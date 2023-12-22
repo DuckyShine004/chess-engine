@@ -10,10 +10,10 @@ SLIDERS = {
 }
 
 CASTLE = {
-    "white_king_side": 1,
-    "white_queen_side": 2,
-    "black_king_side": 4,
-    "black_queen_side": 8,
+    "K": 1,
+    "Q": 2,
+    "k": 4,
+    "q": 8,
 }
 
 PIECES = {

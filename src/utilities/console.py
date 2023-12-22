@@ -32,10 +32,10 @@ class Console:
     def print_board(bitboards, enpassant, castle, side):
         enpassant_msg = COORDINATES[enpassant] if enpassant < NUMBER_OF_SQUARES else "no"
 
-        castle_white_king_side = "K" if castle & CASTLE["white_king_side"] else "-"
-        castle_white_queen_side = "Q" if castle & CASTLE["white_queen_side"] else "-"
-        castle_black_king_side = "k" if castle & CASTLE["black_king_side"] else "-"
-        castle_black_queen_side = "q" if castle & CASTLE["black_queen_side"] else "-"
+        castle_white_king_side = "K" if castle & CASTLE["K"] else "-"
+        castle_white_queen_side = "Q" if castle & CASTLE["Q"] else "-"
+        castle_black_king_side = "k" if castle & CASTLE["k"] else "-"
+        castle_black_queen_side = "q" if castle & CASTLE["q"] else "-"
 
         print()
 
@@ -50,12 +50,14 @@ class Console:
                     if Bit.get_bit(bitboards[bitboard_piece], square):
                         piece = bitboard_piece
 
-                print(f" {'.' if piece == -1 else UNICODE_PIECES[piece]}", end="")
+                print(
+                    f" {'.' if piece == -1 else UNICODE_PIECES[piece]}", end="")
 
             print()
 
         print("\n   a b c d e f g h\n")
-        print(f"   Side:     {'white' if not side and side != -1 else 'black'}")
+        print(
+            f"   Side:     {'white' if not side and side != -1 else 'black'}")
         print(f"   Enpassant:   {enpassant_msg}")
         print("   Castling:  ", end="")
         print(castle_white_king_side + castle_white_queen_side, end="")

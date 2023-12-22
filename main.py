@@ -14,31 +14,11 @@ from src.lookup.board_lookup import SQUARES
 from src.constants.file_constants import PROFILE_NAME
 
 with cProfile.Profile() as profile:
-    table_manager = TableManager()
+    # table_manager = TableManager()
     bitboard_manager = BitboardManager()
-    attack_tables = (
-        table_manager.bishop_attack_table,
-        table_manager.rook_attack_table,
-    )
-    attack_masks = (
-        table_manager.bishop_attack_masks,
-        table_manager.rook_attack_masks,
-    )
-    occupancy = 0
-    occupancy = Bit.set_bit(occupancy, SQUARES["b6"])
-    occupancy = Bit.set_bit(occupancy, SQUARES["d6"])
-    occupancy = Bit.set_bit(occupancy, SQUARES["f6"])
-    occupancy = Bit.set_bit(occupancy, SQUARES["b4"])
-    occupancy = Bit.set_bit(occupancy, SQUARES["g4"])
-    occupancy = Bit.set_bit(occupancy, SQUARES["c3"])
-    occupancy = Bit.set_bit(occupancy, SQUARES["d3"])
-    occupancy = Bit.set_bit(occupancy, SQUARES["e3"])
-    Console.print_bitboard(occupancy)
-    Console.print_bitboard(
-        Attack.get_queen_attack_masks(
-            SQUARES["d4"], occupancy, attack_tables, attack_masks
-        )
-    )
+
+    bitboard_manager.parse_fen(TRICKY_BOARD)
+    bitboard_manager.print_board()
 
 
 stats = pstats.Stats(profile)
