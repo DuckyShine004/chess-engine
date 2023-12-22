@@ -19,6 +19,10 @@ with cProfile.Profile() as profile:
     bitboard_manager.parse_fen(TRICKY_BOARD)
     bitboard_manager.print_board()
 
+    Console.print_bitboard(bitboard_manager.occupancies[0])
+    Console.print_bitboard(bitboard_manager.occupancies[1])
+    Console.print_bitboard(bitboard_manager.occupancies[2])
+
 
 stats = pstats.Stats(profile)
 stats.sort_stats(pstats.SortKey.TIME)

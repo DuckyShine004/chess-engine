@@ -81,6 +81,18 @@ class BitboardManager:
         else:
             self.enpassant = SQUARES["NULL_SQUARE"]
 
+        # Initialize white occupancies
+        for bitboard_piece in range(PIECES["P"], PIECES["K"] + 1):
+            self.occupancies[SIDES["white"]] |= self.bitboards[bitboard_piece]
+
+        # Initialize black occupancies
+        for bitboard_piece in range(PIECES["p"], PIECES["k"] + 1):
+            self.occupancies[SIDES["black"]] |= self.bitboards[bitboard_piece]
+
+        # Initialize all occupancies
+        self.occupancies[SIDES["all"]] |= self.occupancies[SIDES["white"]]
+        self.occupancies[SIDES["all"]] |= self.occupancies[SIDES["black"]]
+
     def set_bitboard(self, square, ascii_piece):
         piece = PIECES[ascii_piece]
         self.bitboards[piece] = Bit.set_bit(self.bitboards[piece], square)
