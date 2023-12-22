@@ -15,9 +15,9 @@ class TableManager:
     def __init__(self):
         self.pawn_attack_table = [[0] * NUMBER_OF_SQUARES for _ in range(NUMBER_OF_SIDES)]
         self.king_attack_table = [0] * NUMBER_OF_SQUARES
+        self.knight_attack_table = [0] * NUMBER_OF_SQUARES
         self.rook_attack_table = [[0] * MAGIC_NUMBERS for _ in range(NUMBER_OF_SQUARES)]
         self.bishop_attack_table = [[0] * OCCUPANCIES for _ in range(NUMBER_OF_SQUARES)]
-        self.knight_attack_table = [0] * NUMBER_OF_SQUARES
 
         self.rook_attack_masks = [0] * NUMBER_OF_SQUARES
         self.bishop_attack_masks = [0] * NUMBER_OF_SQUARES
