@@ -17,7 +17,8 @@ from src.constants.board_constants import (
 class Attack:
     @staticmethod
     def get_pawn_attacks(side, square):
-        attacks = bitboard = 0
+        attacks = 0
+        bitboard = 0
 
         bitboard = Bit.set_bit(bitboard, square)
 
@@ -38,7 +39,8 @@ class Attack:
 
     @staticmethod
     def get_knight_attacks(square):
-        attacks = bitboard = 0
+        attacks = 0
+        bitboard = 0
 
         bitboard = Bit.set_bit(bitboard, square)
 
@@ -70,7 +72,8 @@ class Attack:
 
     @staticmethod
     def get_king_attacks(square):
-        attacks = bitboard = 0
+        attacks = 0
+        bitboard = 0
 
         bitboard = Bit.set_bit(bitboard, square)
 
@@ -257,17 +260,32 @@ class Attack:
         return attacks
 
     @staticmethod
-    def get_bishop_attack_masks(square, occupancy, attack_table, attack_masks):
-        occupancy &= attack_masks[square]
+    def get_bishop_attack_masks(square, occupancy, attack_table, attack_mask):
+        occupancy &= attack_mask[square]
         occupancy = Math.multiply(occupancy, BISHOP_MAGIC_NUMBERS[square])
         occupancy = Bit.right_shift(occupancy, 64 - BISHOP_RELEVANT_BITS[square])
 
         return attack_table[square][occupancy]
 
     @staticmethod
-    def get_rook_attack_masks(square, occupancy, attack_table, attack_masks):
-        occupancy &= attack_masks[square]
+    def get_rook_attack_masks(square, occupancy, attack_table, attack_mask):
+        occupancy &= attack_mask[square]
         occupancy = Math.multiply(occupancy, ROOK_MAGIC_NUMBERS[square])
         occupancy = Bit.right_shift(occupancy, 64 - ROOK_RELEVANT_BITS[square])
 
         return attack_table[square][occupancy]
+
+    @staticmethod
+    def get_queen_attack_masks(square, occupancy, attack_tables, attack_masks):
+        bishop_attack_table, rook_attack_table = attack_tables
+        bishop_attack_mask, rook_attack_mask = attack_masks
+
+        bishop_attacks = Attack.get_bishop_attack_masks(
+            square, occupancy, bishop_attack_table, bishop_attack_mask
+        )
+
+        rook_attacks = Attack.get_rook_attack_masks(
+            square, occupancy, rook_attack_table, rook_attack_mask
+        )
+
+        return bishop_attacks | rook_attacks
