@@ -1,7 +1,7 @@
 import cProfile
 import pstats
 
-from src.constants.parser_constants import TRICKY_BOARD
+from src.constants.parser_constants import EMPTY_BOARD, TRICKY_BOARD, DEBUG_BOARD
 from managers.table_manager import TableManager
 from managers.bitboard_manager import BitboardManager
 

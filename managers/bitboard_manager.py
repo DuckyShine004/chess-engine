@@ -20,9 +20,9 @@ class BitboardManager:
 
     def parse_fen(self, fen):
         self.reset()
-        idx = 0
-
+        
         # Parse bit pieces
+        idx = 0
         for rank in range(8):
             file = 0
 
