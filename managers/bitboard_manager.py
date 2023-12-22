@@ -1,10 +1,62 @@
+from src.utilities.bit import Bit
+from src.utilities.console import Console
+
+from src.lookup.piece_lookup import PIECES, SIDES, CASTLE
 from src.lookup.board_lookup import SQUARES
+
+from src.constants.board_constants import NUMBER_OF_BITBOARDS
 
 
 class BitboardManager:
     def __init__(self):
+        self.reset()
+
+    def reset(self):
         self.bitboards = [0] * 12
         self.occupancies = [0] * 3
-        self.side = -1
+        self.side = 0
         self.enpassant = SQUARES["NULL_SQUARE"]
-        self.castle = 15
+        self.castle = 0
+
+    def parse_fen(self, fen):
+        self.reset()
+        idx = 0
+
+        # Parse bit pieces
+        for rank in range(8):
+            file = 0
+
+            while file < 8:
+                square = file + rank * 8
+
+                if fen[idx].isalpha():
+                    self.set_bitboard(square, fen[idx])
+                    idx += 1
+
+                if fen[idx].isdigit():
+                    offset = ord(fen[idx]) - ord("0")
+                    piece = -1
+
+                    for bitboard_piece in range(NUMBER_OF_BITBOARDS):
+                        if Bit.get_bit(self.bitboards[bitboard_piece], square):
+                            piece = bitboard_piece
+
+                    if piece == -1:
+                        file -= 1
+
+                    file += offset
+                    idx += 1
+
+                if fen[idx] == "/":
+                    idx += 1
+
+                file += 1
+
+        print(f"fen: '{fen[idx:]}'")
+
+    def set_bitboard(self, square, ascii_piece):
+        piece = PIECES[ascii_piece]
+        self.bitboards[piece] = Bit.set_bit(self.bitboards[piece], square)
+
+    def print_board(self):
+        Console.print_board(self.bitboards, self.enpassant, self.castle, self.side)
