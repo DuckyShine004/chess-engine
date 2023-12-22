@@ -14,10 +14,7 @@ class FenParser:
         self.manager.reset()
 
         position = self.parse_pieces(fen)
-
-        # Parse the side to move
-        position += 1
-        self.manager.side = fen[position] == "b"
+        position = self.parse_side_to_move(fen, position)
 
         # Parse castling rights
         position += 2
@@ -35,8 +32,6 @@ class FenParser:
         else:
             self.manager.enpassant = SQUARES["null"]
 
-        # fen_position = self.parse_pieces(fen, fen_position)
-        # fen_position = self.parse_side_to_move(fen, fen_position)
         # fen_position = self.parse_castling_rights(fen, fen_position)
         # self.parse_enpassant_square(fen, fen_position)
 
@@ -52,25 +47,18 @@ class FenParser:
 
         return position
 
-    def parse_square(self, fen, fen_position, rank, file):
-        square = file + rank * 8
-        if fen[fen_position].isalpha():
-            self.manager.set_bitboard(square, fen[fen_position])
-            fen_position += 1
-        elif fen[fen_position].isdigit():
-            offset = int(fen[fen_position])
-            fen_position += 1
-            file += offset - 1
-        return square, fen_position
+    def parse_side_to_move(self, fen, position):
+        position += 1
+        self.manager.side = fen[position] == "b"
 
-    def parse_side_to_move(self, fen, fen_position):
-        self.manager.side = fen[fen_position] == "b"
-        return fen_position + 2
+        return position
 
-    def parse_castling_rights(self, fen, fen_position):
-        while fen[fen_position] != " ":
-            self.manager.castle |= CASTLE.get(fen[fen_position], 0)
-            fen_position += 1
+    def parse_castling_rights(self, fen, position):
+        position += 2
+        while fen[position] != " ":
+            self.manager.castle |= CASTLE[fen[position]]
+            position += 1
+
         return fen_position + 1
 
     def parse_enpassant_square(self, fen, fen_position):
