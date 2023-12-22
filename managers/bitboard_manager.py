@@ -71,10 +71,15 @@ class BitboardManager:
 
             idx += 1
 
+        # Parse enpassant square
+        idx += 1
+        if fen[idx] != '-':
+            file = ord(fen[idx]) - ord('a')
+            rank = 8 - (ord(fen[idx + 1]) - ord('0'))
 
-
-        print(f"fen: '{fen[idx:]}'")
-
+            self.enpassant = file + rank * 8
+        else:
+            self.enpassant = SQUARES["NULL_SQUARE"]
 
     def set_bitboard(self, square, ascii_piece):
         piece = PIECES[ascii_piece]
