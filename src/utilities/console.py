@@ -30,13 +30,6 @@ class Console:
 
     @staticmethod
     def print_board(bitboards, enpassant, castle, side):
-        enpassant_msg = COORDINATES[enpassant] if enpassant < NUMBER_OF_SQUARES else "no"
-
-        castle_white_king_side = "K" if castle & CASTLE["white_king_side"] else "-"
-        castle_white_queen_side = "Q" if castle & CASTLE["white_queen_side"] else "-"
-        castle_black_king_side = "k" if castle & CASTLE["black_king_side"] else "-"
-        castle_black_queen_side = "q" if castle & CASTLE["black_queen_side"] else "-"
-
         print()
 
         for rank in range(RANKS):
@@ -53,6 +46,17 @@ class Console:
                 print(f" {'.' if piece == -1 else UNICODE_PIECES[piece]}", end="")
 
             print()
+
+        Console.print_board_messages(enpassant, castle, side)
+
+    @staticmethod
+    def print_board_messages(enpassant, castle, side):
+        enpassant_msg = COORDINATES[enpassant] if enpassant < NUMBER_OF_SQUARES else "no"
+
+        castle_white_king_side = "K" if castle & CASTLE["K"] else "-"
+        castle_white_queen_side = "Q" if castle & CASTLE["Q"] else "-"
+        castle_black_king_side = "k" if castle & CASTLE["k"] else "-"
+        castle_black_queen_side = "q" if castle & CASTLE["q"] else "-"
 
         print("\n   a b c d e f g h\n")
         print(f"   Side:     {'white' if not side and side != -1 else 'black'}")

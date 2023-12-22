@@ -15,66 +15,78 @@ class TableManager:
     def __init__(self):
         self.pawn_attack_table = [[0] * NUMBER_OF_SQUARES for _ in range(NUMBER_OF_SIDES)]
         self.king_attack_table = [0] * NUMBER_OF_SQUARES
+        self.knight_attack_table = [0] * NUMBER_OF_SQUARES
         self.rook_attack_table = [[0] * MAGIC_NUMBERS for _ in range(NUMBER_OF_SQUARES)]
         self.bishop_attack_table = [[0] * OCCUPANCIES for _ in range(NUMBER_OF_SQUARES)]
-        self.knight_attack_table = [0] * NUMBER_OF_SQUARES
 
         self.rook_attack_masks = [0] * NUMBER_OF_SQUARES
         self.bishop_attack_masks = [0] * NUMBER_OF_SQUARES
 
-        self.initialize()
+        self.initialize_tables()
 
-    def initialize(self):
+    def initialize_tables(self):
         self.initialize_leaper_attack_tables()
-
         self.initialize_slider_attack_tables(SLIDERS["bishop"])
         self.initialize_slider_attack_tables(SLIDERS["rook"])
 
     def initialize_leaper_attack_tables(self):
         for square in range(NUMBER_OF_SQUARES):
-            white_pawn_attacks = Attack.get_pawn_attacks(SIDES["white"], square)
-            black_pawn_attacks = Attack.get_pawn_attacks(SIDES["black"], square)
-            king_attacks = Attack.get_king_attacks(square)
-            knight_attacks = Attack.get_knight_attacks(square)
+            self.initialize_pawn_attacks(square)
+            self.king_attack_table[square] = Attack.get_king_attacks(square)
+            self.knight_attack_table[square] = Attack.get_knight_attacks(square)
 
-            self.pawn_attack_table[SIDES["white"]][square] = white_pawn_attacks
-            self.pawn_attack_table[SIDES["black"]][square] = black_pawn_attacks
-            self.king_attack_table[square] = king_attacks
-            self.knight_attack_table[square] = knight_attacks
+    def initialize_pawn_attacks(self, square):
+        white_pawn_attacks = Attack.get_pawn_attacks(SIDES["white"], square)
+        black_pawn_attacks = Attack.get_pawn_attacks(SIDES["black"], square)
+
+        self.pawn_attack_table[SIDES["white"]][square] = white_pawn_attacks
+        self.pawn_attack_table[SIDES["black"]][square] = black_pawn_attacks
 
     def initialize_slider_attack_tables(self, is_bishop):
         for square in range(NUMBER_OF_SQUARES):
             self.bishop_attack_masks[square] = Attack.get_bishop_attacks(square)
             self.rook_attack_masks[square] = Attack.get_rook_attacks(square)
 
-            attack_mask = None
+            self.initialize_slider_attacks(square, is_bishop)
 
-            if is_bishop:
-                attack_mask = self.bishop_attack_masks[square]
-            else:
-                attack_mask = self.rook_attack_masks[square]
+    def initialize_slider_attacks(self, square, is_bishop):
+        attack_mask = self.get_attack_mask(square, is_bishop)
+        relevant_bits = Bit.get_bit_count(attack_mask)
+        indices = Bit.left_shift(1, relevant_bits)
 
-            relevant_bits = Bit.get_bit_count(attack_mask)
-            occupancy_indices = Bit.left_shift(1, relevant_bits)
+        for index in range(indices):
+            occupancy = Bit.set_occupancy(index, relevant_bits, attack_mask)
+            magic_index = self.get_magic_index(square, occupancy, is_bishop)
+            self.update_attack_table(square, magic_index, occupancy, is_bishop)
 
-            for index in range(occupancy_indices):
-                if is_bishop:
-                    occupancy = Bit.set_occupancy(index, relevant_bits, attack_mask)
-                    offset = 64 - BISHOP_RELEVANT_BITS[square]
+    def get_attack_mask(self, square, is_bishop):
+        if is_bishop:
+            return self.bishop_attack_masks[square]
 
-                    magic_mask = Math.multiply(occupancy, BISHOP_MAGIC_NUMBERS[square])
-                    magic_index = Bit.right_shift32(magic_mask, offset)
+        return self.rook_attack_masks[square]
 
-                    m_bishop = Attack.get_bishop_attacks_on_the_fly(square, occupancy)
+    def get_magic_index(self, square, occupancy, is_bishop):
+        if is_bishop:
+            magic_number = BISHOP_MAGIC_NUMBERS[square]
+            offset = 64 - BISHOP_RELEVANT_BITS[square]
+        else:
+            magic_number = ROOK_MAGIC_NUMBERS[square]
+            offset = 64 - ROOK_RELEVANT_BITS[square]
 
-                    self.bishop_attack_table[square][magic_index] = m_bishop
-                else:
-                    occupancy = Bit.set_occupancy(index, relevant_bits, attack_mask)
-                    offset = 64 - ROOK_RELEVANT_BITS[square]
+        magic_mask = Math.multiply(occupancy, magic_number)
 
-                    magic_mask = Math.multiply(occupancy, ROOK_MAGIC_NUMBERS[square])
-                    magic_index = Bit.right_shift32(magic_mask, offset)
+        return Bit.right_shift32(magic_mask, offset)
 
-                    m_rook = Attack.get_rook_attacks_on_the_fly(square, occupancy)
+    def get_attacks_on_the_fly(self, square, occupancy, is_bishop):
+        if is_bishop:
+            return Attack.get_bishop_attacks_on_the_fly(square, occupancy)
 
-                    self.rook_attack_table[square][magic_index] = m_rook
+        return Attack.get_rook_attacks_on_the_fly(square, occupancy)
+
+    def update_attack_table(self, square, magic_index, occupancy, is_bishop):
+        attacks_on_the_fly = self.get_attacks_on_the_fly(square, occupancy, is_bishop)
+
+        if is_bishop:
+            self.bishop_attack_table[square][magic_index] = attacks_on_the_fly
+        else:
+            self.rook_attack_table[square][magic_index] = attacks_on_the_fly
