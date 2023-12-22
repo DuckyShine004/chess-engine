@@ -1,1 +1,3 @@
-print(-123473264 & 0xFFFFFFFF)
+for i in range(10):
+    print(i)
+    i += 2
