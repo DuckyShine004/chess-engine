@@ -22,25 +22,25 @@ class TableManager:
         self.rook_attack_masks = [0] * NUMBER_OF_SQUARES
         self.bishop_attack_masks = [0] * NUMBER_OF_SQUARES
 
-        self.initialize()
+        self.initialize_tables()
 
-    def initialize(self):
+    def initialize_tables(self):
         self.initialize_leaper_attack_tables()
-
         self.initialize_slider_attack_tables(SLIDERS["bishop"])
         self.initialize_slider_attack_tables(SLIDERS["rook"])
 
     def initialize_leaper_attack_tables(self):
         for square in range(NUMBER_OF_SQUARES):
-            white_pawn_attacks = Attack.get_pawn_attacks(SIDES["white"], square)
-            black_pawn_attacks = Attack.get_pawn_attacks(SIDES["black"], square)
-            king_attacks = Attack.get_king_attacks(square)
-            knight_attacks = Attack.get_knight_attacks(square)
+            self.initialize_pawn_attacks(square)
+            self.king_attack_table[square] = Attack.get_king_attacks(square)
+            self.knight_attack_table[square] = Attack.get_knight_attacks(square)
 
-            self.pawn_attack_table[SIDES["white"]][square] = white_pawn_attacks
-            self.pawn_attack_table[SIDES["black"]][square] = black_pawn_attacks
-            self.king_attack_table[square] = king_attacks
-            self.knight_attack_table[square] = knight_attacks
+    def initialize_pawn_attacks(self, square):
+        white_pawn_attacks = Attack.get_pawn_attacks(SIDES["white"], square)
+        black_pawn_attacks = Attack.get_pawn_attacks(SIDES["black"], square)
+
+        self.pawn_attack_table[SIDES["white"]][square] = white_pawn_attacks
+        self.pawn_attack_table[SIDES["black"]][square] = black_pawn_attacks
 
     def initialize_slider_attack_tables(self, is_bishop):
         for square in range(NUMBER_OF_SQUARES):
@@ -78,3 +78,13 @@ class TableManager:
                     m_rook = Attack.get_rook_attacks_on_the_fly(square, occupancy)
 
                     self.rook_attack_table[square][magic_index] = m_rook
+
+    def get_relevant_bits(self, square, is_bishop):
+        attack_mask = 0
+
+        if is_bishop:
+            attack_mask = self.bishop_attack_masks[square]
+        else:
+            attack_mask = self.rook_attack_masks[square]
+
+        return Bit.get_bit_count(attack_mask)
