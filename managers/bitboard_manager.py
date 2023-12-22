@@ -52,6 +52,10 @@ class BitboardManager:
 
                 file += 1
 
+        # Parse the side to move
+        idx += 1
+        self.side = fen[idx] == "b"
+
         print(f"fen: '{fen[idx:]}'")
 
     def set_bitboard(self, square, ascii_piece):
