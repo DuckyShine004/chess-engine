@@ -18,14 +18,6 @@ class BitboardManager:
         self.enpassant = SQUARES["null"]
         self.castle = 0
 
-    def parse_fen(self, fen):
-        parser = FenParser(self)
-        parser.parse(fen)
-
-    def set_bitboard(self, square, ascii_piece):
-        board_index = PIECES[ascii_piece]
-        self.bitboards[board_index] = Bit.set_bit(self.bitboards[board_index], square)
-
     def initialize_occupancies(self):
         for board_index in range(PIECES["P"], PIECES["K"] + 1):
             self.occupancies[SIDES["white"]] |= self.bitboards[board_index]
@@ -35,6 +27,14 @@ class BitboardManager:
 
         self.occupancies[SIDES["all"]] |= self.occupancies[SIDES["white"]]
         self.occupancies[SIDES["all"]] |= self.occupancies[SIDES["black"]]
+
+    def parse_fen(self, fen):
+        parser = FenParser(self)
+        parser.parse(fen)
+
+    def set_bitboard(self, square, piece_index):
+        board_index = PIECES[piece_index]
+        self.bitboards[board_index] = Bit.set_bit(self.bitboards[board_index], square)
 
     def print_board(self):
         Console.print_board(self.bitboards, self.enpassant, self.castle, self.side)
