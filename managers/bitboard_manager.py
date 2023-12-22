@@ -56,7 +56,25 @@ class BitboardManager:
         idx += 1
         self.side = fen[idx] == "b"
 
+        # Parse castling rights
+        idx += 2
+        while fen[idx] != ' ':
+            match (fen[idx]):
+                case 'K':
+                    self.castle |= CASTLE["white_king_side"]
+                case 'Q':
+                    self.castle |= CASTLE["white_queen_side"]
+                case 'k':
+                    self.castle |= CASTLE["black_king_side"]
+                case 'q':
+                    self.castle |= CASTLE["black_queen_side"]
+
+            idx += 1
+
+
+
         print(f"fen: '{fen[idx:]}'")
+
 
     def set_bitboard(self, square, ascii_piece):
         piece = PIECES[ascii_piece]
