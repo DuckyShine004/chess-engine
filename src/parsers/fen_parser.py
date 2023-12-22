@@ -15,25 +15,10 @@ class FenParser:
 
         position = self.parse_pieces(fen)
         position = self.parse_side_to_move(fen, position)
+        position = self.parse_castling_rights(fen, position)
 
-        # Parse castling rights
-        position += 2
-        while fen[position] != " ":
-            self.manager.castle |= CASTLE[fen[position]]
-            position += 1
-
-        # Parse enpassant square
-        position += 1
-        if fen[position] != "-":
-            file = int(fen[position])
-            rank = 8 - int(fen[position + 1])
-
-            self.manager.enpassant = file + rank * 8
-        else:
-            self.manager.enpassant = SQUARES["null"]
-
-        # fen_position = self.parse_castling_rights(fen, fen_position)
-        # self.parse_enpassant_square(fen, fen_position)
+        self.parse_enpassant_square(fen, position)
+        self.manager.initialize_occupancies()
 
     def parse_pieces(self, fen):
         position = 0
@@ -45,26 +30,25 @@ class FenParser:
                 square = file + rank * 8
                 file, position = self.handle_fen_position(fen, square, file, position)
 
-        return position
+        return position + 1
 
     def parse_side_to_move(self, fen, position):
-        position += 1
         self.manager.side = fen[position] == "b"
 
-        return position
+        return position + 2
 
     def parse_castling_rights(self, fen, position):
-        position += 2
         while fen[position] != " ":
-            self.manager.castle |= CASTLE[fen[position]]
+            self.manager.castle |= CASTLE.get(fen[position], 0)
             position += 1
 
-        return fen_position + 1
+        return position + 1
 
-    def parse_enpassant_square(self, fen, fen_position):
-        if fen[fen_position] != "-":
-            file = ord(fen[fen_position]) - ord("a")
-            rank = 8 - (ord(fen[fen_position + 1]) - ord("0"))
+    def parse_enpassant_square(self, fen, position):
+        print(fen, fen[position], position)
+        if fen[position] != "-":
+            file = ord(fen[position]) - ord("a")
+            rank = 8 - int(fen[position + 1])
             self.manager.enpassant = file + rank * 8
         else:
             self.manager.enpassant = SQUARES["null"]
@@ -79,7 +63,7 @@ class FenParser:
     def handle_fen_position(self, fen, square, file, position):
         position = self.handle_fen_alpha(fen, square, position)
         file, position = self.handle_fen_digit(fen, square, file, position)
-        position = self.handle_fen_rank_break(fen, square, position)
+        position = self.handle_fen_rank_break(fen, position)
 
         return file + 1, position
 
@@ -95,16 +79,16 @@ class FenParser:
         if not fen[position].isdigit():
             return file, position
 
-        offset = int(fen[position])
+        file_offset = int(fen[position])
 
         if self.check_empty_square(square):
             file -= 1
 
-        file += offset
+        file += file_offset
 
         return file, position + 1
 
-    def handle_fen_rank_break(self, fen, square, position):
+    def handle_fen_rank_break(self, fen, position):
         if not fen[position] == "/":
             return position
 

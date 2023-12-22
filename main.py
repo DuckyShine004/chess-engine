@@ -1,7 +1,12 @@
 import cProfile
 import pstats
 
-from src.constants.parser_constants import EMPTY_BOARD, TRICKY_BOARD, DEBUG_BOARD
+from src.constants.parser_constants import (
+    EMPTY_BOARD,
+    TRICKY_BOARD,
+    DEBUG_BOARD,
+    KILLER_BOARD,
+)
 from managers.table_manager import TableManager
 from managers.bitboard_manager import BitboardManager
 
@@ -17,7 +22,7 @@ with cProfile.Profile() as profile:
     # table_manager = TableManager()
     bitboard_manager = BitboardManager()
 
-    bitboard_manager.parse_fen(TRICKY_BOARD)
+    bitboard_manager.parse_fen(KILLER_BOARD)
     bitboard_manager.print_board()
 
 

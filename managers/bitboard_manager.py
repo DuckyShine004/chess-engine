@@ -1,8 +1,10 @@
 from src.utilities.bit import Bit
 from src.utilities.console import Console
-from src.lookup.board_lookup import SQUARES
-from src.lookup.piece_lookup import PIECES
+
 from src.parsers.fen_parser import FenParser
+
+from src.lookup.board_lookup import SQUARES
+from src.lookup.piece_lookup import PIECES, SIDES
 
 
 class BitboardManager:
@@ -25,11 +27,14 @@ class BitboardManager:
         self.bitboards[board_index] = Bit.set_bit(self.bitboards[board_index], square)
 
     def initialize_occupancies(self):
-        for board in self.bitboards[:6]:
-            self.occupancies[0] |= board  # White pieces
-        for board in self.bitboards[6:]:
-            self.occupancies[1] |= board  # Black pieces
-        self.occupancies[2] = self.occupancies[0] | self.occupancies[1]  # All pieces
+        for board_index in range(PIECES["P"], PIECES["K"] + 1):
+            self.occupancies[SIDES["white"]] |= self.bitboards[board_index]
+
+        for board_index in range(PIECES["p"], PIECES["k"] + 1):
+            self.occupancies[SIDES["black"]] |= self.bitboards[board_index]
+
+        self.occupancies[SIDES["all"]] |= self.occupancies[SIDES["white"]]
+        self.occupancies[SIDES["all"]] |= self.occupancies[SIDES["black"]]
 
     def print_board(self):
         Console.print_board(self.bitboards, self.enpassant, self.castle, self.side)
