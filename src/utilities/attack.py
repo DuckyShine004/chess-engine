@@ -300,4 +300,11 @@ class Attack:
         ):
             return True
 
+        # Attacked by black pawns
+        if (side == SIDES["black"]) and (
+            app.table_manager.pawn_attack_table[SIDES["white"]][square]
+            & app.bitboard_manager.bitboards[PIECES["p"]]
+        ):
+            return True
+
         return False
