@@ -2,6 +2,7 @@ from src.utilities.bit import Bit
 from src.utilities.math import Math
 
 from src.lookup.bit_lookup import BISHOP_RELEVANT_BITS, ROOK_RELEVANT_BITS
+from src.lookup.piece_lookup import SIDES, PIECES
 from src.lookup.number_lookup import BISHOP_MAGIC_NUMBERS, ROOK_MAGIC_NUMBERS
 
 from src.constants.board_constants import (
@@ -289,3 +290,14 @@ class Attack:
         )
 
         return bishop_attacks | rook_attacks
+
+    @staticmethod
+    def check_square_attacked(app, square, side):
+        # Attacked by white pawns
+        if (side == SIDES["white"]) and (
+            app.table_manager.pawn_attack_table[SIDES["black"]][square]
+            & app.bitboard_manager.bitboards[PIECES["P"]]
+        ):
+            return True
+
+        return False

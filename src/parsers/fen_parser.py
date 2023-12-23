@@ -45,7 +45,6 @@ class FenParser:
         return position + 1
 
     def parse_enpassant_square(self, fen, position):
-        print(fen, fen[position], position)
         if fen[position] != "-":
             file = ord(fen[position]) - ord("a")
             rank = 8 - int(fen[position + 1])

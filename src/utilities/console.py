@@ -1,4 +1,5 @@
 from src.utilities.bit import Bit
+from src.utilities.attack import Attack
 
 from src.lookup.board_lookup import COORDINATES
 from src.lookup.piece_lookup import CASTLE, UNICODE_PIECES
@@ -64,3 +65,20 @@ class Console:
         print("   Castling:  ", end="")
         print(castle_white_king_side + castle_white_queen_side, end="")
         print(castle_black_king_side + castle_black_queen_side, end="")
+
+        print()
+
+    @staticmethod
+    def print_attacked_squares(app, side):
+        print()
+
+        for rank in range(RANKS):
+            print(f"{8 - rank} ", end="")
+
+            for file in range(FILES):
+                square = rank * 8 + file
+                print(f" {int(Attack.check_square_attacked(app, square, side))}", end="")
+
+            print()
+
+        print("\n   a b c d e f g h\n")
