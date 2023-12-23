@@ -315,4 +315,12 @@ class Attack:
         ) & (app.table_manager.knight_attack_table[square]):
             return True
 
+        # Attacked by king
+        if (
+            app.bitboard_manager.bitboards[PIECES["K"]]
+            if side == SIDES["white"]
+            else app.bitboard_manager.bitboards[PIECES["k"]]
+        ) & (app.table_manager.king_attack_table[square]):
+            return True
+
         return False

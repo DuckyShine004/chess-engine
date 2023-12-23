@@ -21,6 +21,6 @@ class App:
         self.table_manager = TableManager(self)
         self.bitboard_manager = BitboardManager(self)
 
-        self.bitboard_manager.parse_fen("8/8/8/3n4/8/8/8/8 w - - ")
+        self.bitboard_manager.parse_fen("8/8/8/3k4/8/8/8/8 w - - ")
         self.bitboard_manager.print_board()
         Console.print_attacked_squares(self, SIDES["black"])
