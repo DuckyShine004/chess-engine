@@ -13,6 +13,7 @@ from src.constants.parser_constants import (
     TRICKY_BOARD,
     DEBUG_BOARD,
     KILLER_BOARD,
+    INITIAL_BOARD,
 )
 
 
@@ -21,6 +22,7 @@ class App:
         self.table_manager = TableManager(self)
         self.bitboard_manager = BitboardManager(self)
 
-        self.bitboard_manager.parse_fen("8/8/8/3k4/8/8/8/8 w - - ")
+        self.bitboard_manager.parse_fen("8/8/8/3R4/8/8/8/8 w - - ")
         self.bitboard_manager.print_board()
-        Console.print_attacked_squares(self, SIDES["black"])
+        Console.print_bitboard(self.bitboard_manager.occupancies[2])
+        Console.print_attacked_squares(self, SIDES["white"])

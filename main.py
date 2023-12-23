@@ -2,6 +2,7 @@ import cProfile
 import pstats
 
 from src.app.app import App
+
 from src.constants.file_constants import PROFILE_NAME
 
 

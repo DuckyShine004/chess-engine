@@ -261,16 +261,16 @@ class Attack:
         return attacks
 
     @staticmethod
-    def get_bishop_attack_masks(square, occupancy, attack_table, attack_mask):
-        occupancy &= attack_mask[square]
+    def get_bishop_attack_masks(square, occupancy, attack_table, attack_masks):
+        occupancy &= attack_masks[square]
         occupancy = Math.multiply(occupancy, BISHOP_MAGIC_NUMBERS[square])
         occupancy = Bit.right_shift(occupancy, 64 - BISHOP_RELEVANT_BITS[square])
 
         return attack_table[square][occupancy]
 
     @staticmethod
-    def get_rook_attack_masks(square, occupancy, attack_table, attack_mask):
-        occupancy &= attack_mask[square]
+    def get_rook_attack_masks(square, occupancy, attack_table, attack_masks):
+        occupancy &= attack_masks[square]
         occupancy = Math.multiply(occupancy, ROOK_MAGIC_NUMBERS[square])
         occupancy = Bit.right_shift(occupancy, 64 - ROOK_RELEVANT_BITS[square])
 
@@ -293,6 +293,7 @@ class Attack:
 
     @staticmethod
     def check_square_attacked(app, square, side):
+        # Leaper pieces
         # Attacked by white pawns
         if (side == SIDES["white"]) and (
             app.table_manager.pawn_attack_table[SIDES["black"]][square]
@@ -321,6 +322,31 @@ class Attack:
             if side == SIDES["white"]
             else app.bitboard_manager.bitboards[PIECES["k"]]
         ) & (app.table_manager.king_attack_table[square]):
+            return True
+
+        # Slider pieces
+        # Attacked by bishop
+        occupancy = app.bitboard_manager.occupancies[SIDES["all"]]
+        attack_table = app.table_manager.bishop_attack_table
+        attack_masks = app.table_manager.bishop_attack_masks
+
+        if (
+            app.bitboard_manager.bitboards[PIECES["B"]]
+            if side == SIDES["white"]
+            else app.bitboard_manager.bitboards[PIECES["b"]]
+        ) & Attack.get_bishop_attack_masks(square, occupancy, attack_table, attack_masks):
+            return True
+
+        # Attacked by the rook
+        occupancy = app.bitboard_manager.occupancies[SIDES["all"]]
+        attack_table = app.table_manager.rook_attack_table
+        attack_masks = app.table_manager.rook_attack_masks
+
+        if (
+            app.bitboard_manager.bitboards[PIECES["R"]]
+            if side == SIDES["white"]
+            else app.bitboard_manager.bitboards[PIECES["r"]]
+        ) & Attack.get_rook_attack_masks(square, occupancy, attack_table, attack_masks):
             return True
 
         return False
