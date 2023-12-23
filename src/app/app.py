@@ -1,8 +1,6 @@
 from managers.table_manager import TableManager
 from managers.bitboard_manager import BitboardManager
 
-from src.utilities.attacked import Attacked
-
 from src.utilities.bit import Bit
 from src.utilities.attack import Attack
 from src.utilities.console import Console

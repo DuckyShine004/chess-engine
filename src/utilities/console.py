@@ -1,5 +1,5 @@
+from src.routines.attacked import Attacked
 from src.utilities.bit import Bit
-from src.utilities.attacked import Attacked
 
 from src.lookup.board_lookup import COORDINATES
 from src.lookup.piece_lookup import CASTLE, UNICODE_PIECES
