@@ -3,7 +3,7 @@ from src.lookup.piece_lookup import SIDES, PIECES
 
 class Attacked:
     @staticmethod
-    def check_square_attacked(app, square, side):
+    def check_squares_attacked(app, square, side):
         if Attacked.check_leaper_squares_attacked(app, square, side):
             return True
 
@@ -14,25 +14,50 @@ class Attacked:
 
     @staticmethod
     def check_leaper_squares_attacked(app, square, side):
-        if Attacked.check_square_attacked_by_pawns(app, square, side):
+        if Attacked.check_squares_attacked_by_leaper_pieces(app, square, side, "P"):
+            return True
+
+        if Attacked.check_squares_attacked_by_leaper_pieces(app, square, side, "N"):
+            return True
+
+        if Attacked.check_squares_attacked_by_leaper_pieces(app, square, side, "K"):
             return True
 
         return False
 
     @staticmethod
     def check_slider_squares_attacked(app, square, side):
+        if Attacked.check_squares_attacked_by_bishops(app, square, side):
+            return True
+
+        if Attacked.check_squares_attacked_by_rooks(app, square, side):
+            return True
+
+        if Attacked.check_squares_attacked_by_queens(app, square, side):
+            return True
+
+        return False
+
+    @staticmethod
+    def check_squares_attacked_by_leaper_pieces(app, square, side, piece):
+        attack_mask = Attacked.get_attack_mask(app, square, side)
+        bitboard = Attacked.get_bitboard(app, side, piece)
+
+        return attack_mask & bitboard
+
+    @staticmethod
+    def check_squares_attacked_by_bishops(app, square, side):
         ...
 
     @staticmethod
-    def check_square_attacked_by_pawns(app, square, side):
-        attack_mask = 0
-        bitboard = 0
+    def get_attack_mask(app, square, side):
+        return app.table_manager.pawn_attack_table[side][square]
 
+    @staticmethod
+    def get_bitboard(app, side, piece):
         if side == SIDES["white"]:
-            attack_mask = app.table_manager.pawn_attack_table[SIDES["white"]][square]
-            bitboard = app.bitboard_manager.bitboards[PIECES["P"]]
-        else:
-            attack_mask = app.table_manager.pawn_attack_table[SIDES["black"]][square]
-            bitboard = app.bitboard_manager.bitboards[PIECES["p"]]
+            return app.bitboard_manager.bitboards[PIECES[piece]]
 
-        return attack_mask & bitboard
+        piece = piece.lower()
+
+        return app.bitboard_manager.bitboards[PIECES[piece]]
