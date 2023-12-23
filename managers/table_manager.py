@@ -12,7 +12,9 @@ from src.constants.board_constants import NUMBER_OF_SIDES, NUMBER_OF_SQUARES
 
 
 class TableManager:
-    def __init__(self):
+    def __init__(self, app):
+        self.app = app
+
         self.pawn_attack_table = [[0] * NUMBER_OF_SQUARES for _ in range(NUMBER_OF_SIDES)]
         self.king_attack_table = [0] * NUMBER_OF_SQUARES
         self.knight_attack_table = [0] * NUMBER_OF_SQUARES
@@ -65,6 +67,12 @@ class TableManager:
 
         return self.rook_attack_masks[square]
 
+    def get_attacks_on_the_fly(self, square, occupancy, is_bishop):
+        if is_bishop:
+            return Attack.get_bishop_attacks_on_the_fly(square, occupancy)
+
+        return Attack.get_rook_attacks_on_the_fly(square, occupancy)
+
     def get_magic_index(self, square, occupancy, is_bishop):
         if is_bishop:
             magic_number = BISHOP_MAGIC_NUMBERS[square]
@@ -76,12 +84,6 @@ class TableManager:
         magic_mask = Math.multiply(occupancy, magic_number)
 
         return Bit.right_shift32(magic_mask, offset)
-
-    def get_attacks_on_the_fly(self, square, occupancy, is_bishop):
-        if is_bishop:
-            return Attack.get_bishop_attacks_on_the_fly(square, occupancy)
-
-        return Attack.get_rook_attacks_on_the_fly(square, occupancy)
 
     def update_attack_table(self, square, magic_index, occupancy, is_bishop):
         attacks_on_the_fly = self.get_attacks_on_the_fly(square, occupancy, is_bishop)

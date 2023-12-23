@@ -6,14 +6,18 @@ from src.parsers.fen_parser import FenParser
 from src.lookup.board_lookup import SQUARES
 from src.lookup.piece_lookup import PIECES, SIDES
 
+from src.constants.board_constants import ALL_SIDES, NUMBER_OF_BITBOARDS
+
 
 class BitboardManager:
-    def __init__(self):
+    def __init__(self, app):
+        self.app = app
+
         self.reset()
 
     def reset(self):
-        self.bitboards = [0] * 12
-        self.occupancies = [0] * 3
+        self.bitboards = [0] * NUMBER_OF_BITBOARDS
+        self.occupancies = [0] * ALL_SIDES
         self.side = 0
         self.enpassant = SQUARES["null"]
         self.castle = 0
