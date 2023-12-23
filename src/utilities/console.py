@@ -1,5 +1,5 @@
 from src.utilities.bit import Bit
-from src.utilities.attack import Attack
+from src.utilities.attacked import Attacked
 
 from src.lookup.board_lookup import COORDINATES
 from src.lookup.piece_lookup import CASTLE, UNICODE_PIECES
@@ -77,7 +77,7 @@ class Console:
 
             for file in range(FILES):
                 square = rank * 8 + file
-                print(f" {int(Attack.check_square_attacked(app, square, side))}", end="")
+                print(f" {int(Attacked.check_squares_attacked(app, square, side))}", end="")
 
             print()
 

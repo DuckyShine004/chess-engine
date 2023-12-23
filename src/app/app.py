@@ -1,6 +1,8 @@
 from managers.table_manager import TableManager
 from managers.bitboard_manager import BitboardManager
 
+from src.utilities.attacked import Attacked
+
 from src.utilities.bit import Bit
 from src.utilities.attack import Attack
 from src.utilities.console import Console
@@ -22,7 +24,7 @@ class App:
         self.table_manager = TableManager(self)
         self.bitboard_manager = BitboardManager(self)
 
-        self.bitboard_manager.parse_fen(TRICKY_BOARD)
+        self.bitboard_manager.parse_fen(INITIAL_BOARD)
         self.bitboard_manager.print_board()
         Console.print_bitboard(self.bitboard_manager.occupancies[2])
         Console.print_attacked_squares(self, SIDES["white"])

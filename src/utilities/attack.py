@@ -292,7 +292,7 @@ class Attack:
         return bishop_attacks | rook_attacks
 
     @staticmethod
-    def check_square_attacked(app, square, side):
+    def check_squares_attacked(app, square, side):
         # Leaper pieces
         # Attacked by white pawns
         if (side == SIDES["white"]) and (
