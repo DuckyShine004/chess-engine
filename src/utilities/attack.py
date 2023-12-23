@@ -349,4 +349,22 @@ class Attack:
         ) & Attack.get_rook_attack_masks(square, occupancy, attack_table, attack_masks):
             return True
 
+        # Attacked by the queen
+        occupancy = app.bitboard_manager.occupancies[SIDES["all"]]
+        attack_tables = (
+            app.table_manager.bishop_attack_table,
+            app.table_manager.rook_attack_table,
+        )
+        attack_masks = (
+            app.table_manager.bishop_attack_masks,
+            app.table_manager.rook_attack_masks,
+        )
+
+        if (
+            app.bitboard_manager.bitboards[PIECES["Q"]]
+            if side == SIDES["white"]
+            else app.bitboard_manager.bitboards[PIECES["q"]]
+        ) & Attack.get_queen_attack_masks(square, occupancy, attack_tables, attack_masks):
+            return True
+
         return False
