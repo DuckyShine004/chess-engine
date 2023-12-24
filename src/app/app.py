@@ -1,6 +1,7 @@
 from managers.table_manager import TableManager
 from managers.bitboard_manager import BitboardManager
 
+from src.routines.move import Move
 from src.utilities.bit import Bit
 from src.utilities.attack import Attack
 from src.utilities.console import Console
@@ -22,7 +23,8 @@ class App:
         self.table_manager = TableManager(self)
         self.bitboard_manager = BitboardManager(self)
 
-        self.bitboard_manager.parse_fen(INITIAL_BOARD)
+        self.bitboard_manager.parse_fen(
+            "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R b KQkq - 0 1 "
+        )
         self.bitboard_manager.print_board()
-        Console.print_bitboard(self.bitboard_manager.occupancies[2])
-        Console.print_attacked_squares(self, SIDES["white"])
+        Move.generate_moves(self)
