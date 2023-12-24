@@ -20,3 +20,7 @@ class Deserializer:
     @staticmethod
     def get_decoded_piece(move):
         return Bit.right_shift((move & PIECE_OFFSET), 12)
+
+    @staticmethod
+    def get_decoded_promoted_piece(move):
+        return Bit.right_shift((move & PROMOTED_PIECE_OFFSET), 16)
