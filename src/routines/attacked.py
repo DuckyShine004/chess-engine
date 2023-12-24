@@ -1,6 +1,6 @@
 from src.utilities.attack import Attack
 
-from src.lookup.piece_lookup import SIDES, PIECES
+from src.constants.piece_constants import SIDES, PIECES
 
 
 class Attacked:

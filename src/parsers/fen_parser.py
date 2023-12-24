@@ -1,9 +1,7 @@
 from src.utilities.bit import Bit
 
-from src.lookup.piece_lookup import CASTLE
-from src.lookup.board_lookup import SQUARES
-
-from src.constants.board_constants import NUMBER_OF_BITBOARDS
+from src.constants.piece_constants import CASTLE
+from src.constants.board_constants import NUMBER_OF_BITBOARDS, SQUARES
 
 
 class FenParser:

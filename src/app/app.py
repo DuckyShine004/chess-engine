@@ -1,14 +1,18 @@
 from managers.table_manager import TableManager
 from managers.bitboard_manager import BitboardManager
 
+from src.data.parameters.move_parameters import MoveParameters
 from src.routines.move import Move
+
+from src.routines.deserializer import Deserializer
+from src.routines.serializer import Serializer
+
 from src.utilities.bit import Bit
 from src.utilities.attack import Attack
 from src.utilities.console import Console
 
-from src.lookup.piece_lookup import PIECES, SIDES
-from src.lookup.board_lookup import SQUARES
-
+from src.constants.piece_constants import PIECES, SIDES, UNICODE_PIECES
+from src.constants.board_constants import SQUARES, COORDINATES
 from src.constants.parser_constants import (
     EMPTY_BOARD,
     TRICKY_BOARD,
@@ -23,8 +27,23 @@ class App:
         self.table_manager = TableManager(self)
         self.bitboard_manager = BitboardManager(self)
 
-        self.bitboard_manager.parse_fen(
-            "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R b KQkq - 0 1 "
-        )
-        self.bitboard_manager.print_board()
-        Move.generate_moves(self)
+        params = MoveParameters(SQUARES["d7"], SQUARES["e8"], PIECES["P"], PIECES["R"], 0, 0, 0, 0)
+        move = Serializer.get_encoded_move(params)
+
+        source_square = Deserializer.get_decoded_source_square(move)
+        target_square = Deserializer.get_decoded_target_square(move)
+        piece = Deserializer.get_decoded_piece(move)
+        promoted_piece = Deserializer.get_decoded_promoted_piece(move)
+        capture_flag = Deserializer.get_decoded_capture_flag(move)
+        double_pawn_push_flag = Deserializer.get_decoded_double_pawn_push_flag(move)
+        enpassant_flag = Deserializer.get_decoded_enpassant_flag(move)
+        castling_flag = Deserializer.get_decoded_castling_flag(move)
+
+        print(f"source square: {COORDINATES[source_square]}")
+        print(f"target square: {COORDINATES[target_square]}")
+        print(f"piece: {UNICODE_PIECES[piece]}")
+        print(f"promoted piece: {UNICODE_PIECES[promoted_piece]}")
+        print(f"capture flag: {capture_flag}")
+        print(f"double pawn push flag: {double_pawn_push_flag}")
+        print(f"enpassant flag: {enpassant_flag}")
+        print(f"enpassant flag: {castling_flag}")

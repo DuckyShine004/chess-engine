@@ -3,10 +3,8 @@ from src.routines.attacked import Attacked
 from src.utilities.bit import Bit
 from src.utilities.attack import Attack
 
-from src.lookup.board_lookup import SQUARES, COORDINATES
-from src.lookup.piece_lookup import SIDES, PIECES, CASTLE
-
-from src.constants.board_constants import NUMBER_OF_BITBOARDS
+from src.constants.piece_constants import SIDES, PIECES, CASTLE
+from src.constants.board_constants import NUMBER_OF_BITBOARDS, SQUARES, COORDINATES
 
 
 class Move:
