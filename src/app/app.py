@@ -6,9 +6,8 @@ from src.utilities.bit import Bit
 from src.utilities.attack import Attack
 from src.utilities.console import Console
 
-from src.lookup.piece_lookup import PIECES, SIDES
-from src.lookup.board_lookup import SQUARES
-
+from src.constants.piece_constants import PIECES, SIDES
+from src.constants.board_constants import SQUARES, COORDINATES
 from src.constants.parser_constants import (
     EMPTY_BOARD,
     TRICKY_BOARD,
@@ -27,3 +26,13 @@ class App:
             "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R b KQkq - 0 1 "
         )
         self.bitboard_manager.print_board()
+
+        move = 0
+
+        move = (move | 63) << 6
+
+        Console.print_bitboard(move)
+
+        target_square = (move & 0xFC0) >> 6
+
+        print(f"target_square: {target_square}  {COORDINATES[target_square]}")

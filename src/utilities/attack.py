@@ -1,9 +1,12 @@
 from src.utilities.bit import Bit
 from src.utilities.math import Math
 
-from src.lookup.bit_lookup import BISHOP_RELEVANT_BITS, ROOK_RELEVANT_BITS
-from src.lookup.piece_lookup import SIDES, PIECES
-from src.lookup.number_lookup import BISHOP_MAGIC_NUMBERS, ROOK_MAGIC_NUMBERS
+from src.constants.bit_constants import (
+    BISHOP_RELEVANT_BITS,
+    ROOK_RELEVANT_BITS,
+    BISHOP_MAGIC_NUMBERS,
+    ROOK_MAGIC_NUMBERS,
+)
 
 from src.constants.board_constants import (
     RANKS,

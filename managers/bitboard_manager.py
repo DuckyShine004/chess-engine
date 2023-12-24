@@ -3,10 +3,8 @@ from src.utilities.console import Console
 
 from src.parsers.fen_parser import FenParser
 
-from src.lookup.board_lookup import SQUARES
-from src.lookup.piece_lookup import PIECES, SIDES
-
-from src.constants.board_constants import ALL_SIDES, NUMBER_OF_BITBOARDS
+from src.constants.piece_constants import PIECES, SIDES
+from src.constants.board_constants import ALL_SIDES, NUMBER_OF_BITBOARDS, SQUARES
 
 
 class BitboardManager:

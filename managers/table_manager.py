@@ -2,13 +2,17 @@ from src.utilities.bit import Bit
 from src.utilities.math import Math
 from src.utilities.attack import Attack
 
-from src.lookup.bit_lookup import BISHOP_RELEVANT_BITS, ROOK_RELEVANT_BITS
-from src.lookup.piece_lookup import SIDES, SLIDERS
-from src.lookup.board_lookup import SQUARES
-from src.lookup.number_lookup import BISHOP_MAGIC_NUMBERS, ROOK_MAGIC_NUMBERS
-
-from src.constants.bit_constants import OCCUPANCIES, MAGIC_NUMBERS
+from src.constants.piece_constants import SIDES, SLIDERS
 from src.constants.board_constants import NUMBER_OF_SIDES, NUMBER_OF_SQUARES
+
+from src.constants.bit_constants import (
+    OCCUPANCIES,
+    MAGIC_NUMBERS,
+    BISHOP_RELEVANT_BITS,
+    ROOK_RELEVANT_BITS,
+    BISHOP_MAGIC_NUMBERS,
+    ROOK_MAGIC_NUMBERS,
+)
 
 
 class TableManager:

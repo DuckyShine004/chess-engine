@@ -1,14 +1,14 @@
 from src.routines.attacked import Attacked
 from src.utilities.bit import Bit
 
-from src.lookup.board_lookup import COORDINATES
-from src.lookup.piece_lookup import CASTLE, UNICODE_PIECES
+from src.constants.piece_constants import CASTLE, UNICODE_PIECES
 
 from src.constants.board_constants import (
     RANKS,
     FILES,
     NUMBER_OF_SQUARES,
     NUMBER_OF_BITBOARDS,
+    COORDINATES,
 )
 
 
