@@ -14,14 +14,14 @@ NOT_AB_FILE = 18229723555195321596
 NOT_HG_FILE = 4557430888798830399
 
 MOVE_OFFSETS = {
-    "source": 0,
-    "target": 6,
+    "source_square": 0,
+    "target_square": 6,
     "piece": 12,
-    "promoted": 16,
-    "capture": 20,
-    "double": 21,
-    "enpassant": 22,
-    "castling": 23,
+    "promoted_piece": 16,
+    "capture_flag": 20,
+    "double_pawn_push_flag": 21,
+    "enpassant_flag": 22,
+    "castling_flag": 23,
 }
 
 COORDINATES = {

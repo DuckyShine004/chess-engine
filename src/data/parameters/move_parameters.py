@@ -9,5 +9,5 @@ class MoveParameters:
     promoted_piece: int
     capture_flag: int
     double_pawn_push_flag: int
-    enpassant: int
-    castling: int
+    enpassant_flag: int
+    castling_flag: int

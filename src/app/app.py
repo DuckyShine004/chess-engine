@@ -27,7 +27,7 @@ class App:
         self.table_manager = TableManager(self)
         self.bitboard_manager = BitboardManager(self)
 
-        params = MoveParameters(SQUARES["d7"], SQUARES["d8"], PIECES["P"], PIECES["R"], 1, 0, 0, 0)
+        params = MoveParameters(SQUARES["d7"], SQUARES["d8"], PIECES["P"], PIECES["R"], 1, 1, 1, 0)
         move = Serializer.get_encoded_move(params)
 
         source_square = Deserializer.get_decoded_source_square(move)
@@ -35,9 +35,13 @@ class App:
         piece = Deserializer.get_decoded_piece(move)
         promoted_piece = Deserializer.get_decoded_promoted_piece(move)
         capture_flag = Deserializer.get_decoded_capture_flag(move)
+        double_pawn_push_flag = Deserializer.get_decoded_double_pawn_push_flag(move)
+        enpassant_flag = Deserializer.get_decoded_enpassant_flag(move)
 
         print(f"source square: {COORDINATES[source_square]}")
         print(f"target square: {COORDINATES[target_square]}")
         print(f"piece: {UNICODE_PIECES[piece]}")
         print(f"promoted piece: {UNICODE_PIECES[promoted_piece]}")
         print(f"capture flag: {capture_flag}")
+        print(f"double pawn push flag: {double_pawn_push_flag}")
+        print(f"enpassant flag: {enpassant_flag}")
