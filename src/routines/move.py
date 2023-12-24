@@ -15,6 +15,8 @@ class Move:
         bitboards = app.bitboard_manager.bitboards
         occupancies = app.bitboard_manager.occupancies
         side = app.bitboard_manager.side
+        pawn_attack_table = app.table_manager.pawn_attack_table
+        enpassant = app.bitboard_manager.enpassant
 
         for board_index in range(NUMBER_OF_BITBOARDS):
             bitboard = bitboards[board_index]
@@ -57,6 +59,48 @@ class Move:
                                     print(
                                         f"double pawn push: {COORDINATES[source_square]}{COORDINATES[target_square - 8]}"
                                     )
+
+                        # Initialize pawn attacks bitboard
+                        attacks = pawn_attack_table[side][source_square] & occupancies[SIDES["black"]]
+
+                        # Generate pawn captures
+                        while attacks:
+                            target_square = Bit.get_least_significant_first_bit(attacks)
+
+                            if source_square >= SQUARES["a7"] and source_square <= SQUARES["h7"]:
+                                print(
+                                    f"pawn promotion capture: {COORDINATES[source_square]}{COORDINATES[target_square]}q"
+                                )
+                                print(
+                                    f"pawn promotion capture: {COORDINATES[source_square]}{COORDINATES[target_square]}r"
+                                )
+                                print(
+                                    f"pawn promotion capture: {COORDINATES[source_square]}{COORDINATES[target_square]}b"
+                                )
+                                print(
+                                    f"pawn promotion capture: {COORDINATES[source_square]}{COORDINATES[target_square]}n"
+                                )
+                            else:
+                                # One square ahead pawn move
+                                print(
+                                    f"pawn capture: {COORDINATES[source_square]}{COORDINATES[target_square]}"
+                                )
+
+                            attacks = Bit.pop_bit(attacks, target_square)
+
+                        # Enpassant square captures
+                        if enpassant != SQUARES["null"]:
+                            # Lookup pawn attacks and bitwise and with enpassant square
+                            enpassant_attacks = pawn_attack_table[side][source_square] & Bit.left_shift(
+                                1, enpassant
+                            )
+
+                            if enpassant_attacks:
+                                target_enpassant = Bit.get_least_significant_first_bit(enpassant_attacks)
+                                print(
+                                    f"pawn enpassant capture: {COORDINATES[source_square]}{COORDINATES[target_enpassant]}"
+                                )
+
                         # Pop least significant first bit from bitboard
                         bitboard = Bit.pop_bit(bitboard, source_square)
 
@@ -99,6 +143,47 @@ class Move:
                                     print(
                                         f"double pawn push: {COORDINATES[source_square]}{COORDINATES[target_square + 8]}"
                                     )
+
+                        # Initialize pawn attacks bitboard
+                        attacks = pawn_attack_table[side][source_square] & occupancies[SIDES["white"]]
+
+                        # Generate pawn captures
+                        while attacks:
+                            target_square = Bit.get_least_significant_first_bit(attacks)
+
+                            if source_square >= SQUARES["a2"] and source_square <= SQUARES["h2"]:
+                                print(
+                                    f"pawn promotion capture: {COORDINATES[source_square]}{COORDINATES[target_square]}q"
+                                )
+                                print(
+                                    f"pawn promotion capture: {COORDINATES[source_square]}{COORDINATES[target_square]}r"
+                                )
+                                print(
+                                    f"pawn promotion capture: {COORDINATES[source_square]}{COORDINATES[target_square]}b"
+                                )
+                                print(
+                                    f"pawn promotion capture: {COORDINATES[source_square]}{COORDINATES[target_square]}n"
+                                )
+                            else:
+                                # One square ahead pawn move
+                                print(
+                                    f"pawn capture: {COORDINATES[source_square]}{COORDINATES[target_square]}"
+                                )
+
+                            attacks = Bit.pop_bit(attacks, target_square)
+
+                        # Enpassant square captures
+                        if enpassant != SQUARES["null"]:
+                            # Lookup pawn attacks and bitwise and with enpassant square
+                            enpassant_attacks = pawn_attack_table[side][source_square] & Bit.left_shift(
+                                1, enpassant
+                            )
+
+                            if enpassant_attacks:
+                                target_enpassant = Bit.get_least_significant_first_bit(enpassant_attacks)
+                                print(
+                                    f"pawn enpassant capture: {COORDINATES[source_square]}{COORDINATES[target_enpassant]}"
+                                )
                         # Pop least significant first bit from bitboard
                         bitboard = Bit.pop_bit(bitboard, source_square)
 
