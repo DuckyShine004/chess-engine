@@ -8,6 +8,7 @@ from src.constants.bit_constants import (
     CAPTURE_FLAG_OFFSET,
     DOUBLE_PAWN_PUSH_FLAG,
     ENPASSANT_FLAG,
+    CASTLING_FLAG,
 )
 
 
@@ -39,3 +40,7 @@ class Deserializer:
     @staticmethod
     def get_decoded_enpassant_flag(move):
         return bool(move & ENPASSANT_FLAG)
+
+    @staticmethod
+    def get_decoded_castling_flag(move):
+        return bool(move & CASTLING_FLAG)
