@@ -18,6 +18,7 @@ class Move:
         occupancies = app.bitboard_manager.occupancies
         side = app.bitboard_manager.side
         pawn_attack_table = app.table_manager.pawn_attack_table
+        knight_attack_table = app.table_manager.knight_attack_table
         enpassant = app.bitboard_manager.enpassant
         castle = app.bitboard_manager.castle
 
@@ -38,21 +39,21 @@ class Move:
                             # Pawn promotion
                             if SQUARES["a7"] <= source_square <= SQUARES["h7"]:
                                 print(
-                                    f"pawn promotion: {COORDINATES[source_square]}{COORDINATES[target_square]}q"
+                                    f"{COORDINATES[source_square]}{COORDINATES[target_square]}q pawn promotion"
                                 )
                                 print(
-                                    f"pawn promotion: {COORDINATES[source_square]}{COORDINATES[target_square]}r"
+                                    f"{COORDINATES[source_square]}{COORDINATES[target_square]}r pawn promotion"
                                 )
                                 print(
-                                    f"pawn promotion: {COORDINATES[source_square]}{COORDINATES[target_square]}b"
+                                    f"{COORDINATES[source_square]}{COORDINATES[target_square]}b pawn promotion"
                                 )
                                 print(
-                                    f"pawn promotion: {COORDINATES[source_square]}{COORDINATES[target_square]}n"
+                                    f"{COORDINATES[source_square]}{COORDINATES[target_square]}n pawn promotion"
                                 )
                             else:
                                 # One square ahead pawn move
                                 print(
-                                    f"pawn push: {COORDINATES[source_square]}{COORDINATES[target_square]}"
+                                    f"{COORDINATES[source_square]}{COORDINATES[target_square]} pawn push"
                                 )
 
                                 # Two squares ahead pawn move
@@ -60,7 +61,7 @@ class Move:
                                     occupancies[SIDES["all"]], target_square - 8
                                 ):
                                     print(
-                                        f"double pawn push: {COORDINATES[source_square]}{COORDINATES[target_square - 8]}"
+                                        f"{COORDINATES[source_square]}{COORDINATES[target_square - 8]} double pawn push"
                                     )
 
                         # Initialize pawn attacks bitboard
@@ -72,21 +73,21 @@ class Move:
 
                             if SQUARES["a7"] <= source_square <= SQUARES["h7"]:
                                 print(
-                                    f"pawn promotion capture: {COORDINATES[source_square]}{COORDINATES[target_square]}q"
+                                    f"{COORDINATES[source_square]}{COORDINATES[target_square]}q pawn promotion capture"
                                 )
                                 print(
-                                    f"pawn promotion capture: {COORDINATES[source_square]}{COORDINATES[target_square]}r"
+                                    f"{COORDINATES[source_square]}{COORDINATES[target_square]}r pawn promotion capture"
                                 )
                                 print(
-                                    f"pawn promotion capture: {COORDINATES[source_square]}{COORDINATES[target_square]}b"
+                                    f"{COORDINATES[source_square]}{COORDINATES[target_square]}b pawn promotion capture"
                                 )
                                 print(
-                                    f"pawn promotion capture: {COORDINATES[source_square]}{COORDINATES[target_square]}n"
+                                    f"{COORDINATES[source_square]}{COORDINATES[target_square]}n pawn promotion capture"
                                 )
                             else:
                                 # One square ahead pawn move
                                 print(
-                                    f"pawn capture: {COORDINATES[source_square]}{COORDINATES[target_square]}"
+                                    f"{COORDINATES[source_square]}{COORDINATES[target_square]} pawn capture"
                                 )
 
                             attacks = Bit.pop_bit(attacks, target_square)
@@ -121,7 +122,7 @@ class Move:
                             ) and not Attacked.check_squares_attacked(
                                 app, SQUARES["f1"], SIDES["black"]
                             ):
-                                print("castling move: e1g1")
+                                print("e1g1 castling move")
 
                     # Queen side castling is available
                     if castle & CASTLE["Q"]:
@@ -136,7 +137,7 @@ class Move:
                             ) and not Attacked.check_squares_attacked(
                                 app, SQUARES["d1"], SIDES["black"]
                             ):
-                                print("castling move: e1c1")
+                                print("e1c1 castling move")
 
             # Generate black pawns and black king castling moves
             else:
@@ -153,21 +154,21 @@ class Move:
                             # Pawn promotion
                             if SQUARES["a2"] <= source_square <= SQUARES["h2"]:
                                 print(
-                                    f"pawn promotion: {COORDINATES[source_square]}{COORDINATES[target_square]}q"
+                                    f"{COORDINATES[source_square]}{COORDINATES[target_square]}q pawn promotion"
                                 )
                                 print(
-                                    f"pawn promotion: {COORDINATES[source_square]}{COORDINATES[target_square]}r"
+                                    f"{COORDINATES[source_square]}{COORDINATES[target_square]}r pawn promotion"
                                 )
                                 print(
-                                    f"pawn promotion: {COORDINATES[source_square]}{COORDINATES[target_square]}b"
+                                    f"{COORDINATES[source_square]}{COORDINATES[target_square]}b pawn promotion"
                                 )
                                 print(
-                                    f"pawn promotion: {COORDINATES[source_square]}{COORDINATES[target_square]}n"
+                                    f"{COORDINATES[source_square]}{COORDINATES[target_square]}n pawn promotion"
                                 )
                             else:
                                 # One square ahead pawn move
                                 print(
-                                    f"pawn push: {COORDINATES[source_square]}{COORDINATES[target_square]}"
+                                    f"{COORDINATES[source_square]}{COORDINATES[target_square]} pawn push"
                                 )
 
                                 # Two squares ahead pawn move
@@ -175,7 +176,7 @@ class Move:
                                     occupancies[SIDES["all"]], target_square + 8
                                 ):
                                     print(
-                                        f"double pawn push: {COORDINATES[source_square]}{COORDINATES[target_square + 8]}"
+                                        f"{COORDINATES[source_square]}{COORDINATES[target_square + 8]} double pawn push"
                                     )
 
                         # Initialize pawn attacks bitboard
@@ -187,21 +188,21 @@ class Move:
 
                             if SQUARES["a2"] <= source_square <= SQUARES["h2"]:
                                 print(
-                                    f"pawn promotion capture: {COORDINATES[source_square]}{COORDINATES[target_square]}q"
+                                    f"{COORDINATES[source_square]}{COORDINATES[target_square]}q pawn promotion capture"
                                 )
                                 print(
-                                    f"pawn promotion capture: {COORDINATES[source_square]}{COORDINATES[target_square]}r"
+                                    f"{COORDINATES[source_square]}{COORDINATES[target_square]}r pawn promotion capture"
                                 )
                                 print(
-                                    f"pawn promotion capture: {COORDINATES[source_square]}{COORDINATES[target_square]}b"
+                                    f"{COORDINATES[source_square]}{COORDINATES[target_square]}b pawn promotion capture"
                                 )
                                 print(
-                                    f"pawn promotion capture: {COORDINATES[source_square]}{COORDINATES[target_square]}n"
+                                    f"{COORDINATES[source_square]}{COORDINATES[target_square]}n pawn promotion capture"
                                 )
                             else:
                                 # One square ahead pawn move
                                 print(
-                                    f"pawn capture: {COORDINATES[source_square]}{COORDINATES[target_square]}"
+                                    f"{COORDINATES[source_square]}{COORDINATES[target_square]} pawn capture"
                                 )
 
                             attacks = Bit.pop_bit(attacks, target_square)
@@ -216,7 +217,7 @@ class Move:
                             if enpassant_attacks:
                                 target_enpassant = Bit.get_least_significant_first_bit(enpassant_attacks)
                                 print(
-                                    f"pawn enpassant capture: {COORDINATES[source_square]}{COORDINATES[target_enpassant]}"
+                                    f"{COORDINATES[source_square]}{COORDINATES[target_enpassant]} pawn enpassant capture"
                                 )
                         # Pop least significant first bit from bitboard
                         bitboard = Bit.pop_bit(bitboard, source_square)
@@ -235,7 +236,7 @@ class Move:
                             ) and not Attacked.check_squares_attacked(
                                 app, SQUARES["f8"], SIDES["white"]
                             ):
-                                print("castling move: e8g8")
+                                print("e8g8 castling move")
 
                     # Queen side castling is available
                     if castle & CASTLE["q"]:
@@ -250,9 +251,45 @@ class Move:
                             ) and not Attacked.check_squares_attacked(
                                 app, SQUARES["d8"], SIDES["white"]
                             ):
-                                print("castling move: e8c8")
+                                print("e8c8 castling move")
 
             # Generate knight moves
+            if board_index == PIECES["N"] if side == SIDES["white"] else board_index == PIECES["n"]:
+                # Loop over source squares of piece bitboard
+                while bitboard:
+                    source_square = Bit.get_least_significant_first_bit(bitboard)
+
+                    # Initialize piece attacks in order to get the set of target squares
+                    attacks = knight_attack_table[source_square] & (
+                        ~occupancies[SIDES["white"]]
+                        if side == SIDES["white"]
+                        else ~occupancies[SIDES["black"]]
+                    )
+
+                    # Loop over the target squares available from generated attacks
+                    while attacks:
+                        target_square = Bit.get_least_significant_first_bit(attacks)
+
+                        # Quiet moves
+                        if not Bit.get_bit(
+                            occupancies[SIDES["black"]]
+                            if side == SIDES["white"]
+                            else occupancies[SIDES["white"]],
+                            target_square,
+                        ):
+                            print(
+                                f"{COORDINATES[source_square]}{COORDINATES[target_square]} piece quiet move"
+                            )
+
+                        # Capture moves
+                        else:
+                            print(
+                                f"{COORDINATES[source_square]}{COORDINATES[target_square]} piece capture"
+                            )
+
+                        attacks = Bit.pop_bit(attacks, target_square)
+
+                    bitboard = Bit.pop_bit(bitboard, source_square)
 
             # Generate bishop moves
 
