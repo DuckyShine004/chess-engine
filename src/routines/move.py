@@ -1,6 +1,7 @@
 from src.routines.attacked import Attacked
 
 from src.utilities.bit import Bit
+from src.utilities.attack import Attack
 
 from src.lookup.board_lookup import SQUARES, COORDINATES
 from src.lookup.piece_lookup import SIDES, PIECES, CASTLE
@@ -19,6 +20,8 @@ class Move:
         side = app.bitboard_manager.side
         pawn_attack_table = app.table_manager.pawn_attack_table
         knight_attack_table = app.table_manager.knight_attack_table
+        bishop_attack_table = app.table_manager.bishop_attack_table
+        bishop_attack_masks = app.table_manager.bishop_attack_masks
         enpassant = app.bitboard_manager.enpassant
         castle = app.bitboard_manager.castle
 
@@ -292,6 +295,47 @@ class Move:
                     bitboard = Bit.pop_bit(bitboard, source_square)
 
             # Generate bishop moves
+            if board_index == PIECES["B"] if side == SIDES["white"] else board_index == PIECES["b"]:
+                # Loop over source squares of piece bitboard
+                while bitboard:
+                    source_square = Bit.get_least_significant_first_bit(bitboard)
+
+                    # Initialize piece attacks in order to get the set of target squares
+                    attacks = Attack.get_bishop_attack_masks(
+                        source_square,
+                        occupancies[SIDES["all"]],
+                        bishop_attack_table,
+                        bishop_attack_masks,
+                    ) & (
+                        ~occupancies[SIDES["white"]]
+                        if side == SIDES["white"]
+                        else ~occupancies[SIDES["black"]]
+                    )
+
+                    # Loop over the target squares available from generated attacks
+                    while attacks:
+                        target_square = Bit.get_least_significant_first_bit(attacks)
+
+                        # Quiet moves
+                        if not Bit.get_bit(
+                            occupancies[SIDES["black"]]
+                            if side == SIDES["white"]
+                            else occupancies[SIDES["white"]],
+                            target_square,
+                        ):
+                            print(
+                                f"{COORDINATES[source_square]}{COORDINATES[target_square]} piece quiet move"
+                            )
+
+                        # Capture moves
+                        else:
+                            print(
+                                f"{COORDINATES[source_square]}{COORDINATES[target_square]} piece capture"
+                            )
+
+                        attacks = Bit.pop_bit(attacks, target_square)
+
+                    bitboard = Bit.pop_bit(bitboard, source_square)
 
             # Generate rook moves
 
