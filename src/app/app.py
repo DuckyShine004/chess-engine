@@ -1,7 +1,10 @@
 from managers.table_manager import TableManager
 from managers.bitboard_manager import BitboardManager
 
+from src.data.parameters.move_parameters import MoveParameters
 from src.routines.move import Move
+from src.routines.serialize import Serialize
+
 from src.utilities.bit import Bit
 from src.utilities.attack import Attack
 from src.utilities.console import Console
@@ -27,12 +30,9 @@ class App:
         )
         self.bitboard_manager.print_board()
 
-        move = 0
+        params = MoveParameters(SQUARES["e2"], SQUARES["e4"], PIECES["P"], 0, 0, 0, 0, 0)
+        move = Serialize.get_encoded_move(params)
 
-        move = (move | 63) << 6
+        source_square = Serialize.get_encoded_source_square(move)
 
-        Console.print_bitboard(move)
-
-        target_square = (move & 0xFC0) >> 6
-
-        print(f"target_square: {target_square}  {COORDINATES[target_square]}")
+        print(f"source square: {COORDINATES[source_square]}")
