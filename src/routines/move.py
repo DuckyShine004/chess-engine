@@ -1,7 +1,9 @@
+from src.routines.attacked import Attacked
+
 from src.utilities.bit import Bit
 
 from src.lookup.board_lookup import SQUARES, COORDINATES
-from src.lookup.piece_lookup import SIDES, PIECES
+from src.lookup.piece_lookup import SIDES, PIECES, CASTLE
 
 from src.constants.board_constants import NUMBER_OF_BITBOARDS
 
@@ -17,6 +19,7 @@ class Move:
         side = app.bitboard_manager.side
         pawn_attack_table = app.table_manager.pawn_attack_table
         enpassant = app.bitboard_manager.enpassant
+        castle = app.bitboard_manager.castle
 
         for board_index in range(NUMBER_OF_BITBOARDS):
             bitboard = bitboards[board_index]
@@ -33,7 +36,7 @@ class Move:
                             occupancies[SIDES["all"]], target_square
                         ):
                             # Pawn promotion
-                            if source_square >= SQUARES["a7"] and source_square <= SQUARES["h7"]:
+                            if SQUARES["a7"] <= source_square <= SQUARES["h7"]:
                                 print(
                                     f"pawn promotion: {COORDINATES[source_square]}{COORDINATES[target_square]}q"
                                 )
@@ -53,9 +56,9 @@ class Move:
                                 )
 
                                 # Two squares ahead pawn move
-                                if (
-                                    source_square >= SQUARES["a2"] and source_square <= SQUARES["h2"]
-                                ) and not Bit.get_bit(occupancies[SIDES["all"]], target_square - 8):
+                                if (SQUARES["a2"] <= source_square <= SQUARES["h2"]) and not Bit.get_bit(
+                                    occupancies[SIDES["all"]], target_square - 8
+                                ):
                                     print(
                                         f"double pawn push: {COORDINATES[source_square]}{COORDINATES[target_square - 8]}"
                                     )
@@ -67,7 +70,7 @@ class Move:
                         while attacks:
                             target_square = Bit.get_least_significant_first_bit(attacks)
 
-                            if source_square >= SQUARES["a7"] and source_square <= SQUARES["h7"]:
+                            if SQUARES["a7"] <= source_square <= SQUARES["h7"]:
                                 print(
                                     f"pawn promotion capture: {COORDINATES[source_square]}{COORDINATES[target_square]}q"
                                 )
@@ -103,6 +106,37 @@ class Move:
 
                         # Pop least significant first bit from bitboard
                         bitboard = Bit.pop_bit(bitboard, source_square)
+
+                # Castling moves for the white king
+                if board_index == PIECES["K"]:
+                    # King side castling is available
+                    if castle & CASTLE["K"]:
+                        # Make sure that there are no pieces in between the king and rook
+                        if not Bit.get_bit(occupancies[SIDES["all"]], SQUARES["f1"]) and not Bit.get_bit(
+                            occupancies[SIDES["all"]], SQUARES["g1"]
+                        ):
+                            # Make sure the king and the f1 squares are not under attack
+                            if not Attacked.check_squares_attacked(
+                                app, SQUARES["e1"], SIDES["black"]
+                            ) and not Attacked.check_squares_attacked(
+                                app, SQUARES["f1"], SIDES["black"]
+                            ):
+                                print("castling move: e1g1")
+
+                    # Queen side castling is available
+                    if castle & CASTLE["Q"]:
+                        if (
+                            not Bit.get_bit(occupancies[SIDES["all"]], SQUARES["d1"])
+                            and not Bit.get_bit(occupancies[SIDES["all"]], SQUARES["c1"])
+                            and not Bit.get_bit(occupancies[SIDES["all"]], SQUARES["b1"])
+                        ):
+                            # Make sure the king and the f1 squares are not under attack
+                            if not Attacked.check_squares_attacked(
+                                app, SQUARES["e1"], SIDES["black"]
+                            ) and not Attacked.check_squares_attacked(
+                                app, SQUARES["d1"], SIDES["black"]
+                            ):
+                                print("castling move: e1c1")
 
             # Generate black pawns and black king castling moves
             else:
@@ -117,7 +151,7 @@ class Move:
                             occupancies[SIDES["all"]], target_square
                         ):
                             # Pawn promotion
-                            if source_square >= SQUARES["a2"] and source_square <= SQUARES["h2"]:
+                            if SQUARES["a2"] <= source_square <= SQUARES["h2"]:
                                 print(
                                     f"pawn promotion: {COORDINATES[source_square]}{COORDINATES[target_square]}q"
                                 )
@@ -137,9 +171,9 @@ class Move:
                                 )
 
                                 # Two squares ahead pawn move
-                                if (
-                                    source_square >= SQUARES["a7"] and source_square <= SQUARES["h7"]
-                                ) and not Bit.get_bit(occupancies[SIDES["all"]], target_square + 8):
+                                if (SQUARES["a7"] <= source_square <= SQUARES["h7"]) and not Bit.get_bit(
+                                    occupancies[SIDES["all"]], target_square + 8
+                                ):
                                     print(
                                         f"double pawn push: {COORDINATES[source_square]}{COORDINATES[target_square + 8]}"
                                     )
@@ -151,7 +185,7 @@ class Move:
                         while attacks:
                             target_square = Bit.get_least_significant_first_bit(attacks)
 
-                            if source_square >= SQUARES["a2"] and source_square <= SQUARES["h2"]:
+                            if SQUARES["a2"] <= source_square <= SQUARES["h2"]:
                                 print(
                                     f"pawn promotion capture: {COORDINATES[source_square]}{COORDINATES[target_square]}q"
                                 )
@@ -186,6 +220,37 @@ class Move:
                                 )
                         # Pop least significant first bit from bitboard
                         bitboard = Bit.pop_bit(bitboard, source_square)
+
+                # Castling moves for the black king
+                if board_index == PIECES["k"]:
+                    # King side castling is available
+                    if castle & CASTLE["k"]:
+                        # Make sure that there are no pieces in between the king and rook
+                        if not Bit.get_bit(occupancies[SIDES["all"]], SQUARES["f8"]) and not Bit.get_bit(
+                            occupancies[SIDES["all"]], SQUARES["g8"]
+                        ):
+                            # Make sure the king and the f1 squares are not under attack
+                            if not Attacked.check_squares_attacked(
+                                app, SQUARES["e8"], SIDES["white"]
+                            ) and not Attacked.check_squares_attacked(
+                                app, SQUARES["f8"], SIDES["white"]
+                            ):
+                                print("castling move: e8g8")
+
+                    # Queen side castling is available
+                    if castle & CASTLE["q"]:
+                        if (
+                            not Bit.get_bit(occupancies[SIDES["all"]], SQUARES["d8"])
+                            and not Bit.get_bit(occupancies[SIDES["all"]], SQUARES["c8"])
+                            and not Bit.get_bit(occupancies[SIDES["all"]], SQUARES["b8"])
+                        ):
+                            # Make sure the king and the f8 squares are not under attack
+                            if not Attacked.check_squares_attacked(
+                                app, SQUARES["e8"], SIDES["white"]
+                            ) and not Attacked.check_squares_attacked(
+                                app, SQUARES["d8"], SIDES["white"]
+                            ):
+                                print("castling move: e8c8")
 
             # Generate knight moves
 
