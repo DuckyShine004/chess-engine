@@ -24,6 +24,7 @@ class Move:
         bishop_attack_masks = app.table_manager.bishop_attack_masks
         rook_attack_table = app.table_manager.rook_attack_table
         rook_attack_masks = app.table_manager.rook_attack_masks
+        king_attack_table = app.table_manager.king_attack_table
         attack_tables = (bishop_attack_table, rook_attack_table)
         attack_masks = (bishop_attack_masks, rook_attack_masks)
 
@@ -429,3 +430,39 @@ class Move:
                     bitboard = Bit.pop_bit(bitboard, source_square)
 
             # Generate king moves
+            if board_index == PIECES["K"] if side == SIDES["white"] else board_index == PIECES["k"]:
+                # Loop over source squares of piece bitboard
+                while bitboard:
+                    source_square = Bit.get_least_significant_first_bit(bitboard)
+
+                    # Initialize piece attacks in order to get the set of target squares
+                    attacks = king_attack_table[source_square] & (
+                        ~occupancies[SIDES["white"]]
+                        if side == SIDES["white"]
+                        else ~occupancies[SIDES["black"]]
+                    )
+
+                    # Loop over the target squares available from generated attacks
+                    while attacks:
+                        target_square = Bit.get_least_significant_first_bit(attacks)
+
+                        # Quiet moves
+                        if not Bit.get_bit(
+                            occupancies[SIDES["black"]]
+                            if side == SIDES["white"]
+                            else occupancies[SIDES["white"]],
+                            target_square,
+                        ):
+                            print(
+                                f"{COORDINATES[source_square]}{COORDINATES[target_square]} piece quiet move"
+                            )
+
+                        # Capture moves
+                        else:
+                            print(
+                                f"{COORDINATES[source_square]}{COORDINATES[target_square]} piece capture"
+                            )
+
+                        attacks = Bit.pop_bit(attacks, target_square)
+
+                    bitboard = Bit.pop_bit(bitboard, source_square)
