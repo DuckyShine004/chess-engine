@@ -5,6 +5,7 @@ from src.constants.bit_constants import (
     TARGET_SQUARE_OFFSET,
     PIECE_OFFSET,
     PROMOTED_PIECE_OFFSET,
+    CAPTURE_FLAG_OFFSET,
 )
 
 
@@ -24,3 +25,7 @@ class Deserializer:
     @staticmethod
     def get_decoded_promoted_piece(move):
         return Bit.right_shift((move & PROMOTED_PIECE_OFFSET), 16)
+
+    @staticmethod
+    def get_decoded_capture_flag(move):
+        return bool(move & CAPTURE_FLAG_OFFSET)

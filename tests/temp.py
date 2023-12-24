@@ -1,5 +1,1 @@
-def foo(**kwargs):
-    print(kwargs)
-
-
-foo(x=2, y=3)
+print(bool(1231234))
