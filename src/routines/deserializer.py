@@ -6,6 +6,7 @@ from src.constants.bit_constants import (
     PIECE_OFFSET,
     PROMOTED_PIECE_OFFSET,
     CAPTURE_FLAG_OFFSET,
+    DOUBLE_PAWN_PUSH_FLAG,
 )
 
 
@@ -29,3 +30,7 @@ class Deserializer:
     @staticmethod
     def get_decoded_capture_flag(move):
         return bool(move & CAPTURE_FLAG_OFFSET)
+
+    @staticmethod
+    def get_decoded_double_pawn_push_flag(move):
+        return bool(move & DOUBLE_PAWN_PUSH_FLAG)
