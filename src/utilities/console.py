@@ -66,9 +66,7 @@ class Console:
         print(f"   Enpassant:   {enpassant_message}")
         print("   Castling:  ", end="")
         print(castle_white_king_side_message + castle_white_queen_side_message, end="")
-        print(castle_black_king_side_message + castle_black_queen_side_message, end="")
-
-        print()
+        print(castle_black_king_side_message + castle_black_queen_side_message)
 
     @staticmethod
     def print_attacked_squares(app, side):
@@ -89,9 +87,11 @@ class Console:
     def print_move(move):
         move_parameters = Deserializer.get_decoded_move_parameters(move)
 
-        print(COORDINATES[move_parameters.source_square], end="")
-        print(COORDINATES[move_parameters.target_square], end="")
-        print(PROMOTED_PIECES[move_parameters.promoted_piece])
+        print(
+            f"{COORDINATES[move_parameters.source_square]}"
+            f"{COORDINATES[move_parameters.target_square]}"
+            f"{PROMOTED_PIECES[move_parameters.promoted_piece]}"
+        )
 
     @staticmethod
     def print_extended_move(move):
