@@ -90,7 +90,7 @@ class Console:
         print(
             f"{COORDINATES[move_parameters.source_square]}"
             f"{COORDINATES[move_parameters.target_square]}"
-            f"{PROMOTED_PIECES[move_parameters.promoted_piece]}"
+            f"{PROMOTED_PIECES.get(move_parameters.promoted_piece, ' ')}"
         )
 
     @staticmethod
@@ -98,9 +98,9 @@ class Console:
         move_parameters = Deserializer.get_decoded_move_parameters(move)
 
         print(
-            f"{COORDINATES[move_parameters.source_square]:>6}"
+            f"{COORDINATES[move_parameters.source_square]:>5}"
             f"{COORDINATES[move_parameters.target_square]:}"
-            f"{PROMOTED_PIECES[move_parameters.promoted_piece]:}"
+            f"{PROMOTED_PIECES.get(move_parameters.promoted_piece, ' '):}"
             f"{UNICODE_PIECES[move_parameters.piece]:>4}"
             f"{move_parameters.capture_flag:>8}"
             f"{move_parameters.double_pawn_push_flag:>10}"
@@ -110,10 +110,14 @@ class Console:
 
     @staticmethod
     def print_moves(moves):
-        print("\n    move    piece   capture   double    enpass    castling\n")
+        if not moves.count:
+            print("\n   No move in the move list")
+            return
+
+        print("\n   move    piece   capture   double    enpass    castling\n")
 
         for move_count in range(moves.count):
             move = moves.moves[move_count]
             Console.print_extended_move(move)
 
-        print(f"\n    Total number of moves: {moves.count}")
+        print(f"\n   Total number of moves: {moves.count}")

@@ -1,4 +1,8 @@
+from src.data_structures.moves import Moves
+from src.data.parameters.move_parameters import MoveParameters
+
 from src.routines.attacked import Attacked
+from src.routines.serializer import Serializer
 
 from src.utilities.bit import Bit
 from src.utilities.attack import Attack
@@ -12,7 +16,9 @@ class Move:
     #     self.bitboards = bitboards
 
     @staticmethod
-    def generate_moves(app):
+    def get_moves(app):
+        moves = Moves()
+
         bitboards = app.bitboard_manager.bitboards
         occupancies = app.bitboard_manager.occupancies
         side = app.bitboard_manager.side
@@ -29,11 +35,11 @@ class Move:
         enpassant = app.bitboard_manager.enpassant
         castle = app.bitboard_manager.castle
 
-        for board_index in range(NUMBER_OF_BITBOARDS):
-            bitboard = bitboards[board_index]
+        for piece in range(NUMBER_OF_BITBOARDS):
+            bitboard = bitboards[piece]
             # Generate white pawns and white king castling move
             if side == SIDES["white"]:
-                if board_index == PIECES["P"]:
+                if piece == PIECES["P"]:
                     # Loop over white pawns within white pawn bitboard
                     while bitboard:
                         source_square = Bit.get_least_significant_first_bit(bitboard)
@@ -45,31 +51,46 @@ class Move:
                         ):
                             # Pawn promotion
                             if SQUARES["a7"] <= source_square <= SQUARES["h7"]:
-                                print(
-                                    f"{COORDINATES[source_square]}{COORDINATES[target_square]}q pawn promotion"
+                                move_parameters = MoveParameters(
+                                    source_square, target_square, piece, PIECES["Q"], 0, 0, 0, 0
                                 )
-                                print(
-                                    f"{COORDINATES[source_square]}{COORDINATES[target_square]}r pawn promotion"
+
+                                moves.add_move(Serializer.get_encoded_move(move_parameters))
+
+                                move_parameters = MoveParameters(
+                                    source_square, target_square, piece, PIECES["R"], 0, 0, 0, 0
                                 )
-                                print(
-                                    f"{COORDINATES[source_square]}{COORDINATES[target_square]}b pawn promotion"
+
+                                moves.add_move(Serializer.get_encoded_move(move_parameters))
+
+                                move_parameters = MoveParameters(
+                                    source_square, target_square, piece, PIECES["B"], 0, 0, 0, 0
                                 )
-                                print(
-                                    f"{COORDINATES[source_square]}{COORDINATES[target_square]}n pawn promotion"
+
+                                moves.add_move(Serializer.get_encoded_move(move_parameters))
+
+                                move_parameters = MoveParameters(
+                                    source_square, target_square, piece, PIECES["N"], 0, 0, 0, 0
                                 )
+
+                                moves.add_move(Serializer.get_encoded_move(move_parameters))
                             else:
                                 # One square ahead pawn move
-                                print(
-                                    f"{COORDINATES[source_square]}{COORDINATES[target_square]} pawn push"
+                                move_parameters = MoveParameters(
+                                    source_square, target_square, piece, 0, 0, 0, 0, 0
                                 )
+
+                                moves.add_move(Serializer.get_encoded_move(move_parameters))
 
                                 # Two squares ahead pawn move
                                 if (SQUARES["a2"] <= source_square <= SQUARES["h2"]) and not Bit.get_bit(
                                     occupancies[SIDES["all"]], target_square - 8
                                 ):
-                                    print(
-                                        f"{COORDINATES[source_square]}{COORDINATES[target_square - 8]} double pawn push"
+                                    move_parameters = MoveParameters(
+                                        source_square, target_square - 8, piece, 0, 0, 1, 0, 0
                                     )
+
+                                    moves.add_move(Serializer.get_encoded_move(move_parameters))
 
                         # Initialize pawn attacks bitboard
                         attacks = pawn_attack_table[side][source_square] & occupancies[SIDES["black"]]
@@ -78,24 +99,37 @@ class Move:
                         while attacks:
                             target_square = Bit.get_least_significant_first_bit(attacks)
 
+                            # Pawn promotion captures
                             if SQUARES["a7"] <= source_square <= SQUARES["h7"]:
-                                print(
-                                    f"{COORDINATES[source_square]}{COORDINATES[target_square]}q pawn promotion capture"
+                                move_parameters = MoveParameters(
+                                    source_square, target_square, piece, PIECES["Q"], 1, 0, 0, 0
                                 )
-                                print(
-                                    f"{COORDINATES[source_square]}{COORDINATES[target_square]}r pawn promotion capture"
+
+                                moves.add_move(Serializer.get_encoded_move(move_parameters))
+
+                                move_parameters = MoveParameters(
+                                    source_square, target_square, piece, PIECES["R"], 1, 0, 0, 0
                                 )
-                                print(
-                                    f"{COORDINATES[source_square]}{COORDINATES[target_square]}b pawn promotion capture"
+
+                                moves.add_move(Serializer.get_encoded_move(move_parameters))
+
+                                move_parameters = MoveParameters(
+                                    source_square, target_square, piece, PIECES["B"], 1, 0, 0, 0
                                 )
-                                print(
-                                    f"{COORDINATES[source_square]}{COORDINATES[target_square]}n pawn promotion capture"
+
+                                moves.add_move(Serializer.get_encoded_move(move_parameters))
+
+                                move_parameters = MoveParameters(
+                                    source_square, target_square, piece, PIECES["N"], 1, 0, 0, 0
                                 )
+
+                                moves.add_move(Serializer.get_encoded_move(move_parameters))
                             else:
                                 # One square ahead pawn move
-                                print(
-                                    f"{COORDINATES[source_square]}{COORDINATES[target_square]} pawn capture"
+                                move_parameters = MoveParameters(
+                                    source_square, target_square, piece, 0, 1, 0, 0, 0
                                 )
+                                moves.add_move(Serializer.get_encoded_move(move_parameters))
 
                             attacks = Bit.pop_bit(attacks, target_square)
 
@@ -107,16 +141,17 @@ class Move:
                             )
 
                             if enpassant_attacks:
-                                target_enpassant = Bit.get_least_significant_first_bit(enpassant_attacks)
-                                print(
-                                    f"pawn enpassant capture: {COORDINATES[source_square]}{COORDINATES[target_enpassant]}"
+                                enpassant_square = Bit.get_least_significant_first_bit(enpassant_attacks)
+                                move_parameters = MoveParameters(
+                                    source_square, enpassant_square, piece, 0, 1, 0, 1, 0
                                 )
+                                moves.add_move(Serializer.get_encoded_move(move_parameters))
 
                         # Pop least significant first bit from bitboard
                         bitboard = Bit.pop_bit(bitboard, source_square)
 
                 # Castling moves for the white king
-                if board_index == PIECES["K"]:
+                if piece == PIECES["K"]:
                     # King side castling is available
                     if castle & CASTLE["K"]:
                         # Make sure that there are no pieces in between the king and rook
@@ -129,7 +164,10 @@ class Move:
                             ) and not Attacked.check_squares_attacked(
                                 app, SQUARES["f1"], SIDES["black"]
                             ):
-                                print("e1g1 castling move")
+                                move_parameters = MoveParameters(
+                                    SQUARES["e1"], SQUARES["g1"], piece, 0, 0, 0, 0, 1
+                                )
+                                moves.add_move(Serializer.get_encoded_move(move_parameters))
 
                     # Queen side castling is available
                     if castle & CASTLE["Q"]:
@@ -144,11 +182,14 @@ class Move:
                             ) and not Attacked.check_squares_attacked(
                                 app, SQUARES["d1"], SIDES["black"]
                             ):
-                                print("e1c1 castling move")
+                                move_parameters = MoveParameters(
+                                    SQUARES["e1"], SQUARES["c1"], piece, 0, 0, 0, 0, 1
+                                )
+                                moves.add_move(Serializer.get_encoded_move(move_parameters))
 
             # Generate black pawns and black king castling moves
             else:
-                if board_index == PIECES["p"]:
+                if piece == PIECES["p"]:
                     # Loop over black pawns within black pawn bitboard
                     while bitboard:
                         source_square = Bit.get_least_significant_first_bit(bitboard)
@@ -160,31 +201,46 @@ class Move:
                         ):
                             # Pawn promotion
                             if SQUARES["a2"] <= source_square <= SQUARES["h2"]:
-                                print(
-                                    f"{COORDINATES[source_square]}{COORDINATES[target_square]}q pawn promotion"
+                                move_parameters = MoveParameters(
+                                    source_square, target_square, piece, PIECES["q"], 0, 0, 0, 0
                                 )
-                                print(
-                                    f"{COORDINATES[source_square]}{COORDINATES[target_square]}r pawn promotion"
+
+                                moves.add_move(Serializer.get_encoded_move(move_parameters))
+
+                                move_parameters = MoveParameters(
+                                    source_square, target_square, piece, PIECES["r"], 0, 0, 0, 0
                                 )
-                                print(
-                                    f"{COORDINATES[source_square]}{COORDINATES[target_square]}b pawn promotion"
+
+                                moves.add_move(Serializer.get_encoded_move(move_parameters))
+
+                                move_parameters = MoveParameters(
+                                    source_square, target_square, piece, PIECES["b"], 0, 0, 0, 0
                                 )
-                                print(
-                                    f"{COORDINATES[source_square]}{COORDINATES[target_square]}n pawn promotion"
+
+                                moves.add_move(Serializer.get_encoded_move(move_parameters))
+
+                                move_parameters = MoveParameters(
+                                    source_square, target_square, piece, PIECES["n"], 0, 0, 0, 0
                                 )
+
+                                moves.add_move(Serializer.get_encoded_move(move_parameters))
                             else:
                                 # One square ahead pawn move
-                                print(
-                                    f"{COORDINATES[source_square]}{COORDINATES[target_square]} pawn push"
+                                move_parameters = MoveParameters(
+                                    source_square, target_square, piece, 0, 0, 0, 0, 0
                                 )
+
+                                moves.add_move(Serializer.get_encoded_move(move_parameters))
 
                                 # Two squares ahead pawn move
                                 if (SQUARES["a7"] <= source_square <= SQUARES["h7"]) and not Bit.get_bit(
                                     occupancies[SIDES["all"]], target_square + 8
                                 ):
-                                    print(
-                                        f"{COORDINATES[source_square]}{COORDINATES[target_square + 8]} double pawn push"
+                                    move_parameters = MoveParameters(
+                                        source_square, target_square + 8, piece, 0, 0, 1, 0, 0
                                     )
+
+                                    moves.add_move(Serializer.get_encoded_move(move_parameters))
 
                         # Initialize pawn attacks bitboard
                         attacks = pawn_attack_table[side][source_square] & occupancies[SIDES["white"]]
@@ -194,23 +250,35 @@ class Move:
                             target_square = Bit.get_least_significant_first_bit(attacks)
 
                             if SQUARES["a2"] <= source_square <= SQUARES["h2"]:
-                                print(
-                                    f"{COORDINATES[source_square]}{COORDINATES[target_square]}q pawn promotion capture"
+                                move_parameters = MoveParameters(
+                                    source_square, target_square, piece, PIECES["q"], 1, 0, 0, 0
                                 )
-                                print(
-                                    f"{COORDINATES[source_square]}{COORDINATES[target_square]}r pawn promotion capture"
+
+                                moves.add_move(Serializer.get_encoded_move(move_parameters))
+
+                                move_parameters = MoveParameters(
+                                    source_square, target_square, piece, PIECES["r"], 1, 0, 0, 0
                                 )
-                                print(
-                                    f"{COORDINATES[source_square]}{COORDINATES[target_square]}b pawn promotion capture"
+
+                                moves.add_move(Serializer.get_encoded_move(move_parameters))
+
+                                move_parameters = MoveParameters(
+                                    source_square, target_square, piece, PIECES["b"], 1, 0, 0, 0
                                 )
-                                print(
-                                    f"{COORDINATES[source_square]}{COORDINATES[target_square]}n pawn promotion capture"
+
+                                moves.add_move(Serializer.get_encoded_move(move_parameters))
+
+                                move_parameters = MoveParameters(
+                                    source_square, target_square, piece, PIECES["n"], 1, 0, 0, 0
                                 )
+
+                                moves.add_move(Serializer.get_encoded_move(move_parameters))
                             else:
                                 # One square ahead pawn move
-                                print(
-                                    f"{COORDINATES[source_square]}{COORDINATES[target_square]} pawn capture"
+                                move_parameters = MoveParameters(
+                                    source_square, target_square, piece, 0, 1, 0, 0, 0
                                 )
+                                moves.add_move(Serializer.get_encoded_move(move_parameters))
 
                             attacks = Bit.pop_bit(attacks, target_square)
 
@@ -222,15 +290,17 @@ class Move:
                             )
 
                             if enpassant_attacks:
-                                target_enpassant = Bit.get_least_significant_first_bit(enpassant_attacks)
-                                print(
-                                    f"{COORDINATES[source_square]}{COORDINATES[target_enpassant]} pawn enpassant capture"
+                                enpassant_square = Bit.get_least_significant_first_bit(enpassant_attacks)
+                                move_parameters = MoveParameters(
+                                    source_square, enpassant_square, piece, 0, 1, 0, 1, 0
                                 )
+                                moves.add_move(Serializer.get_encoded_move(move_parameters))
+
                         # Pop least significant first bit from bitboard
                         bitboard = Bit.pop_bit(bitboard, source_square)
 
                 # Castling moves for the black king
-                if board_index == PIECES["k"]:
+                if piece == PIECES["k"]:
                     # King side castling is available
                     if castle & CASTLE["k"]:
                         # Make sure that there are no pieces in between the king and rook
@@ -243,7 +313,10 @@ class Move:
                             ) and not Attacked.check_squares_attacked(
                                 app, SQUARES["f8"], SIDES["white"]
                             ):
-                                print("e8g8 castling move")
+                                move_parameters = MoveParameters(
+                                    SQUARES["e8"], SQUARES["g8"], piece, 0, 0, 0, 0, 1
+                                )
+                                moves.add_move(Serializer.get_encoded_move(move_parameters))
 
                     # Queen side castling is available
                     if castle & CASTLE["q"]:
@@ -258,10 +331,13 @@ class Move:
                             ) and not Attacked.check_squares_attacked(
                                 app, SQUARES["d8"], SIDES["white"]
                             ):
-                                print("e8c8 castling move")
+                                move_parameters = MoveParameters(
+                                    SQUARES["e8"], SQUARES["c8"], piece, 0, 0, 0, 0, 1
+                                )
+                                moves.add_move(Serializer.get_encoded_move(move_parameters))
 
             # Generate knight moves
-            if board_index == PIECES["N"] if side == SIDES["white"] else board_index == PIECES["n"]:
+            if piece == PIECES["N"] if side == SIDES["white"] else piece == PIECES["n"]:
                 # Loop over source squares of piece bitboard
                 while bitboard:
                     source_square = Bit.get_least_significant_first_bit(bitboard)
@@ -284,22 +360,24 @@ class Move:
                             else occupancies[SIDES["white"]],
                             target_square,
                         ):
-                            print(
-                                f"{COORDINATES[source_square]}{COORDINATES[target_square]} piece quiet move"
+                            move_parameters = MoveParameters(
+                                source_square, target_square, piece, 0, 0, 0, 0, 0
                             )
+                            moves.add_move(Serializer.get_encoded_move(move_parameters))
 
                         # Capture moves
                         else:
-                            print(
-                                f"{COORDINATES[source_square]}{COORDINATES[target_square]} piece capture"
+                            move_parameters = MoveParameters(
+                                source_square, target_square, piece, 0, 1, 0, 0, 0
                             )
+                            moves.add_move(Serializer.get_encoded_move(move_parameters))
 
                         attacks = Bit.pop_bit(attacks, target_square)
 
                     bitboard = Bit.pop_bit(bitboard, source_square)
 
             # Generate bishop moves
-            if board_index == PIECES["B"] if side == SIDES["white"] else board_index == PIECES["b"]:
+            if piece == PIECES["B"] if side == SIDES["white"] else piece == PIECES["b"]:
                 # Loop over source squares of piece bitboard
                 while bitboard:
                     source_square = Bit.get_least_significant_first_bit(bitboard)
@@ -327,22 +405,24 @@ class Move:
                             else occupancies[SIDES["white"]],
                             target_square,
                         ):
-                            print(
-                                f"{COORDINATES[source_square]}{COORDINATES[target_square]} piece quiet move"
+                            move_parameters = MoveParameters(
+                                source_square, target_square, piece, 0, 0, 0, 0, 0
                             )
+                            moves.add_move(Serializer.get_encoded_move(move_parameters))
 
                         # Capture moves
                         else:
-                            print(
-                                f"{COORDINATES[source_square]}{COORDINATES[target_square]} piece capture"
+                            move_parameters = MoveParameters(
+                                source_square, target_square, piece, 0, 1, 0, 0, 0
                             )
+                            moves.add_move(Serializer.get_encoded_move(move_parameters))
 
                         attacks = Bit.pop_bit(attacks, target_square)
 
                     bitboard = Bit.pop_bit(bitboard, source_square)
 
             # Generate rook moves
-            if board_index == PIECES["R"] if side == SIDES["white"] else board_index == PIECES["r"]:
+            if piece == PIECES["R"] if side == SIDES["white"] else piece == PIECES["r"]:
                 # Loop over source squares of piece bitboard
                 while bitboard:
                     source_square = Bit.get_least_significant_first_bit(bitboard)
@@ -370,22 +450,24 @@ class Move:
                             else occupancies[SIDES["white"]],
                             target_square,
                         ):
-                            print(
-                                f"{COORDINATES[source_square]}{COORDINATES[target_square]} piece quiet move"
+                            move_parameters = MoveParameters(
+                                source_square, target_square, piece, 0, 0, 0, 0, 0
                             )
+                            moves.add_move(Serializer.get_encoded_move(move_parameters))
 
                         # Capture moves
                         else:
-                            print(
-                                f"{COORDINATES[source_square]}{COORDINATES[target_square]} piece capture"
+                            move_parameters = MoveParameters(
+                                source_square, target_square, piece, 0, 1, 0, 0, 0
                             )
+                            moves.add_move(Serializer.get_encoded_move(move_parameters))
 
                         attacks = Bit.pop_bit(attacks, target_square)
 
                     bitboard = Bit.pop_bit(bitboard, source_square)
 
             # Generate queen moves
-            if board_index == PIECES["Q"] if side == SIDES["white"] else board_index == PIECES["q"]:
+            if piece == PIECES["Q"] if side == SIDES["white"] else piece == PIECES["q"]:
                 # Loop over source squares of piece bitboard
                 while bitboard:
                     source_square = Bit.get_least_significant_first_bit(bitboard)
@@ -413,22 +495,24 @@ class Move:
                             else occupancies[SIDES["white"]],
                             target_square,
                         ):
-                            print(
-                                f"{COORDINATES[source_square]}{COORDINATES[target_square]} piece quiet move"
+                            move_parameters = MoveParameters(
+                                source_square, target_square, piece, 0, 0, 0, 0, 0
                             )
+                            moves.add_move(Serializer.get_encoded_move(move_parameters))
 
                         # Capture moves
                         else:
-                            print(
-                                f"{COORDINATES[source_square]}{COORDINATES[target_square]} piece capture"
+                            move_parameters = MoveParameters(
+                                source_square, target_square, piece, 0, 1, 0, 0, 0
                             )
+                            moves.add_move(Serializer.get_encoded_move(move_parameters))
 
                         attacks = Bit.pop_bit(attacks, target_square)
 
                     bitboard = Bit.pop_bit(bitboard, source_square)
 
             # Generate king moves
-            if board_index == PIECES["K"] if side == SIDES["white"] else board_index == PIECES["k"]:
+            if piece == PIECES["K"] if side == SIDES["white"] else piece == PIECES["k"]:
                 # Loop over source squares of piece bitboard
                 while bitboard:
                     source_square = Bit.get_least_significant_first_bit(bitboard)
@@ -451,16 +535,20 @@ class Move:
                             else occupancies[SIDES["white"]],
                             target_square,
                         ):
-                            print(
-                                f"{COORDINATES[source_square]}{COORDINATES[target_square]} piece quiet move"
+                            move_parameters = MoveParameters(
+                                source_square, target_square, piece, 0, 0, 0, 0, 0
                             )
+                            moves.add_move(Serializer.get_encoded_move(move_parameters))
 
                         # Capture moves
                         else:
-                            print(
-                                f"{COORDINATES[source_square]}{COORDINATES[target_square]} piece capture"
+                            move_parameters = MoveParameters(
+                                source_square, target_square, piece, 0, 1, 0, 0, 0
                             )
+                            moves.add_move(Serializer.get_encoded_move(move_parameters))
 
                         attacks = Bit.pop_bit(attacks, target_square)
 
                     bitboard = Bit.pop_bit(bitboard, source_square)
+
+        return moves
