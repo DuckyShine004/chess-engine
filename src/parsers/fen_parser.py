@@ -1,12 +1,22 @@
 from src.utilities.bit import Bit
 
-from src.constants.piece_constants import CASTLE
+from src.constants.piece_constants import CASTLE, PIECES, SIDES
 from src.constants.board_constants import NUMBER_OF_BITBOARDS, SQUARES
 
 
 class FenParser:
     def __init__(self, bitboard_manager):
         self.manager = bitboard_manager
+
+    def initialize_occupancies(self):
+        for board_index in range(PIECES["P"], PIECES["K"] + 1):
+            self.manager.occupancies[SIDES["white"]] |= self.manager.bitboards[board_index]
+
+        for board_index in range(PIECES["p"], PIECES["k"] + 1):
+            self.manager.occupancies[SIDES["black"]] |= self.manager.bitboards[board_index]
+
+        self.manager.occupancies[SIDES["all"]] |= self.manager.occupancies[SIDES["white"]]
+        self.manager.occupancies[SIDES["all"]] |= self.manager.occupancies[SIDES["black"]]
 
     def parse(self, fen):
         self.manager.reset()
@@ -16,7 +26,7 @@ class FenParser:
         position = self.parse_castling_rights(fen, position)
 
         self.parse_enpassant_square(fen, position)
-        self.manager.initialize_occupancies()
+        self.initialize_occupancies()
 
     def parse_pieces(self, fen):
         position = 0
