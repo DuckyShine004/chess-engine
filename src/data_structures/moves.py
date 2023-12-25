@@ -4,5 +4,6 @@ class Moves:
         self.count = 0
 
     def add_move(self, move):
+        print(self.count)
         self.moves[self.count] = move
         self.count += 1
