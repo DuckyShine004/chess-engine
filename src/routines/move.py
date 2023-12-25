@@ -450,15 +450,17 @@ class Move:
                             else occupancies[SIDES["white"]],
                             target_square,
                         ):
-                            print(
-                                f"{COORDINATES[source_square]}{COORDINATES[target_square]} piece quiet move"
+                            move_parameters = MoveParameters(
+                                source_square, target_square, piece, 0, 0, 0, 0, 0
                             )
+                            moves.add_move(Serializer.get_encoded_move(move_parameters))
 
                         # Capture moves
                         else:
-                            print(
-                                f"{COORDINATES[source_square]}{COORDINATES[target_square]} piece capture"
+                            move_parameters = MoveParameters(
+                                source_square, target_square, piece, 0, 1, 0, 0, 0
                             )
+                            moves.add_move(Serializer.get_encoded_move(move_parameters))
 
                         attacks = Bit.pop_bit(attacks, target_square)
 
