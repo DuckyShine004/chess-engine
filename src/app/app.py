@@ -29,7 +29,7 @@ class App:
         self.bitboard_manager = BitboardManager(self)
 
         self.bitboard_manager.parse_fen(
-            "r3k2r/pPppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R b KQkq a3 0 1 "
+            "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPpP/R3K2R b KQkq a3 0 1 "
         )
         self.bitboard_manager.print_board()
 
