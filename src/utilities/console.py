@@ -1,7 +1,9 @@
 from src.routines.attacked import Attacked
+from src.routines.deserializer import Deserializer
+
 from src.utilities.bit import Bit
 
-from src.constants.piece_constants import CASTLE, UNICODE_PIECES
+from src.constants.piece_constants import CASTLE, UNICODE_PIECES, PROMOTED_PIECES
 
 from src.constants.board_constants import (
     RANKS,
@@ -82,3 +84,13 @@ class Console:
             print()
 
         print("\n   a b c d e f g h\n")
+
+    @staticmethod
+    def print_move(move):
+        source_square = Deserializer.get_decoded_source_square(move)
+        target_square = Deserializer.get_decoded_target_square(move)
+        promoted_piece = Deserializer.get_decoded_promoted_piece(move)
+
+        print(
+            f"{COORDINATES[source_square]}{COORDINATES[target_square]}{PROMOTED_PIECES[promoted_piece]}"
+        )

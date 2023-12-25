@@ -31,5 +31,16 @@ PIECES = {
     "k": 11,
 }
 
+PROMOTED_PIECES = {
+    PIECES["Q"]: "q",
+    PIECES["R"]: "r",
+    PIECES["B"]: "b",
+    PIECES["N"]: "n",
+    PIECES["q"]: "q",
+    PIECES["r"]: "r",
+    PIECES["b"]: "b",
+    PIECES["n"]: "n",
+}
+
 ASCII_PIECES = "PNBRQKpnbrqk"
 UNICODE_PIECES = "♙♘♗♖♕♔♟♞♝♜♛♚"
