@@ -3,6 +3,7 @@ from managers.bitboard_manager import BitboardManager
 
 from src.data.parameters.move_parameters import MoveParameters
 from src.routines.move import Move
+from src.data_structures.moves import Moves
 
 from src.routines.deserializer import Deserializer
 from src.routines.serializer import Serializer
@@ -27,7 +28,9 @@ class App:
         self.table_manager = TableManager(self)
         self.bitboard_manager = BitboardManager(self)
 
-        params = MoveParameters(SQUARES["d7"], SQUARES["e8"], PIECES["P"], PIECES["Q"], 0, 0, 0, 0)
+        moves = Moves()
+        params = MoveParameters(SQUARES["d7"], SQUARES["e8"], PIECES["B"], PIECES["Q"], 0, 0, 0, 0)
         move = Serializer.get_encoded_move(params)
+        moves.add_move(move)
 
-        Console.print_move(move)
+        Console.print_moves(moves)

@@ -1,4 +1,8 @@
+from src.data.parameters.move_parameters import MoveParameters
+
 from src.utilities.bit import Bit
+
+from src.constants.file_constants import DESERIALIZER_METHODS
 
 from src.constants.bit_constants import (
     SOURCE_SQUARE_OFFSET,
@@ -13,6 +17,16 @@ from src.constants.bit_constants import (
 
 
 class Deserializer:
+    @staticmethod
+    def get_decoded_move_parameters(move):
+        arguments = []
+
+        for method_name in DESERIALIZER_METHODS:
+            method = getattr(Deserializer, method_name)
+            arguments.append(method(move))
+
+        return MoveParameters(*arguments)
+
     @staticmethod
     def get_decoded_source_square(move):
         return move & SOURCE_SQUARE_OFFSET
