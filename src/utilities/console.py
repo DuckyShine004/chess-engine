@@ -1,5 +1,5 @@
+from src.routines.codec import Codec
 from src.routines.attacked import Attacked
-from src.routines.deserializer import Deserializer
 
 from src.utilities.bit import Bit
 
@@ -90,7 +90,7 @@ class Console:
 
     @staticmethod
     def print_move(move):
-        move_parameters = Deserializer.get_decoded_move_parameters(move)
+        move_parameters = Codec.get_decoded_move_parameters(move)
 
         print(
             f"{COORDINATES[move_parameters.source_square]}"
@@ -100,7 +100,7 @@ class Console:
 
     @staticmethod
     def print_extended_move(move):
-        move_parameters = Deserializer.get_decoded_move_parameters(move)
+        move_parameters = Codec.get_decoded_move_parameters(move)
 
         print(
             f"{COORDINATES[move_parameters.source_square]:>5}"

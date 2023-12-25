@@ -5,8 +5,7 @@ from src.data.parameters.move_parameters import MoveParameters
 from src.routines.move import Move
 from src.data_structures.moves import Moves
 
-from src.routines.deserializer import Deserializer
-from src.routines.serializer import Serializer
+from src.routines.codec import Codec
 
 from src.utilities.bit import Bit
 from src.utilities.attack import Attack
