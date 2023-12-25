@@ -1,7 +1,9 @@
 from src.routines.attacked import Attacked
+from src.routines.deserializer import Deserializer
+
 from src.utilities.bit import Bit
 
-from src.constants.piece_constants import CASTLE, UNICODE_PIECES
+from src.constants.piece_constants import CASTLE, UNICODE_PIECES, PROMOTED_PIECES
 
 from src.constants.board_constants import (
     RANKS,
@@ -52,21 +54,19 @@ class Console:
 
     @staticmethod
     def print_board_messages(enpassant, castle, side):
-        enpassant_msg = COORDINATES[enpassant] if enpassant < NUMBER_OF_SQUARES else "no"
+        enpassant_message = COORDINATES[enpassant] if enpassant < NUMBER_OF_SQUARES else "no"
 
-        castle_white_king_side = "K" if castle & CASTLE["K"] else "-"
-        castle_white_queen_side = "Q" if castle & CASTLE["Q"] else "-"
-        castle_black_king_side = "k" if castle & CASTLE["k"] else "-"
-        castle_black_queen_side = "q" if castle & CASTLE["q"] else "-"
+        castle_white_king_side_message = "K" if castle & CASTLE["K"] else "-"
+        castle_white_queen_side_message = "Q" if castle & CASTLE["Q"] else "-"
+        castle_black_king_side_message = "k" if castle & CASTLE["k"] else "-"
+        castle_black_queen_side_message = "q" if castle & CASTLE["q"] else "-"
 
         print("\n   a b c d e f g h\n")
         print(f"   Side:     {'white' if not side and side != -1 else 'black'}")
-        print(f"   Enpassant:   {enpassant_msg}")
+        print(f"   Enpassant:   {enpassant_message}")
         print("   Castling:  ", end="")
-        print(castle_white_king_side + castle_white_queen_side, end="")
-        print(castle_black_king_side + castle_black_queen_side, end="")
-
-        print()
+        print(castle_white_king_side_message + castle_white_queen_side_message, end="")
+        print(castle_black_king_side_message + castle_black_queen_side_message)
 
     @staticmethod
     def print_attacked_squares(app, side):
@@ -82,3 +82,38 @@ class Console:
             print()
 
         print("\n   a b c d e f g h\n")
+
+    @staticmethod
+    def print_move(move):
+        move_parameters = Deserializer.get_decoded_move_parameters(move)
+
+        print(
+            f"{COORDINATES[move_parameters.source_square]}"
+            f"{COORDINATES[move_parameters.target_square]}"
+            f"{PROMOTED_PIECES[move_parameters.promoted_piece]}"
+        )
+
+    @staticmethod
+    def print_extended_move(move):
+        move_parameters = Deserializer.get_decoded_move_parameters(move)
+
+        print(
+            f"{COORDINATES[move_parameters.source_square]:>6}"
+            f"{COORDINATES[move_parameters.target_square]:}"
+            f"{PROMOTED_PIECES[move_parameters.promoted_piece]:}"
+            f"{UNICODE_PIECES[move_parameters.piece]:>4}"
+            f"{move_parameters.capture_flag:>8}"
+            f"{move_parameters.double_pawn_push_flag:>10}"
+            f"{move_parameters.enpassant_flag:>10}"
+            f"{move_parameters.castling_flag:>10}"
+        )
+
+    @staticmethod
+    def print_moves(moves):
+        print("\n    move    piece   capture   double    enpass    castling\n")
+
+        for move_count in range(moves.count):
+            move = moves.moves[move_count]
+            Console.print_extended_move(move)
+
+        print(f"\n    Total number of moves: {moves.count}")
