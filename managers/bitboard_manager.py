@@ -1,3 +1,5 @@
+import copy
+
 from src.utilities.bit import Bit
 from src.utilities.console import Console
 
@@ -19,6 +21,13 @@ class BitboardManager:
         self.side = 0
         self.enpassant = SQUARES["null"]
         self.castle = 0
+
+    def preserve_attributes(self):
+        self.preserved_bitboards = list(self.bitboards)
+        self.preserved_occupancies = list(self.occupancies)
+        self.preserved_side = self.side
+        self.preserved_enpassant = self.enpassant
+        self.preserved_castle = self.castle
 
     def parse_fen(self, fen):
         parser = FenParser(self)

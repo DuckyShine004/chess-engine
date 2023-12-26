@@ -30,12 +30,15 @@ class App:
         self.bitboard_manager = BitboardManager(self)
 
         self.bitboard_manager.parse_fen(
-            "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1 "
+            "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq c6 0 1 "
         )
         self.bitboard_manager.print_board()
 
-        move_generator = MoveGenerator(self)
-        moves = move_generator.get_moves()
-        # moves = Move.get_moves(self)
+        self.bitboard_manager.preserve_attributes()
 
-        Console.print_moves(moves)
+        self.bitboard_manager.parse_fen(EMPTY_BOARD)
+        self.bitboard_manager.print_board()
+
+        self.bitboard_manager.set_attributes()
+
+        self.bitboard_manager.print_board()

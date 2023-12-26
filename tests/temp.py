@@ -1,20 +1,21 @@
 class A:
     def __init__(self):
-        self.a = []
+        self.a = [1, 2, 4]
+        self.b = 1
+        self.c = self.b
 
+        self.b += 1
 
-class B:
-    def __init__(self, a):
-        self.a = a
-        self.b = self.a.a
+        print(self.c)
+
+    def get_list(self):
+        return [a for a in self.a]
 
 
 foo = A()
-bar = B(foo)
-car = B(foo)
 
 print(foo.a)
+b = foo.get_list()
+b.append(3)
 
-foo.a.append(1)
-
-print(bar.b)
+print(foo.a, b)
