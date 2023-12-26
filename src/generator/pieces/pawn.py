@@ -137,6 +137,6 @@ class Pawn(Piece):
         self.move_parameters.target_square = enpassant_square
         self.move_parameters.capture_flag = 1
         self.move_parameters.enpassant_flag = 1
-        self.add_move()
 
+        self.add_move()
         self.reset_move_parameters()

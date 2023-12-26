@@ -1,6 +1,7 @@
 from src.generator.pieces.pawn import Pawn
 from src.generator.pieces.king import King
 from src.generator.pieces.knight import Knight
+from src.generator.pieces.bishop import Bishop
 
 from src.data_structures.moves import Moves
 from src.data.parameters.move_parameters import MoveParameters
@@ -22,6 +23,7 @@ class MoveGenerator:
         self.pawn = Pawn(self, app)
         self.king = King(self, app)
         self.knight = Knight(self, app)
+        self.bishop = Bishop(self, app)
 
     def get_moves(self):
         for piece in range(NUMBER_OF_BITBOARDS):
@@ -31,7 +33,9 @@ class MoveGenerator:
 
             # self.get_pawn_moves(bitboard, piece)
             # self.get_king_moves(bitboard, piece)
-            self.get_knight_moves(bitboard, piece)
+
+            # self.get_knight_moves(bitboard, piece)
+            self.get_bishop_moves(bitboard, piece)
 
         return self.moves
 
@@ -46,3 +50,7 @@ class MoveGenerator:
     def get_knight_moves(self, bitboard, piece):
         if piece == PIECES["N"] if self.side == SIDES["white"] else piece == PIECES["n"]:
             self.knight.generate_moves(bitboard)
+
+    def get_bishop_moves(self, bitboard, piece):
+        if piece == PIECES["B"] if self.side == SIDES["white"] else piece == PIECES["b"]:
+            self.bishop.generate_moves(bitboard)

@@ -1,11 +1,12 @@
 from src.generator.pieces.piece import Piece
 
 from src.utilities.bit import Bit
+from src.utilities.attack import Attack
 
-from src.constants.piece_constants import PIECES
+from src.constants.piece_constants import SIDES, PIECES
 
 
-class Knight(Piece):
+class Bishop(Piece):
     def __init__(self, move_generator, app):
         super().__init__(move_generator, app)
 
@@ -21,7 +22,7 @@ class Knight(Piece):
 
     def generate_capture_moves(self, source_square):
         offset = ~self.occupancies[self.side]
-        attacks = self.knight_attack_table[source_square] & offset
+        attacks = self.get_bishop_attacks(source_square) & offset
 
         while attacks:
             target_square = Bit.get_least_significant_first_bit(attacks)
@@ -34,6 +35,13 @@ class Knight(Piece):
                 self.add_quiet_move()
 
             attacks = Bit.pop_bit(attacks, target_square)
+
+    def get_bishop_attacks(self, source_square):
+        occupancy = self.occupancies[SIDES["all"]]
+        attack_table = self.bishop_attack_table
+        attack_masks = self.bishop_attack_masks
+
+        return Attack.get_bishop_attack_masks(source_square, occupancy, attack_table, attack_masks)
 
     def add_capture_move(self):
         self.move_parameters.capture_flag = 1
