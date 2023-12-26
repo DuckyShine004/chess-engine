@@ -6,7 +6,7 @@ class MoveParameters:
     source_square: int
     target_square: int
     piece: int
-    promoted_piece: int
+    promotion_piece: int
     capture_flag: int
     double_pawn_push_flag: int
     enpassant_flag: int

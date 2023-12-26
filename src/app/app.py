@@ -5,12 +5,13 @@ from src.data.parameters.move_parameters import MoveParameters
 from src.routines.move import Move
 from src.data_structures.moves import Moves
 
-from src.routines.deserializer import Deserializer
-from src.routines.serializer import Serializer
+from src.routines.codec import Codec
 
 from src.utilities.bit import Bit
 from src.utilities.attack import Attack
 from src.utilities.console import Console
+
+from src.generator.move_generator import MoveGenerator
 
 from src.constants.piece_constants import PIECES, SIDES, UNICODE_PIECES
 from src.constants.board_constants import SQUARES, COORDINATES
@@ -33,6 +34,8 @@ class App:
         )
         self.bitboard_manager.print_board()
 
-        moves = Move.get_moves(self)
+        move_generator = MoveGenerator(self)
+        moves = move_generator.get_moves()
+        # moves = Move.get_moves(self)
 
         Console.print_moves(moves)

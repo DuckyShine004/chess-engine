@@ -1,14 +1,16 @@
 from src.data_structures.moves import Moves
 from src.data.parameters.move_parameters import MoveParameters
 
+from src.routines.codec import Codec
 from src.routines.attacked import Attacked
-from src.routines.serializer import Serializer
 
 from src.utilities.bit import Bit
 from src.utilities.attack import Attack
 
 from src.constants.piece_constants import SIDES, PIECES, CASTLE
 from src.constants.board_constants import NUMBER_OF_BITBOARDS, SQUARES, COORDINATES
+
+# Use this instead of refactored code if actual behavior does not match the expected behavior
 
 
 class Move:
@@ -55,32 +57,32 @@ class Move:
                                     source_square, target_square, piece, PIECES["Q"], 0, 0, 0, 0
                                 )
 
-                                moves.add_move(Serializer.get_encoded_move(move_parameters))
+                                moves.add_move(Codec.get_encoded_move(move_parameters))
 
                                 move_parameters = MoveParameters(
                                     source_square, target_square, piece, PIECES["R"], 0, 0, 0, 0
                                 )
 
-                                moves.add_move(Serializer.get_encoded_move(move_parameters))
+                                moves.add_move(Codec.get_encoded_move(move_parameters))
 
                                 move_parameters = MoveParameters(
                                     source_square, target_square, piece, PIECES["B"], 0, 0, 0, 0
                                 )
 
-                                moves.add_move(Serializer.get_encoded_move(move_parameters))
+                                moves.add_move(Codec.get_encoded_move(move_parameters))
 
                                 move_parameters = MoveParameters(
                                     source_square, target_square, piece, PIECES["N"], 0, 0, 0, 0
                                 )
 
-                                moves.add_move(Serializer.get_encoded_move(move_parameters))
+                                moves.add_move(Codec.get_encoded_move(move_parameters))
                             else:
                                 # One square ahead pawn move
                                 move_parameters = MoveParameters(
                                     source_square, target_square, piece, 0, 0, 0, 0, 0
                                 )
 
-                                moves.add_move(Serializer.get_encoded_move(move_parameters))
+                                moves.add_move(Codec.get_encoded_move(move_parameters))
 
                                 # Two squares ahead pawn move
                                 if (SQUARES["a2"] <= source_square <= SQUARES["h2"]) and not Bit.get_bit(
@@ -90,7 +92,7 @@ class Move:
                                         source_square, target_square - 8, piece, 0, 0, 1, 0, 0
                                     )
 
-                                    moves.add_move(Serializer.get_encoded_move(move_parameters))
+                                    moves.add_move(Codec.get_encoded_move(move_parameters))
 
                         # Initialize pawn attacks bitboard
                         attacks = pawn_attack_table[side][source_square] & occupancies[SIDES["black"]]
@@ -105,31 +107,31 @@ class Move:
                                     source_square, target_square, piece, PIECES["Q"], 1, 0, 0, 0
                                 )
 
-                                moves.add_move(Serializer.get_encoded_move(move_parameters))
+                                moves.add_move(Codec.get_encoded_move(move_parameters))
 
                                 move_parameters = MoveParameters(
                                     source_square, target_square, piece, PIECES["R"], 1, 0, 0, 0
                                 )
 
-                                moves.add_move(Serializer.get_encoded_move(move_parameters))
+                                moves.add_move(Codec.get_encoded_move(move_parameters))
 
                                 move_parameters = MoveParameters(
                                     source_square, target_square, piece, PIECES["B"], 1, 0, 0, 0
                                 )
 
-                                moves.add_move(Serializer.get_encoded_move(move_parameters))
+                                moves.add_move(Codec.get_encoded_move(move_parameters))
 
                                 move_parameters = MoveParameters(
                                     source_square, target_square, piece, PIECES["N"], 1, 0, 0, 0
                                 )
 
-                                moves.add_move(Serializer.get_encoded_move(move_parameters))
+                                moves.add_move(Codec.get_encoded_move(move_parameters))
                             else:
                                 # One square ahead pawn move
                                 move_parameters = MoveParameters(
                                     source_square, target_square, piece, 0, 1, 0, 0, 0
                                 )
-                                moves.add_move(Serializer.get_encoded_move(move_parameters))
+                                moves.add_move(Codec.get_encoded_move(move_parameters))
 
                             attacks = Bit.pop_bit(attacks, target_square)
 
@@ -145,7 +147,7 @@ class Move:
                                 move_parameters = MoveParameters(
                                     source_square, enpassant_square, piece, 0, 1, 0, 1, 0
                                 )
-                                moves.add_move(Serializer.get_encoded_move(move_parameters))
+                                moves.add_move(Codec.get_encoded_move(move_parameters))
 
                         # Pop least significant first bit from bitboard
                         bitboard = Bit.pop_bit(bitboard, source_square)
@@ -167,7 +169,7 @@ class Move:
                                 move_parameters = MoveParameters(
                                     SQUARES["e1"], SQUARES["g1"], piece, 0, 0, 0, 0, 1
                                 )
-                                moves.add_move(Serializer.get_encoded_move(move_parameters))
+                                moves.add_move(Codec.get_encoded_move(move_parameters))
 
                     # Queen side castling is available
                     if castle & CASTLE["Q"]:
@@ -185,7 +187,7 @@ class Move:
                                 move_parameters = MoveParameters(
                                     SQUARES["e1"], SQUARES["c1"], piece, 0, 0, 0, 0, 1
                                 )
-                                moves.add_move(Serializer.get_encoded_move(move_parameters))
+                                moves.add_move(Codec.get_encoded_move(move_parameters))
 
             # Generate black pawns and black king castling moves
             else:
@@ -205,32 +207,32 @@ class Move:
                                     source_square, target_square, piece, PIECES["q"], 0, 0, 0, 0
                                 )
 
-                                moves.add_move(Serializer.get_encoded_move(move_parameters))
+                                moves.add_move(Codec.get_encoded_move(move_parameters))
 
                                 move_parameters = MoveParameters(
                                     source_square, target_square, piece, PIECES["r"], 0, 0, 0, 0
                                 )
 
-                                moves.add_move(Serializer.get_encoded_move(move_parameters))
+                                moves.add_move(Codec.get_encoded_move(move_parameters))
 
                                 move_parameters = MoveParameters(
                                     source_square, target_square, piece, PIECES["b"], 0, 0, 0, 0
                                 )
 
-                                moves.add_move(Serializer.get_encoded_move(move_parameters))
+                                moves.add_move(Codec.get_encoded_move(move_parameters))
 
                                 move_parameters = MoveParameters(
                                     source_square, target_square, piece, PIECES["n"], 0, 0, 0, 0
                                 )
 
-                                moves.add_move(Serializer.get_encoded_move(move_parameters))
+                                moves.add_move(Codec.get_encoded_move(move_parameters))
                             else:
                                 # One square ahead pawn move
                                 move_parameters = MoveParameters(
                                     source_square, target_square, piece, 0, 0, 0, 0, 0
                                 )
 
-                                moves.add_move(Serializer.get_encoded_move(move_parameters))
+                                moves.add_move(Codec.get_encoded_move(move_parameters))
 
                                 # Two squares ahead pawn move
                                 if (SQUARES["a7"] <= source_square <= SQUARES["h7"]) and not Bit.get_bit(
@@ -240,7 +242,7 @@ class Move:
                                         source_square, target_square + 8, piece, 0, 0, 1, 0, 0
                                     )
 
-                                    moves.add_move(Serializer.get_encoded_move(move_parameters))
+                                    moves.add_move(Codec.get_encoded_move(move_parameters))
 
                         # Initialize pawn attacks bitboard
                         attacks = pawn_attack_table[side][source_square] & occupancies[SIDES["white"]]
@@ -254,31 +256,31 @@ class Move:
                                     source_square, target_square, piece, PIECES["q"], 1, 0, 0, 0
                                 )
 
-                                moves.add_move(Serializer.get_encoded_move(move_parameters))
+                                moves.add_move(Codec.get_encoded_move(move_parameters))
 
                                 move_parameters = MoveParameters(
                                     source_square, target_square, piece, PIECES["r"], 1, 0, 0, 0
                                 )
 
-                                moves.add_move(Serializer.get_encoded_move(move_parameters))
+                                moves.add_move(Codec.get_encoded_move(move_parameters))
 
                                 move_parameters = MoveParameters(
                                     source_square, target_square, piece, PIECES["b"], 1, 0, 0, 0
                                 )
 
-                                moves.add_move(Serializer.get_encoded_move(move_parameters))
+                                moves.add_move(Codec.get_encoded_move(move_parameters))
 
                                 move_parameters = MoveParameters(
                                     source_square, target_square, piece, PIECES["n"], 1, 0, 0, 0
                                 )
 
-                                moves.add_move(Serializer.get_encoded_move(move_parameters))
+                                moves.add_move(Codec.get_encoded_move(move_parameters))
                             else:
                                 # One square ahead pawn move
                                 move_parameters = MoveParameters(
                                     source_square, target_square, piece, 0, 1, 0, 0, 0
                                 )
-                                moves.add_move(Serializer.get_encoded_move(move_parameters))
+                                moves.add_move(Codec.get_encoded_move(move_parameters))
 
                             attacks = Bit.pop_bit(attacks, target_square)
 
@@ -294,7 +296,7 @@ class Move:
                                 move_parameters = MoveParameters(
                                     source_square, enpassant_square, piece, 0, 1, 0, 1, 0
                                 )
-                                moves.add_move(Serializer.get_encoded_move(move_parameters))
+                                moves.add_move(Codec.get_encoded_move(move_parameters))
 
                         # Pop least significant first bit from bitboard
                         bitboard = Bit.pop_bit(bitboard, source_square)
@@ -316,7 +318,7 @@ class Move:
                                 move_parameters = MoveParameters(
                                     SQUARES["e8"], SQUARES["g8"], piece, 0, 0, 0, 0, 1
                                 )
-                                moves.add_move(Serializer.get_encoded_move(move_parameters))
+                                moves.add_move(Codec.get_encoded_move(move_parameters))
 
                     # Queen side castling is available
                     if castle & CASTLE["q"]:
@@ -334,7 +336,7 @@ class Move:
                                 move_parameters = MoveParameters(
                                     SQUARES["e8"], SQUARES["c8"], piece, 0, 0, 0, 0, 1
                                 )
-                                moves.add_move(Serializer.get_encoded_move(move_parameters))
+                                moves.add_move(Codec.get_encoded_move(move_parameters))
 
             # Generate knight moves
             if piece == PIECES["N"] if side == SIDES["white"] else piece == PIECES["n"]:
@@ -363,14 +365,14 @@ class Move:
                             move_parameters = MoveParameters(
                                 source_square, target_square, piece, 0, 0, 0, 0, 0
                             )
-                            moves.add_move(Serializer.get_encoded_move(move_parameters))
+                            moves.add_move(Codec.get_encoded_move(move_parameters))
 
                         # Capture moves
                         else:
                             move_parameters = MoveParameters(
                                 source_square, target_square, piece, 0, 1, 0, 0, 0
                             )
-                            moves.add_move(Serializer.get_encoded_move(move_parameters))
+                            moves.add_move(Codec.get_encoded_move(move_parameters))
 
                         attacks = Bit.pop_bit(attacks, target_square)
 
@@ -408,14 +410,14 @@ class Move:
                             move_parameters = MoveParameters(
                                 source_square, target_square, piece, 0, 0, 0, 0, 0
                             )
-                            moves.add_move(Serializer.get_encoded_move(move_parameters))
+                            moves.add_move(Codec.get_encoded_move(move_parameters))
 
                         # Capture moves
                         else:
                             move_parameters = MoveParameters(
                                 source_square, target_square, piece, 0, 1, 0, 0, 0
                             )
-                            moves.add_move(Serializer.get_encoded_move(move_parameters))
+                            moves.add_move(Codec.get_encoded_move(move_parameters))
 
                         attacks = Bit.pop_bit(attacks, target_square)
 
@@ -453,14 +455,14 @@ class Move:
                             move_parameters = MoveParameters(
                                 source_square, target_square, piece, 0, 0, 0, 0, 0
                             )
-                            moves.add_move(Serializer.get_encoded_move(move_parameters))
+                            moves.add_move(Codec.get_encoded_move(move_parameters))
 
                         # Capture moves
                         else:
                             move_parameters = MoveParameters(
                                 source_square, target_square, piece, 0, 1, 0, 0, 0
                             )
-                            moves.add_move(Serializer.get_encoded_move(move_parameters))
+                            moves.add_move(Codec.get_encoded_move(move_parameters))
 
                         attacks = Bit.pop_bit(attacks, target_square)
 
@@ -498,14 +500,14 @@ class Move:
                             move_parameters = MoveParameters(
                                 source_square, target_square, piece, 0, 0, 0, 0, 0
                             )
-                            moves.add_move(Serializer.get_encoded_move(move_parameters))
+                            moves.add_move(Codec.get_encoded_move(move_parameters))
 
                         # Capture moves
                         else:
                             move_parameters = MoveParameters(
                                 source_square, target_square, piece, 0, 1, 0, 0, 0
                             )
-                            moves.add_move(Serializer.get_encoded_move(move_parameters))
+                            moves.add_move(Codec.get_encoded_move(move_parameters))
 
                         attacks = Bit.pop_bit(attacks, target_square)
 
@@ -538,14 +540,14 @@ class Move:
                             move_parameters = MoveParameters(
                                 source_square, target_square, piece, 0, 0, 0, 0, 0
                             )
-                            moves.add_move(Serializer.get_encoded_move(move_parameters))
+                            moves.add_move(Codec.get_encoded_move(move_parameters))
 
                         # Capture moves
                         else:
                             move_parameters = MoveParameters(
                                 source_square, target_square, piece, 0, 1, 0, 0, 0
                             )
-                            moves.add_move(Serializer.get_encoded_move(move_parameters))
+                            moves.add_move(Codec.get_encoded_move(move_parameters))
 
                         attacks = Bit.pop_bit(attacks, target_square)
 
