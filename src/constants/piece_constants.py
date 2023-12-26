@@ -1,3 +1,5 @@
+from src.constants.board_constants import SQUARES
+
 SIDES = {
     "white": 0,
     "black": 1,
@@ -44,3 +46,23 @@ PROMOTION_PIECES = {
 
 ASCII_PIECES = "PNBRQKpnbrqk"
 UNICODE_PIECES = "♙♘♗♖♕♔♟♞♝♜♛♚"
+
+KING_SIDE_SQUARES = [
+    (SQUARES["f1"], SQUARES["g1"]),
+    (SQUARES["f8"], SQUARES["g8"]),
+]
+
+QUEEN_SIDE_SQUARES = [
+    (SQUARES["b1"], SQUARES["c1"], SQUARES["d1"]),
+    (SQUARES["b8"], SQUARES["c8"], SQUARES["d8"]),
+]
+
+KING_ATTACKED_SQUARES = [
+    (SQUARES["e1"], SQUARES["f1"]),
+    (SQUARES["e8"], SQUARES["f8"]),
+]
+
+QUEEN_ATTACKED_SQUARES = [
+    (SQUARES["e1"], SQUARES["d1"]),
+    (SQUARES["e8"], SQUARES["d8"]),
+]
