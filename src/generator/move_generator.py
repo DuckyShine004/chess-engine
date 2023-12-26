@@ -35,12 +35,12 @@ class MoveGenerator:
 
             self.move_parameters.piece = piece
 
-            # self.get_pawn_moves(bitboard, piece)
-            # self.get_king_moves(bitboard, piece)
-            # self.get_rook_moves(bitboard, piece)
+            self.get_pawn_moves(bitboard, piece)
+            self.get_king_moves(bitboard, piece)
+            self.get_rook_moves(bitboard, piece)
             self.get_queen_moves(bitboard, piece)
-            # self.get_knight_moves(bitboard, piece)
-            # self.get_bishop_moves(bitboard, piece)
+            self.get_knight_moves(bitboard, piece)
+            self.get_bishop_moves(bitboard, piece)
 
         return self.moves
 
