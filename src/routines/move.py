@@ -10,6 +10,8 @@ from src.utilities.attack import Attack
 from src.constants.piece_constants import SIDES, PIECES, CASTLE
 from src.constants.board_constants import NUMBER_OF_BITBOARDS, SQUARES, COORDINATES
 
+# Use this instead of refactored code if actual behavior does not match the expected behavior
+
 
 class Move:
     # def __init__(self, bitboards):
