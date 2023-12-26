@@ -35,7 +35,7 @@ class App:
         self.bitboard_manager.print_board()
 
         move_generator = MoveGenerator(self)
-        moves = move_generator.get_moves()
-        # moves = Move.get_moves(self)
+        # moves = move_generator.get_moves()
+        moves = Move.get_moves(self)
 
         Console.print_moves(moves)

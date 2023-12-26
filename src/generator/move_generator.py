@@ -1,6 +1,7 @@
 from src.generator.pieces.pawn import Pawn
 from src.generator.pieces.king import King
 from src.generator.pieces.rook import Rook
+from src.generator.pieces.queen import Queen
 from src.generator.pieces.knight import Knight
 from src.generator.pieces.bishop import Bishop
 
@@ -24,6 +25,7 @@ class MoveGenerator:
         self.pawn = Pawn(self, app)
         self.king = King(self, app)
         self.rook = Rook(self, app)
+        self.queen = Queen(self, app)
         self.knight = Knight(self, app)
         self.bishop = Bishop(self, app)
 
@@ -35,7 +37,8 @@ class MoveGenerator:
 
             # self.get_pawn_moves(bitboard, piece)
             # self.get_king_moves(bitboard, piece)
-            self.get_rook_moves(bitboard, piece)
+            # self.get_rook_moves(bitboard, piece)
+            self.get_queen_moves(bitboard, piece)
             # self.get_knight_moves(bitboard, piece)
             # self.get_bishop_moves(bitboard, piece)
 
@@ -52,6 +55,10 @@ class MoveGenerator:
     def get_rook_moves(self, bitboard, piece):
         if piece == PIECES["R"] if self.side == SIDES["white"] else piece == PIECES["r"]:
             self.rook.generate_moves(bitboard)
+
+    def get_queen_moves(self, bitboard, piece):
+        if piece == PIECES["Q"] if self.side == SIDES["white"] else piece == PIECES["q"]:
+            self.queen.generate_moves(bitboard)
 
     def get_knight_moves(self, bitboard, piece):
         if piece == PIECES["N"] if self.side == SIDES["white"] else piece == PIECES["n"]:
