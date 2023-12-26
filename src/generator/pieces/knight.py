@@ -2,8 +2,6 @@ from src.generator.pieces.piece import Piece
 
 from src.utilities.bit import Bit
 
-from src.constants.piece_constants import PIECES
-
 
 class Knight(Piece):
     def __init__(self, move_generator, app):
