@@ -11,6 +11,8 @@ from src.utilities.bit import Bit
 from src.utilities.attack import Attack
 from src.utilities.console import Console
 
+from src.generator.move_generator import MoveGenerator
+
 from src.constants.piece_constants import PIECES, SIDES, UNICODE_PIECES
 from src.constants.board_constants import SQUARES, COORDINATES
 from src.constants.parser_constants import (
@@ -32,6 +34,8 @@ class App:
         )
         self.bitboard_manager.print_board()
 
-        moves = Move.get_moves(self)
+        move_generator = MoveGenerator(self)
+        moves = move_generator.get_moves()
+        # moves = Move.get_moves(self)
 
         Console.print_moves(moves)
