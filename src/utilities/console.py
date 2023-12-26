@@ -3,7 +3,7 @@ from src.routines.attacked import Attacked
 
 from src.utilities.bit import Bit
 
-from src.constants.piece_constants import CASTLE, UNICODE_PIECES, PROMOTED_PIECES
+from src.constants.piece_constants import CASTLE, UNICODE_PIECES, PROMOTION_PIECES
 
 from src.constants.board_constants import (
     RANKS,
@@ -105,7 +105,7 @@ class Console:
         print(
             f"{COORDINATES[move_parameters.source_square]:>5}"
             f"{COORDINATES[move_parameters.target_square]}"
-            f"{PROMOTED_PIECES.get(move_parameters.promoted_piece, ' ')}"
+            f"{PROMOTION_PIECES.get(move_parameters.promotion_piece, ' ')}"
             f"{UNICODE_PIECES[move_parameters.piece]:>4}"
             f"{move_parameters.capture_flag:>8}"
             f"{move_parameters.double_pawn_push_flag:>10}"

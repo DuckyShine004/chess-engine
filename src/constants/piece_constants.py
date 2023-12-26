@@ -31,7 +31,7 @@ PIECES = {
     "k": 11,
 }
 
-PROMOTED_PIECES = {
+PROMOTION_PIECES = {
     PIECES["Q"]: "q",
     PIECES["R"]: "r",
     PIECES["B"]: "b",

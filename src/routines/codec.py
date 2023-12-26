@@ -51,7 +51,7 @@ class Codec:
         return Bit.right_shift((move & PIECE_OFFSET), 12)
 
     @staticmethod
-    def get_decoded_promoted_piece(move):
+    def get_decoded_promotion_piece(move):
         return Bit.right_shift((move & PROMOTED_PIECE_OFFSET), 16)
 
     @staticmethod

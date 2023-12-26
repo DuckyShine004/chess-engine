@@ -17,7 +17,7 @@ MOVE_OFFSETS = {
     "source_square": 0,
     "target_square": 6,
     "piece": 12,
-    "promoted_piece": 16,
+    "promotion_piece": 16,
     "capture_flag": 20,
     "double_pawn_push_flag": 21,
     "enpassant_flag": 22,
