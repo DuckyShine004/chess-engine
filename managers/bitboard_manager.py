@@ -29,6 +29,13 @@ class BitboardManager:
         self.preserved_enpassant = self.enpassant
         self.preserved_castle = self.castle
 
+    def set_attributes(self):
+        self.bitboards = list(self.preserved_bitboards)
+        self.occupancies = list(self.preserved_occupancies)
+        self.side = self.preserved_side
+        self.enpassant = self.preserved_enpassant
+        self.castle = self.preserved_castle
+
     def parse_fen(self, fen):
         parser = FenParser(self)
         parser.parse(fen)
