@@ -336,219 +336,219 @@ class Move:
                                 )
                                 moves.add_move(Codec.get_encoded_move(move_parameters))
 
-            # Generate knight moves
-            if piece == PIECES["N"] if side == SIDES["white"] else piece == PIECES["n"]:
-                # Loop over source squares of piece bitboard
-                while bitboard:
-                    source_square = Bit.get_least_significant_first_bit(bitboard)
+            # # Generate knight moves
+            # if piece == PIECES["N"] if side == SIDES["white"] else piece == PIECES["n"]:
+            #     # Loop over source squares of piece bitboard
+            #     while bitboard:
+            #         source_square = Bit.get_least_significant_first_bit(bitboard)
 
-                    # Initialize piece attacks in order to get the set of target squares
-                    attacks = knight_attack_table[source_square] & (
-                        ~occupancies[SIDES["white"]]
-                        if side == SIDES["white"]
-                        else ~occupancies[SIDES["black"]]
-                    )
+            #         # Initialize piece attacks in order to get the set of target squares
+            #         attacks = knight_attack_table[source_square] & (
+            #             ~occupancies[SIDES["white"]]
+            #             if side == SIDES["white"]
+            #             else ~occupancies[SIDES["black"]]
+            #         )
 
-                    # Loop over the target squares available from generated attacks
-                    while attacks:
-                        target_square = Bit.get_least_significant_first_bit(attacks)
+            #         # Loop over the target squares available from generated attacks
+            #         while attacks:
+            #             target_square = Bit.get_least_significant_first_bit(attacks)
 
-                        # Quiet moves
-                        if not Bit.get_bit(
-                            occupancies[SIDES["black"]]
-                            if side == SIDES["white"]
-                            else occupancies[SIDES["white"]],
-                            target_square,
-                        ):
-                            move_parameters = MoveParameters(
-                                source_square, target_square, piece, 0, 0, 0, 0, 0
-                            )
-                            moves.add_move(Codec.get_encoded_move(move_parameters))
+            #             # Quiet moves
+            #             if not Bit.get_bit(
+            #                 occupancies[SIDES["black"]]
+            #                 if side == SIDES["white"]
+            #                 else occupancies[SIDES["white"]],
+            #                 target_square,
+            #             ):
+            #                 move_parameters = MoveParameters(
+            #                     source_square, target_square, piece, 0, 0, 0, 0, 0
+            #                 )
+            #                 moves.add_move(Codec.get_encoded_move(move_parameters))
 
-                        # Capture moves
-                        else:
-                            move_parameters = MoveParameters(
-                                source_square, target_square, piece, 0, 1, 0, 0, 0
-                            )
-                            moves.add_move(Codec.get_encoded_move(move_parameters))
+            #             # Capture moves
+            #             else:
+            #                 move_parameters = MoveParameters(
+            #                     source_square, target_square, piece, 0, 1, 0, 0, 0
+            #                 )
+            #                 moves.add_move(Codec.get_encoded_move(move_parameters))
 
-                        attacks = Bit.pop_bit(attacks, target_square)
+            #             attacks = Bit.pop_bit(attacks, target_square)
 
-                    bitboard = Bit.pop_bit(bitboard, source_square)
+            #         bitboard = Bit.pop_bit(bitboard, source_square)
 
-            # Generate bishop moves
-            if piece == PIECES["B"] if side == SIDES["white"] else piece == PIECES["b"]:
-                # Loop over source squares of piece bitboard
-                while bitboard:
-                    source_square = Bit.get_least_significant_first_bit(bitboard)
+            # # Generate bishop moves
+            # if piece == PIECES["B"] if side == SIDES["white"] else piece == PIECES["b"]:
+            #     # Loop over source squares of piece bitboard
+            #     while bitboard:
+            #         source_square = Bit.get_least_significant_first_bit(bitboard)
 
-                    # Initialize piece attacks in order to get the set of target squares
-                    attacks = Attack.get_bishop_attack_masks(
-                        source_square,
-                        occupancies[SIDES["all"]],
-                        bishop_attack_table,
-                        bishop_attack_masks,
-                    ) & (
-                        ~occupancies[SIDES["white"]]
-                        if side == SIDES["white"]
-                        else ~occupancies[SIDES["black"]]
-                    )
+            #         # Initialize piece attacks in order to get the set of target squares
+            #         attacks = Attack.get_bishop_attack_masks(
+            #             source_square,
+            #             occupancies[SIDES["all"]],
+            #             bishop_attack_table,
+            #             bishop_attack_masks,
+            #         ) & (
+            #             ~occupancies[SIDES["white"]]
+            #             if side == SIDES["white"]
+            #             else ~occupancies[SIDES["black"]]
+            #         )
 
-                    # Loop over the target squares available from generated attacks
-                    while attacks:
-                        target_square = Bit.get_least_significant_first_bit(attacks)
+            #         # Loop over the target squares available from generated attacks
+            #         while attacks:
+            #             target_square = Bit.get_least_significant_first_bit(attacks)
 
-                        # Quiet moves
-                        if not Bit.get_bit(
-                            occupancies[SIDES["black"]]
-                            if side == SIDES["white"]
-                            else occupancies[SIDES["white"]],
-                            target_square,
-                        ):
-                            move_parameters = MoveParameters(
-                                source_square, target_square, piece, 0, 0, 0, 0, 0
-                            )
-                            moves.add_move(Codec.get_encoded_move(move_parameters))
+            #             # Quiet moves
+            #             if not Bit.get_bit(
+            #                 occupancies[SIDES["black"]]
+            #                 if side == SIDES["white"]
+            #                 else occupancies[SIDES["white"]],
+            #                 target_square,
+            #             ):
+            #                 move_parameters = MoveParameters(
+            #                     source_square, target_square, piece, 0, 0, 0, 0, 0
+            #                 )
+            #                 moves.add_move(Codec.get_encoded_move(move_parameters))
 
-                        # Capture moves
-                        else:
-                            move_parameters = MoveParameters(
-                                source_square, target_square, piece, 0, 1, 0, 0, 0
-                            )
-                            moves.add_move(Codec.get_encoded_move(move_parameters))
+            #             # Capture moves
+            #             else:
+            #                 move_parameters = MoveParameters(
+            #                     source_square, target_square, piece, 0, 1, 0, 0, 0
+            #                 )
+            #                 moves.add_move(Codec.get_encoded_move(move_parameters))
 
-                        attacks = Bit.pop_bit(attacks, target_square)
+            #             attacks = Bit.pop_bit(attacks, target_square)
 
-                    bitboard = Bit.pop_bit(bitboard, source_square)
+            #         bitboard = Bit.pop_bit(bitboard, source_square)
 
-            # Generate rook moves
-            if piece == PIECES["R"] if side == SIDES["white"] else piece == PIECES["r"]:
-                # Loop over source squares of piece bitboard
-                while bitboard:
-                    source_square = Bit.get_least_significant_first_bit(bitboard)
+            # # Generate rook moves
+            # if piece == PIECES["R"] if side == SIDES["white"] else piece == PIECES["r"]:
+            #     # Loop over source squares of piece bitboard
+            #     while bitboard:
+            #         source_square = Bit.get_least_significant_first_bit(bitboard)
 
-                    # Initialize piece attacks in order to get the set of target squares
-                    attacks = Attack.get_rook_attack_masks(
-                        source_square,
-                        occupancies[SIDES["all"]],
-                        rook_attack_table,
-                        rook_attack_masks,
-                    ) & (
-                        ~occupancies[SIDES["white"]]
-                        if side == SIDES["white"]
-                        else ~occupancies[SIDES["black"]]
-                    )
+            #         # Initialize piece attacks in order to get the set of target squares
+            #         attacks = Attack.get_rook_attack_masks(
+            #             source_square,
+            #             occupancies[SIDES["all"]],
+            #             rook_attack_table,
+            #             rook_attack_masks,
+            #         ) & (
+            #             ~occupancies[SIDES["white"]]
+            #             if side == SIDES["white"]
+            #             else ~occupancies[SIDES["black"]]
+            #         )
 
-                    # Loop over the target squares available from generated attacks
-                    while attacks:
-                        target_square = Bit.get_least_significant_first_bit(attacks)
+            #         # Loop over the target squares available from generated attacks
+            #         while attacks:
+            #             target_square = Bit.get_least_significant_first_bit(attacks)
 
-                        # Quiet moves
-                        if not Bit.get_bit(
-                            occupancies[SIDES["black"]]
-                            if side == SIDES["white"]
-                            else occupancies[SIDES["white"]],
-                            target_square,
-                        ):
-                            move_parameters = MoveParameters(
-                                source_square, target_square, piece, 0, 0, 0, 0, 0
-                            )
-                            moves.add_move(Codec.get_encoded_move(move_parameters))
+            #             # Quiet moves
+            #             if not Bit.get_bit(
+            #                 occupancies[SIDES["black"]]
+            #                 if side == SIDES["white"]
+            #                 else occupancies[SIDES["white"]],
+            #                 target_square,
+            #             ):
+            #                 move_parameters = MoveParameters(
+            #                     source_square, target_square, piece, 0, 0, 0, 0, 0
+            #                 )
+            #                 moves.add_move(Codec.get_encoded_move(move_parameters))
 
-                        # Capture moves
-                        else:
-                            move_parameters = MoveParameters(
-                                source_square, target_square, piece, 0, 1, 0, 0, 0
-                            )
-                            moves.add_move(Codec.get_encoded_move(move_parameters))
+            #             # Capture moves
+            #             else:
+            #                 move_parameters = MoveParameters(
+            #                     source_square, target_square, piece, 0, 1, 0, 0, 0
+            #                 )
+            #                 moves.add_move(Codec.get_encoded_move(move_parameters))
 
-                        attacks = Bit.pop_bit(attacks, target_square)
+            #             attacks = Bit.pop_bit(attacks, target_square)
 
-                    bitboard = Bit.pop_bit(bitboard, source_square)
+            #         bitboard = Bit.pop_bit(bitboard, source_square)
 
-            # Generate queen moves
-            if piece == PIECES["Q"] if side == SIDES["white"] else piece == PIECES["q"]:
-                # Loop over source squares of piece bitboard
-                while bitboard:
-                    source_square = Bit.get_least_significant_first_bit(bitboard)
+            # # Generate queen moves
+            # if piece == PIECES["Q"] if side == SIDES["white"] else piece == PIECES["q"]:
+            #     # Loop over source squares of piece bitboard
+            #     while bitboard:
+            #         source_square = Bit.get_least_significant_first_bit(bitboard)
 
-                    # Initialize piece attacks in order to get the set of target squares
-                    attacks = Attack.get_queen_attack_masks(
-                        source_square,
-                        occupancies[SIDES["all"]],
-                        attack_tables,
-                        attack_masks,
-                    ) & (
-                        ~occupancies[SIDES["white"]]
-                        if side == SIDES["white"]
-                        else ~occupancies[SIDES["black"]]
-                    )
+            #         # Initialize piece attacks in order to get the set of target squares
+            #         attacks = Attack.get_queen_attack_masks(
+            #             source_square,
+            #             occupancies[SIDES["all"]],
+            #             attack_tables,
+            #             attack_masks,
+            #         ) & (
+            #             ~occupancies[SIDES["white"]]
+            #             if side == SIDES["white"]
+            #             else ~occupancies[SIDES["black"]]
+            #         )
 
-                    # Loop over the target squares available from generated attacks
-                    while attacks:
-                        target_square = Bit.get_least_significant_first_bit(attacks)
+            #         # Loop over the target squares available from generated attacks
+            #         while attacks:
+            #             target_square = Bit.get_least_significant_first_bit(attacks)
 
-                        # Quiet moves
-                        if not Bit.get_bit(
-                            occupancies[SIDES["black"]]
-                            if side == SIDES["white"]
-                            else occupancies[SIDES["white"]],
-                            target_square,
-                        ):
-                            move_parameters = MoveParameters(
-                                source_square, target_square, piece, 0, 0, 0, 0, 0
-                            )
-                            moves.add_move(Codec.get_encoded_move(move_parameters))
+            #             # Quiet moves
+            #             if not Bit.get_bit(
+            #                 occupancies[SIDES["black"]]
+            #                 if side == SIDES["white"]
+            #                 else occupancies[SIDES["white"]],
+            #                 target_square,
+            #             ):
+            #                 move_parameters = MoveParameters(
+            #                     source_square, target_square, piece, 0, 0, 0, 0, 0
+            #                 )
+            #                 moves.add_move(Codec.get_encoded_move(move_parameters))
 
-                        # Capture moves
-                        else:
-                            move_parameters = MoveParameters(
-                                source_square, target_square, piece, 0, 1, 0, 0, 0
-                            )
-                            moves.add_move(Codec.get_encoded_move(move_parameters))
+            #             # Capture moves
+            #             else:
+            #                 move_parameters = MoveParameters(
+            #                     source_square, target_square, piece, 0, 1, 0, 0, 0
+            #                 )
+            #                 moves.add_move(Codec.get_encoded_move(move_parameters))
 
-                        attacks = Bit.pop_bit(attacks, target_square)
+            #             attacks = Bit.pop_bit(attacks, target_square)
 
-                    bitboard = Bit.pop_bit(bitboard, source_square)
+            #         bitboard = Bit.pop_bit(bitboard, source_square)
 
-            # Generate king moves
-            if piece == PIECES["K"] if side == SIDES["white"] else piece == PIECES["k"]:
-                # Loop over source squares of piece bitboard
-                while bitboard:
-                    source_square = Bit.get_least_significant_first_bit(bitboard)
+            # # Generate king moves
+            # if piece == PIECES["K"] if side == SIDES["white"] else piece == PIECES["k"]:
+            #     # Loop over source squares of piece bitboard
+            #     while bitboard:
+            #         source_square = Bit.get_least_significant_first_bit(bitboard)
 
-                    # Initialize piece attacks in order to get the set of target squares
-                    attacks = king_attack_table[source_square] & (
-                        ~occupancies[SIDES["white"]]
-                        if side == SIDES["white"]
-                        else ~occupancies[SIDES["black"]]
-                    )
+            #         # Initialize piece attacks in order to get the set of target squares
+            #         attacks = king_attack_table[source_square] & (
+            #             ~occupancies[SIDES["white"]]
+            #             if side == SIDES["white"]
+            #             else ~occupancies[SIDES["black"]]
+            #         )
 
-                    # Loop over the target squares available from generated attacks
-                    while attacks:
-                        target_square = Bit.get_least_significant_first_bit(attacks)
+            #         # Loop over the target squares available from generated attacks
+            #         while attacks:
+            #             target_square = Bit.get_least_significant_first_bit(attacks)
 
-                        # Quiet moves
-                        if not Bit.get_bit(
-                            occupancies[SIDES["black"]]
-                            if side == SIDES["white"]
-                            else occupancies[SIDES["white"]],
-                            target_square,
-                        ):
-                            move_parameters = MoveParameters(
-                                source_square, target_square, piece, 0, 0, 0, 0, 0
-                            )
-                            moves.add_move(Codec.get_encoded_move(move_parameters))
+            #             # Quiet moves
+            #             if not Bit.get_bit(
+            #                 occupancies[SIDES["black"]]
+            #                 if side == SIDES["white"]
+            #                 else occupancies[SIDES["white"]],
+            #                 target_square,
+            #             ):
+            #                 move_parameters = MoveParameters(
+            #                     source_square, target_square, piece, 0, 0, 0, 0, 0
+            #                 )
+            #                 moves.add_move(Codec.get_encoded_move(move_parameters))
 
-                        # Capture moves
-                        else:
-                            move_parameters = MoveParameters(
-                                source_square, target_square, piece, 0, 1, 0, 0, 0
-                            )
-                            moves.add_move(Codec.get_encoded_move(move_parameters))
+            #             # Capture moves
+            #             else:
+            #                 move_parameters = MoveParameters(
+            #                     source_square, target_square, piece, 0, 1, 0, 0, 0
+            #                 )
+            #                 moves.add_move(Codec.get_encoded_move(move_parameters))
 
-                        attacks = Bit.pop_bit(attacks, target_square)
+            #             attacks = Bit.pop_bit(attacks, target_square)
 
-                    bitboard = Bit.pop_bit(bitboard, source_square)
+            #         bitboard = Bit.pop_bit(bitboard, source_square)
 
         return moves

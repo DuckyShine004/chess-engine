@@ -1,13 +1,9 @@
 from src.generator.pieces.piece import Piece
 
-from src.routines.codec import Codec
-from src.routines.attacked import Attacked
-
 from src.utilities.bit import Bit
-from src.utilities.attack import Attack
 
-from src.constants.piece_constants import SIDES, PIECES, CASTLE
-from src.constants.board_constants import NUMBER_OF_BITBOARDS, SQUARES, COORDINATES
+from src.constants.piece_constants import SIDES, PIECES
+from src.constants.board_constants import SQUARES
 
 
 class Pawn(Piece):
@@ -25,6 +21,8 @@ class Pawn(Piece):
             self.move_parameters.target_square = target_square
 
             self.generate_promotion_moves(source_square, target_square)
+            self.generate_capture_moves(source_square)
+            self.generate_enpassant_moves(source_square)
 
             bitboard = Bit.pop_bit(bitboard, source_square)
 
@@ -40,10 +38,10 @@ class Pawn(Piece):
         file_a = SQUARES["a7"] if self.side == SIDES["white"] else SQUARES["a2"]
         file_b = SQUARES["h7"] if self.side == SIDES["white"] else SQUARES["h2"]
 
-        queen_ascii_piece = "Q" if self.side == SIDES["white"] else "q"
-        rook_ascii_piece = "R" if self.side == SIDES["white"] else "r"
-        bishop_ascii_piece = "B" if self.side == SIDES["white"] else "b"
-        knight_ascii_piece = "N" if self.side == SIDES["white"] else "n"
+        queen_ascii_piece = PIECES["Q"] if self.side == SIDES["white"] else PIECES["q"]
+        rook_ascii_piece = PIECES["R"] if self.side == SIDES["white"] else PIECES["r"]
+        bishop_ascii_piece = PIECES["B"] if self.side == SIDES["white"] else PIECES["b"]
+        knight_ascii_piece = PIECES["N"] if self.side == SIDES["white"] else PIECES["n"]
 
         if file_a <= source_square <= file_b:
             self.add_promotion_move(queen_ascii_piece)
@@ -58,10 +56,10 @@ class Pawn(Piece):
         file_a = SQUARES["a7"] if self.side == SIDES["white"] else SQUARES["a2"]
         file_b = SQUARES["h7"] if self.side == SIDES["white"] else SQUARES["h2"]
 
-        queen_ascii_piece = "Q" if self.side == SIDES["white"] else "q"
-        rook_ascii_piece = "R" if self.side == SIDES["white"] else "r"
-        bishop_ascii_piece = "B" if self.side == SIDES["white"] else "b"
-        knight_ascii_piece = "N" if self.side == SIDES["white"] else "n"
+        queen_ascii_piece = PIECES["Q"] if self.side == SIDES["white"] else PIECES["q"]
+        rook_ascii_piece = PIECES["R"] if self.side == SIDES["white"] else PIECES["r"]
+        bishop_ascii_piece = PIECES["B"] if self.side == SIDES["white"] else PIECES["b"]
+        knight_ascii_piece = PIECES["N"] if self.side == SIDES["white"] else PIECES["n"]
 
         if file_a <= source_square <= file_b:
             self.add_promotion_capture_move(queen_ascii_piece)
@@ -119,7 +117,7 @@ class Pawn(Piece):
     def add_capture_move(self):
         self.move_parameters.capture_flag = 1
 
-        self.add_moves()
+        self.add_move()
         self.reset_move_parameters()
 
     def add_promotion_move(self, promotion_piece):
