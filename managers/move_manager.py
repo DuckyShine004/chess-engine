@@ -32,6 +32,7 @@ class MoveManager:
             self.handle_enpassant_moves()
             self.handle_double_pawn_push_moves()
             self.handle_castling_moves()
+            self.handle_castling_rights()
 
             self.update_occupancy_bitboards()
 
@@ -123,8 +124,6 @@ class MoveManager:
             case square if square == SQUARES["c8"]:
                 self.remove_piece(SQUARES["a8"], PIECES["r"])
                 self.set_piece(SQUARES["d8"], PIECES["r"])
-
-        self.handle_castling_rights()
 
     def handle_castling_rights(self):
         self.manager.castle &= CASTLING_RIGHTS[self.source_square]
