@@ -69,6 +69,17 @@ class MoveManager:
         self.remove_piece(self.target_square, piece)
         self.set_piece(self.target_square, self.promotion_piece)
 
+    def handle_enpassant_moves(self):
+        if not self.enpassant_flag:
+            return
+
+        piece = PIECES["p"] if self.manager.side == SIDES["white"] else PIECES["P"]
+        offset = 8 if self.manager.side == SIDES["white"] else -8
+
+        self.remove_piece(self.target_square + offset, piece)
+
+        self.manager.enpassant = SQUARES["null"]
+
     def handle_king_under_check(self):
         self.manager.side ^= 1
 
