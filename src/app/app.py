@@ -30,12 +30,12 @@ class App:
     def __init__(self):
         self.table_manager = TableManager(self)
         self.bitboard_manager = BitboardManager(self)
-        self.move_manager = MoveManager(self.bitboard_manager)
+        self.move_manager = MoveManager(self, self.bitboard_manager)
 
         print("tables initialized")
 
         self.bitboard_manager.parse_fen(
-            "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1 "
+            "r3k2r/p1ppRpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R b KQkq - 0 1 "
         )
         self.bitboard_manager.print_board()
 
@@ -46,12 +46,12 @@ class App:
             move = moves.moves[move_count]
 
             self.bitboard_manager.preserve_attributes()
-            self.move_manager.make_move(move, 0)
-            # self.bitboard_manager.print_board()
-            Console.print_bitboard(self.bitboard_manager.occupancies[0])
+            if not self.move_manager.make_move(move, 0):
+                continue
+
+            self.bitboard_manager.print_board()
             getch.getch()
 
             self.bitboard_manager.set_attributes()
-            # self.bitboard_manager.print_board()
-            Console.print_bitboard(self.bitboard_manager.occupancies[0])
+            self.bitboard_manager.print_board()
             getch.getch()

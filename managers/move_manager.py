@@ -1,4 +1,5 @@
 from src.routines.codec import Codec
+from src.routines.attacked import Attacked
 
 from src.utilities.bit import Bit
 
@@ -7,7 +8,8 @@ from src.constants.board_constants import ALL_SIDES, SQUARES, MOVE_TYPES
 
 
 class MoveManager:
-    def __init__(self, manager):
+    def __init__(self, app, manager):
+        self.app = app
         self.manager = manager
 
     def set_attributes_to_parameters(self, parameters):
@@ -145,12 +147,33 @@ class MoveManager:
                 self.manager.occupancies[SIDES["white"]] | self.manager.occupancies[SIDES["black"]]
             )
 
+            # Change sides
+            self.manager.side ^= 1
+            bitboard = (
+                self.manager.bitboards[PIECES["k"]]
+                if self.manager.side == SIDES["white"]
+                else self.manager.bitboards[PIECES["K"]]
+            )
+
+            square_index = Bit.get_least_significant_first_bit(bitboard)
+
+            # Ensure that the king has not been exposed into a check
+            if Attacked.check_squares_attacked(self.app, square_index, self.manager.side):
+                # Move is illegal, take back the move
+                self.manager.set_attributes()
+
+                # Move is illegal, stop search
+                return False
+
+            # Otherwise, move is legal return the legal state of the search
+            else:
+                return True
+
         # Capture moves
         else:
             # Enusure that the move is a capture
             if Codec.get_decoded_capture_flag(move):
                 self.make_move(move, MOVE_TYPES["all"])
-
             else:
                 # Otherwise, the move is not a capture
-                return 0
+                return False
