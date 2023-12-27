@@ -3,7 +3,7 @@ from src.routines.codec import Codec
 from src.utilities.bit import Bit
 
 from src.constants.piece_constants import SIDES, PIECES
-from src.constants.board_constants import MOVE_TYPES
+from src.constants.board_constants import SQUARES, MOVE_TYPES
 
 
 class MoveManager:
@@ -61,6 +61,17 @@ class MoveManager:
                 self.manager.bitboards[self.promotion_piece] = Bit.set_bit(
                     self.manager.bitboards[self.promotion_piece], self.target_square
                 )
+
+            # Handle enpassant
+            if self.enpassant_flag:
+                # Remove the pawn depending on side to move
+                pawn_piece = PIECES["p"] if self.manager.side == SIDES["white"] else PIECES["P"]
+                offset = 8 if self.manager.side == SIDES["white"] else -8
+                self.manager.bitboards[pawn_piece] = Bit.pop_bit(
+                    self.manager.bitboards[pawn_piece], self.target_square + offset
+                )
+
+            self.manager.enpassant = SQUARES["null"]
 
         # Capture moves
         else:
