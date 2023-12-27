@@ -29,6 +29,8 @@ class MoveManager:
             self.handle_quiet_moves()
             self.handle_capture_moves()
             self.handle_pawn_promotion_moves()
+            self.handle_enpassant_moves()
+            self.handle_double_pawn_push_moves()
 
             return self.handle_king_under_check()
         else:
@@ -79,6 +81,15 @@ class MoveManager:
         self.remove_piece(self.target_square + offset, piece)
 
         self.manager.enpassant = SQUARES["null"]
+
+    def handle_double_pawn_push_moves(self):
+        if not self.double_pawn_push_flag:
+            return
+
+        if self.manager.side == SIDES["white"]:
+            self.manager.enpassant = self.target_square + 8
+        else:
+            self.manager.enpassant = self.target_square - 8
 
     def handle_king_under_check(self):
         self.manager.side ^= 1
