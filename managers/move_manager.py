@@ -91,6 +91,24 @@ class MoveManager:
         else:
             self.manager.enpassant = self.target_square - 8
 
+    def handle_castling_moves(self):
+        if not self.castling_flag:
+            return
+
+        match self.target_square:
+            case square if square == SQUARES["g1"]:
+                self.remove_piece(SQUARES["h1"], PIECES["R"])
+                self.set_piece(SQUARES["f1"], PIECES["R"])
+            case square if square == SQUARES["c1"]:
+                self.remove_piece(SQUARES["a1"], PIECES["R"])
+                self.set_piece(SQUARES["d1"], PIECES["R"])
+            case square if square == SQUARES["g8"]:
+                self.remove_piece(SQUARES["h8"], PIECES["r"])
+                self.set_piece(SQUARES["f8"], PIECES["r"])
+            case square if square == SQUARES["c8"]:
+                self.remove_piece(SQUARES["a8"], PIECES["r"])
+                self.set_piece(SQUARES["d8"], PIECES["r"])
+
     def handle_king_under_check(self):
         self.manager.side ^= 1
 
