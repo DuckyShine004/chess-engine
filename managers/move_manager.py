@@ -73,6 +73,13 @@ class MoveManager:
 
             self.manager.enpassant = SQUARES["null"]
 
+            # Handle double pawn push
+            if self.double_pawn_push_flag:
+                if self.manager.side == SIDES["white"]:
+                    self.manager.enpassant = self.target_square + 8
+                else:
+                    self.manager.enpassant = self.target_square - 8
+
         # Capture moves
         else:
             # Enusure that the move is a capture
