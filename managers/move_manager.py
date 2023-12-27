@@ -24,12 +24,39 @@ class MoveManager:
 
     def make_move(self, move, move_type):
         if move_type == MOVE_TYPES["all"]:
+            self.update_manager_and_parameters(move)
+
+            self.handle_quiet_moves()
+            self.handle_capture_moves()
+
             return self.handle_king_under_check()
         else:
             if not Codec.get_decoded_capture_flag(move):
                 return False
 
             self.make_move(move, move_type)
+
+    def update_manager_and_parameters(self, move):
+        self.manager.preserve_attributes()
+        move_parameters = Codec.get_decoded_move_parameters(move)
+        self.set_attributes_to_parameters(move_parameters)
+
+    def handle_quiet_moves(self):
+        self.move_piece(self.source_square, self.target_square, self.piece)
+
+    def handle_capture_moves(self):
+        if not self.capture_flag:
+            return
+
+        a = PIECES["p"] if self.manager.side == SIDES["white"] else PIECES["P"]
+        b = PIECES["k"] if self.manager.side == SIDES["white"] else PIECES["K"]
+
+        for piece in range(a, b + 1):
+            if not Bit.get_bit(self.manager.bitboards[piece], self.target_square):
+                continue
+
+            self.remove_piece(self.target_square, piece)
+            break
 
     def handle_king_under_check(self):
         self.manager.side ^= 1
@@ -48,3 +75,15 @@ class MoveManager:
             return False
 
         return True
+
+    def move_piece(self, source_square, target_square, piece):
+        self.remove_piece(source_square, piece)
+        self.set_piece(target_square, piece)
+
+    def remove_piece(self, square, piece):
+        bitboard = Bit.pop_bit(self.manager.bitboards[piece], square)
+        self.manager.bitboards[piece] = bitboard
+
+    def set_piece(self, square, piece):
+        bitboard = Bit.set_bit(self.manager.bitboards[piece], square)
+        self.manager.bitboards[piece] = bitboard
