@@ -28,6 +28,7 @@ class MoveManager:
 
             self.handle_quiet_moves()
             self.handle_capture_moves()
+            self.handle_pawn_promotion_moves()
 
             return self.handle_king_under_check()
         else:
@@ -42,7 +43,8 @@ class MoveManager:
         self.set_attributes_to_parameters(move_parameters)
 
     def handle_quiet_moves(self):
-        self.move_piece(self.source_square, self.target_square, self.piece)
+        self.remove_piece(self.source_square, self.piece)
+        self.set_piece(self.target_square, self.piece)
 
     def handle_capture_moves(self):
         if not self.capture_flag:
@@ -57,6 +59,15 @@ class MoveManager:
 
             self.remove_piece(self.target_square, piece)
             break
+
+    def handle_pawn_promotion_moves(self):
+        if not self.promotion_piece:
+            return
+
+        piece = PIECES["P"] if self.manager.side == SIDES["white"] else PIECES["p"]
+
+        self.remove_piece(self.target_square, piece)
+        self.set_piece(self.target_square, self.promotion_piece)
 
     def handle_king_under_check(self):
         self.manager.side ^= 1
@@ -75,10 +86,6 @@ class MoveManager:
             return False
 
         return True
-
-    def move_piece(self, source_square, target_square, piece):
-        self.remove_piece(source_square, piece)
-        self.set_piece(target_square, piece)
 
     def remove_piece(self, square, piece):
         bitboard = Bit.pop_bit(self.manager.bitboards[piece], square)
