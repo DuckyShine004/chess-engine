@@ -8,6 +8,7 @@ from src.data.parameters.move_parameters import MoveParameters
 from src.data_structures.moves import Moves
 
 from src.routines.codec import Codec
+from src.perft.perft import Perft
 
 from src.utilities.bit import Bit
 from src.utilities.attack import Attack
@@ -42,6 +43,8 @@ class App:
         self.move_generator = MoveGenerator(self)
         moves = self.move_generator.get_moves()
 
+        start = Perft.get_time()
+
         for move_count in range(moves.count):
             move = moves.moves[move_count]
 
@@ -55,3 +58,5 @@ class App:
             self.bitboard_manager.set_attributes()
             self.bitboard_manager.print_board()
             getch.getch()
+
+        print(f"Time taken to execute: {Perft.get_time() - start} ms")
