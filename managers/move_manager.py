@@ -80,6 +80,50 @@ class MoveManager:
                 else:
                     self.manager.enpassant = self.target_square - 8
 
+            g1 = SQUARES["g1"]
+            c1 = SQUARES["c1"]
+            g8 = SQUARES["g8"]
+            c8 = SQUARES["c8"]
+
+            # Handle castling moves
+            if self.castling_flag:
+                match self.target_square:
+                    # White king castles king side
+                    case square if square == g1:
+                        self.manager.bitboards[PIECES["R"]] = Bit.pop_bit(
+                            self.manager.bitboards[PIECES["R"]], SQUARES["h1"]
+                        )
+                        self.manager.bitboards[PIECES["R"]] = Bit.set_bit(
+                            self.manager.bitboards[PIECES["R"]], SQUARES["f1"]
+                        )
+
+                    # White king castles queen side
+                    case square if square == c1:
+                        self.manager.bitboards[PIECES["R"]] = Bit.pop_bit(
+                            self.manager.bitboards[PIECES["R"]], SQUARES["a1"]
+                        )
+                        self.manager.bitboards[PIECES["R"]] = Bit.set_bit(
+                            self.manager.bitboards[PIECES["R"]], SQUARES["d1"]
+                        )
+
+                    # Black king castles king side
+                    case square if square == g8:
+                        self.manager.bitboards[PIECES["r"]] = Bit.pop_bit(
+                            self.manager.bitboards[PIECES["r"]], SQUARES["h8"]
+                        )
+                        self.manager.bitboards[PIECES["r"]] = Bit.set_bit(
+                            self.manager.bitboards[PIECES["r"]], SQUARES["f8"]
+                        )
+
+                    # Black king castles queen side
+                    case square if square == c8:
+                        self.manager.bitboards[PIECES["r"]] = Bit.pop_bit(
+                            self.manager.bitboards[PIECES["r"]], SQUARES["a8"]
+                        )
+                        self.manager.bitboards[PIECES["r"]] = Bit.set_bit(
+                            self.manager.bitboards[PIECES["r"]], SQUARES["d8"]
+                        )
+
         # Capture moves
         else:
             # Enusure that the move is a capture
