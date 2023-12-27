@@ -2,7 +2,7 @@ from src.routines.codec import Codec
 
 from src.utilities.bit import Bit
 
-from src.constants.piece_constants import SIDES, PIECES
+from src.constants.piece_constants import SIDES, PIECES, CASTLING_RIGHTS
 from src.constants.board_constants import SQUARES, MOVE_TYPES
 
 
@@ -123,6 +123,10 @@ class MoveManager:
                         self.manager.bitboards[PIECES["r"]] = Bit.set_bit(
                             self.manager.bitboards[PIECES["r"]], SQUARES["d8"]
                         )
+
+            # Handle castling rights
+            self.manager.castle &= CASTLING_RIGHTS[self.source_square]
+            self.manager.castle &= CASTLING_RIGHTS[self.target_square]
 
         # Capture moves
         else:
