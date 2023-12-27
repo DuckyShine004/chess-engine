@@ -31,6 +31,9 @@ class MoveManager:
             self.handle_pawn_promotion_moves()
             self.handle_enpassant_moves()
             self.handle_double_pawn_push_moves()
+            self.handle_castling_moves()
+
+            self.update_occupancy_bitboards()
 
             return self.handle_king_under_check()
         else:
@@ -43,6 +46,18 @@ class MoveManager:
         self.manager.preserve_attributes()
         move_parameters = Codec.get_decoded_move_parameters(move)
         self.set_attributes_to_parameters(move_parameters)
+
+    def update_occupancy_bitboards(self):
+        self.manager.occupancies = [0] * ALL_SIDES
+
+        for piece in range(PIECES["P"], PIECES["K"] + 1):
+            self.manager.occupancies[SIDES["white"]] |= self.manager.bitboards[piece]
+
+        for piece in range(PIECES["p"], PIECES["k"] + 1):
+            self.manager.occupancies[SIDES["black"]] |= self.manager.bitboards[piece]
+
+        self.manager.occupancies[SIDES["all"]] |= self.manager.occupancies[SIDES["white"]]
+        self.manager.occupancies[SIDES["all"]] |= self.manager.occupancies[SIDES["black"]]
 
     def handle_quiet_moves(self):
         self.remove_piece(self.source_square, self.piece)
@@ -108,6 +123,12 @@ class MoveManager:
             case square if square == SQUARES["c8"]:
                 self.remove_piece(SQUARES["a8"], PIECES["r"])
                 self.set_piece(SQUARES["d8"], PIECES["r"])
+
+        self.handle_castling_rights()
+
+    def handle_castling_rights(self):
+        self.manager.castle &= CASTLING_RIGHTS[self.source_square]
+        self.manager.castle &= CASTLING_RIGHTS[self.target_square]
 
     def handle_king_under_check(self):
         self.manager.side ^= 1
