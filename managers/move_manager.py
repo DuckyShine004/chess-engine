@@ -3,7 +3,7 @@ from src.routines.codec import Codec
 from src.utilities.bit import Bit
 
 from src.constants.piece_constants import SIDES, PIECES, CASTLING_RIGHTS
-from src.constants.board_constants import SQUARES, MOVE_TYPES
+from src.constants.board_constants import ALL_SIDES, SQUARES, MOVE_TYPES
 
 
 class MoveManager:
@@ -127,6 +127,23 @@ class MoveManager:
             # Handle castling rights
             self.manager.castle &= CASTLING_RIGHTS[self.source_square]
             self.manager.castle &= CASTLING_RIGHTS[self.target_square]
+
+            # Handle occupancy bitboards
+            self.manager.occupancies = [0] * ALL_SIDES
+
+            # Go through the white piece bitboards
+            for piece in range(PIECES["P"], PIECES["K"] + 1):
+                # Update white occupancies
+                self.manager.occupancies[SIDES["white"]] |= self.manager.bitboards[piece]
+
+            # Go through the black piece bitboards
+            for piece in range(PIECES["p"], PIECES["k"] + 1):
+                # Update white occupancies
+                self.manager.occupancies[SIDES["black"]] |= self.manager.bitboards[piece]
+
+            self.manager.occupancies[SIDES["all"]] = (
+                self.manager.occupancies[SIDES["white"]] | self.manager.occupancies[SIDES["black"]]
+            )
 
         # Capture moves
         else:

@@ -47,9 +47,11 @@ class App:
 
             self.bitboard_manager.preserve_attributes()
             self.move_manager.make_move(move, 0)
-            self.bitboard_manager.print_board()
+            # self.bitboard_manager.print_board()
+            Console.print_bitboard(self.bitboard_manager.occupancies[0])
             getch.getch()
 
             self.bitboard_manager.set_attributes()
-            self.bitboard_manager.print_board()
+            # self.bitboard_manager.print_board()
+            Console.print_bitboard(self.bitboard_manager.occupancies[0])
             getch.getch()
