@@ -35,7 +35,8 @@ class MoveManager:
                 self.manager.bitboards[self.piece], self.target_square
             )
 
-            if Codec.get_decoded_capture_flag(move):
+            # Handle captures
+            if self.capture_flag:
                 start_piece = PIECES["p"] if self.manager.side == SIDES["white"] else PIECES["P"]
                 end_piece = PIECES["k"] if self.manager.side == SIDES["white"] else PIECES["K"]
 
@@ -46,6 +47,21 @@ class MoveManager:
                             self.manager.bitboards[piece], self.target_square
                         )
                         break
+
+            # Handle pawn promotion
+            if self.promotion_piece:
+                pawn_piece = PIECES["P"] if self.manager.side == SIDES["white"] else PIECES["p"]
+
+                # Remove the pawn from the target square
+                self.manager.bitboards[pawn_piece] = Bit.pop_bit(
+                    self.manager.bitboards[pawn_piece], self.target_square
+                )
+
+                # Set the new piece to the promotion piece
+                self.manager.bitboards[self.promotion_piece] = Bit.set_bit(
+                    self.manager.bitboards[self.promotion_piece], self.target_square
+                )
+
         # Capture moves
         else:
             # Enusure that the move is a capture
