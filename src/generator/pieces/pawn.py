@@ -27,9 +27,10 @@ class Pawn(Piece):
             bitboard = Bit.pop_bit(bitboard, source_square)
 
     def generate_promotion_moves(self, source_square, target_square):
-        target_file = "a8" if self.side == SIDES["white"] else "h1"
+        if self.side == SIDES["white"] and target_square < SQUARES["a8"]:
+            return
 
-        if target_square < SQUARES[target_file]:
+        if self.side == SIDES["black"] and target_square > SQUARES["h1"]:
             return
 
         if Bit.get_bit(self.occupancies[SIDES["all"]], target_square):

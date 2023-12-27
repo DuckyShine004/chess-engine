@@ -89,7 +89,7 @@ class Attacked:
     def get_attack_mask(app, square, side, piece):
         pawn_attack_table = app.table_manager.pawn_attack_table
 
-        match (piece):
+        match piece:
             case "P":
                 return pawn_attack_table[side ^ 1][square]
             case "N":

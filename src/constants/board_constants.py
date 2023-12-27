@@ -13,6 +13,11 @@ NOT_H_FILE = 9187201950435737471
 NOT_AB_FILE = 18229723555195321596
 NOT_HG_FILE = 4557430888798830399
 
+MOVE_TYPES = {
+    "all": 0,
+    "capture": 1,
+}
+
 MOVE_OFFSETS = {
     "source_square": 0,
     "target_square": 6,
