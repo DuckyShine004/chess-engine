@@ -1,3 +1,5 @@
+import getch
+
 from managers.table_manager import TableManager
 from managers.bitboard_manager import BitboardManager
 from managers.move_manager import MoveManager
@@ -30,6 +32,8 @@ class App:
         self.bitboard_manager = BitboardManager(self)
         self.move_manager = MoveManager(self.bitboard_manager)
 
+        print("tables initialized")
+
         self.bitboard_manager.parse_fen(TRICKY_BOARD)
         self.bitboard_manager.print_board()
 
@@ -42,6 +46,8 @@ class App:
             self.bitboard_manager.preserve_attributes()
             self.move_manager.make_move(move, 0)
             self.bitboard_manager.print_board()
+            getch.getch()
 
             self.bitboard_manager.set_attributes()
             self.bitboard_manager.print_board()
+            getch.getch()

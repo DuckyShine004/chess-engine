@@ -2,6 +2,7 @@ from src.routines.codec import Codec
 
 from src.utilities.bit import Bit
 
+from src.constants.piece_constants import SIDES, PIECES
 from src.constants.board_constants import MOVE_TYPES
 
 
@@ -27,12 +28,24 @@ class MoveManager:
             self.set_attributes_to_parameters(move_parameters)
 
             # Move the piece
-            bitboard = self.manager.bitboards[self.piece]
+            self.manager.bitboards[self.piece] = Bit.pop_bit(
+                self.manager.bitboards[self.piece], self.source_square
+            )
+            self.manager.bitboards[self.piece] = Bit.set_bit(
+                self.manager.bitboards[self.piece], self.target_square
+            )
 
-            bitboard = Bit.pop_bit(bitboard, self.source_square)
-            bitboard = Bit.set_bit(bitboard, self.target_square)
+            if Codec.get_decoded_capture_flag(move):
+                start_piece = PIECES["p"] if self.manager.side == SIDES["white"] else PIECES["P"]
+                end_piece = PIECES["k"] if self.manager.side == SIDES["white"] else PIECES["K"]
 
-            self.manager.bitboards[self.piece] = bitboard
+                for piece in range(start_piece, end_piece + 1):
+                    # If there is a piece on the target square, we just remove it from the corresponding bitboard
+                    if Bit.get_bit(self.manager.bitboards[piece], self.target_square):
+                        self.manager.bitboards[piece] = Bit.pop_bit(
+                            self.manager.bitboards[piece], self.target_square
+                        )
+                        break
         # Capture moves
         else:
             # Enusure that the move is a capture
