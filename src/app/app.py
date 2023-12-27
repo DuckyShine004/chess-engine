@@ -1,8 +1,8 @@
 from managers.table_manager import TableManager
 from managers.bitboard_manager import BitboardManager
+from managers.move_manager import MoveManager
 
 from src.data.parameters.move_parameters import MoveParameters
-from src.routines.move import Move
 from src.data_structures.moves import Moves
 
 from src.routines.codec import Codec
@@ -28,17 +28,20 @@ class App:
     def __init__(self):
         self.table_manager = TableManager(self)
         self.bitboard_manager = BitboardManager(self)
+        self.move_manager = MoveManager(self.bitboard_manager)
 
-        self.bitboard_manager.parse_fen(
-            "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq c6 0 1 "
-        )
+        self.bitboard_manager.parse_fen(TRICKY_BOARD)
         self.bitboard_manager.print_board()
 
-        self.bitboard_manager.preserve_attributes()
+        self.move_generator = MoveGenerator(self)
+        moves = self.move_generator.get_moves()
 
-        self.bitboard_manager.parse_fen(EMPTY_BOARD)
-        self.bitboard_manager.print_board()
+        for move_count in range(moves.count):
+            move = moves.moves[move_count]
 
-        self.bitboard_manager.set_attributes()
+            self.bitboard_manager.preserve_attributes()
+            self.move_manager.make_move(move, 0)
+            self.bitboard_manager.print_board()
 
-        self.bitboard_manager.print_board()
+            self.bitboard_manager.set_attributes()
+            self.bitboard_manager.print_board()
