@@ -5,8 +5,8 @@ from src.constants.board_constants import NUMBER_OF_BITBOARDS, SQUARES
 
 
 class FenParser:
-    def __init__(self, bitboard_manager):
-        self.manager = bitboard_manager
+    def __init__(self, manager):
+        self.manager = manager
 
     def initialize_occupancies(self):
         for board_index in range(PIECES["P"], PIECES["K"] + 1):
