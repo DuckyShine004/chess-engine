@@ -39,12 +39,12 @@ class App:
         print("Tables initialized")
 
         self.bitboard_manager.parse_fen(
-            "r3k2r/p11pqpb1/bn2pnp1/2pPN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq c6 0 1 "
+            "r3k2r/pP1pqpb1/bn2pnp1/2pPN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq c6 0 1 "
         )
         self.bitboard_manager.print_board()
 
         self.move_parser = MoveParser(self)
-        move = self.move_parser.parse("d5c6")
+        move = self.move_parser.parse("b7a8b")
 
         if move:
             self.move_manager.make_move(move, MOVE_TYPES["all"])
