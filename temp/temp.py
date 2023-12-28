@@ -1,17 +1,17 @@
-class A:
-    def __init__(self):
-        self.a = [1, 2, 3]
+from math import floor, ceil
 
 
-class B:
-    def __init__(self, a):
-        self.a = a.a
+def calc(n):
+    k = n // 10
+    u = str(11 * n)
 
 
-a = A()
-b = B(a)
+def is_palindrome(n):
+    s = str(n)
 
-print(a.a)
-b.a.append(1)
+    return s[::-1] == s
 
-print(a.a)
+
+for i in range(1, 10000000):
+    if is_palindrome(i) and len(str(i)) % 2 == 0:
+        print(i)
