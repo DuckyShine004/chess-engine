@@ -1,3 +1,5 @@
+from src.data.states.board_states import BoardStates
+
 from src.routines.codec import Codec
 from src.routines.attacked import Attacked
 
@@ -24,7 +26,9 @@ class MoveManager:
 
     def make_move(self, move, move_type):
         if move_type == MOVE_TYPES["all"]:
-            self.update_manager_and_parameters(move)
+            board_states = BoardStates.get_board_states(self.manager)
+
+            self.update_parameters(move)
 
             self.handle_quiet_moves()
             self.handle_capture_moves()
@@ -36,15 +40,16 @@ class MoveManager:
 
             self.update_occupancy_bitboards()
 
-            return self.handle_king_under_check()
+            return self.handle_king_under_check(board_states)
         else:
             if not Codec.get_decoded_capture_flag(move):
                 return False
 
-            self.make_move(move, move_type)
+            self.make_move(move, MOVE_TYPES["all"])
 
-    def update_manager_and_parameters(self, move):
-        self.manager.preserve_attributes()
+        return False
+
+    def update_parameters(self, move):
         move_parameters = Codec.get_decoded_move_parameters(move)
         self.set_attributes_to_parameters(move_parameters)
 
@@ -96,9 +101,9 @@ class MoveManager:
 
         self.remove_piece(self.target_square + offset, piece)
 
+    def handle_double_pawn_push_moves(self):
         self.manager.enpassant = SQUARES["null"]
 
-    def handle_double_pawn_push_moves(self):
         if not self.double_pawn_push_flag:
             return
 
@@ -129,7 +134,7 @@ class MoveManager:
         self.manager.castle &= CASTLING_RIGHTS[self.source_square]
         self.manager.castle &= CASTLING_RIGHTS[self.target_square]
 
-    def handle_king_under_check(self):
+    def handle_king_under_check(self, board_states):
         self.manager.side ^= 1
 
         bitboard = None
@@ -142,7 +147,7 @@ class MoveManager:
         square = Bit.get_least_significant_first_bit(bitboard)
 
         if Attacked.check_squares_attacked(self.app, square, self.manager.side):
-            self.manager.set_attributes()
+            self.manager.set_board_states(board_states)
             return False
 
         return True
