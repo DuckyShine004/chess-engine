@@ -33,30 +33,13 @@ class App:
         self.bitboard_manager = BitboardManager(self)
         self.move_manager = MoveManager(self, self.bitboard_manager)
 
-        print("tables initialized")
+        print("Tables initialized")
 
-        self.bitboard_manager.parse_fen(
-            "r3k2r/pPppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1 "
-        )
+        self.bitboard_manager.parse_fen(INITIAL_BOARD)
         self.bitboard_manager.print_board()
 
-        self.move_generator = MoveGenerator(self)
-        moves = self.move_generator.get_moves()
-
         start = Perft.get_time()
-
-        for move_count in range(moves.count):
-            move = moves.moves[move_count]
-
-            self.bitboard_manager.preserve_attributes()
-            if not self.move_manager.make_move(move, 0):
-                continue
-
-            self.bitboard_manager.print_board()
-            getch.getch()
-
-            self.bitboard_manager.set_attributes()
-            self.bitboard_manager.print_board()
-            getch.getch()
+        nodes = Perft.get_perft(self, 4)
 
         print(f"Time taken to execute: {Perft.get_time() - start} ms")
+        print(f"Nodes: {nodes}")

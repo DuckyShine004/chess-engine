@@ -1,7 +1,24 @@
+class MoveManager:
+    def __init__(self, app, manager):
+        self.app = app
+        self.manager = manager
+
+    def set_attributes_to_parameters(self, parameters):
+        self.source_square = parameters.source_square
+        self.target_square = parameters.target_square
+        self.piece = parameters.piece
+        self.promotion_piece = parameters.promotion_piece
+        self.capture_flag = parameters.capture_flag
+        self.double_pawn_push_flag = parameters.double_pawn_push_flag
+        self.enpassant_flag = parameters.enpassant_flag
+        self.castling_flag = parameters.castling_flag
+
+
 def make_move(self, move, move_type):
     # Quiet moves
     if move_type == MOVE_TYPES["all"]:
-        self.manager.preserve_attributes()
+        board_states = BoardStates.get_board_states(self.manager)
+        # self.manager.preserve_attributes()
         move_parameters = Codec.get_decoded_move_parameters(move)
         self.set_attributes_to_parameters(move_parameters)
 
@@ -18,11 +35,11 @@ def make_move(self, move, move_type):
             start_piece = PIECES["p"] if self.manager.side == SIDES["white"] else PIECES["P"]
             end_piece = PIECES["k"] if self.manager.side == SIDES["white"] else PIECES["K"]
 
-            for piece in range(start_piece, end_piece + 1):
+            for bbpiece in range(start_piece, end_piece + 1):
                 # If there is a piece on the target square, we just remove it from the corresponding bitboard
-                if Bit.get_bit(self.manager.bitboards[piece], self.target_square):
-                    self.manager.bitboards[piece] = Bit.pop_bit(
-                        self.manager.bitboards[piece], self.target_square
+                if Bit.get_bit(self.manager.bitboards[bbpiece], self.target_square):
+                    self.manager.bitboards[bbpiece] = Bit.pop_bit(
+                        self.manager.bitboards[bbpiece], self.target_square
                     )
                     break
 
@@ -110,14 +127,14 @@ def make_move(self, move, move_type):
         self.manager.occupancies = [0] * ALL_SIDES
 
         # Go through the white piece bitboards
-        for piece in range(PIECES["P"], PIECES["K"] + 1):
+        for bbpiece in range(PIECES["P"], PIECES["K"] + 1):
             # Update white occupancies
-            self.manager.occupancies[SIDES["white"]] |= self.manager.bitboards[piece]
+            self.manager.occupancies[SIDES["white"]] |= self.manager.bitboards[bbpiece]
 
         # Go through the black piece bitboards
-        for piece in range(PIECES["p"], PIECES["k"] + 1):
+        for bbpiece in range(PIECES["p"], PIECES["k"] + 1):
             # Update white occupancies
-            self.manager.occupancies[SIDES["black"]] |= self.manager.bitboards[piece]
+            self.manager.occupancies[SIDES["black"]] |= self.manager.bitboards[bbpiece]
 
         self.manager.occupancies[SIDES["all"]] = (
             self.manager.occupancies[SIDES["white"]] | self.manager.occupancies[SIDES["black"]]
@@ -131,13 +148,12 @@ def make_move(self, move, move_type):
             else self.manager.bitboards[PIECES["K"]]
         )
 
-        # Handle king checks
         square_index = Bit.get_least_significant_first_bit(bitboard)
 
         # Ensure that the king has not been exposed into a check
         if Attacked.check_squares_attacked(self.app, square_index, self.manager.side):
             # Move is illegal, take back the move
-            self.manager.set_attributes()
+            self.manager.set_board_states(board_states)
 
             # Move is illegal, stop search
             return False
@@ -154,3 +170,5 @@ def make_move(self, move, move_type):
         else:
             # Otherwise, the move is not a capture
             return False
+
+    return False

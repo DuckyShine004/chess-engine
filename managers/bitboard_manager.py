@@ -1,3 +1,5 @@
+import copy
+
 from src.routines.codec import Codec
 
 from src.utilities.bit import Bit
@@ -22,42 +24,12 @@ class BitboardManager:
         self.enpassant = SQUARES["null"]
         self.castle = 0
 
-    def make_move(self, move, move_type):
-        # Quiet moves
-        if move_type == MOVE_TYPES["all"]:
-            self.preserve_attributes()
-            move_parameters = Codec.get_decoded_move_parameters(move)
-
-            # Move the piece
-            self.bitboards[move_parameters.piece] = Bit.pop_bit(
-                self.bitboards[move_parameters.piece], move_parameters.source_square
-            )
-            self.bitboards[move_parameters.piece] = Bit.set_bit(
-                self.bitboards[move_parameters.piece], move_parameters.target_square
-            )
-        # Capture moves
-        else:
-            # Enusure that the move is a capture
-            if Codec.get_decoded_capture_flag(move):
-                self.make_move(move, MOVE_TYPES["all"])
-
-            else:
-                # Otherwise, the move is not a capture
-                return 0
-
-    def preserve_attributes(self):
-        self.preserved_bitboards = list(self.bitboards)
-        self.preserved_occupancies = list(self.occupancies)
-        self.preserved_side = self.side
-        self.preserved_enpassant = self.enpassant
-        self.preserved_castle = self.castle
-
-    def set_attributes(self):
-        self.bitboards = list(self.preserved_bitboards)
-        self.occupancies = list(self.preserved_occupancies)
-        self.side = self.preserved_side
-        self.enpassant = self.preserved_enpassant
-        self.castle = self.preserved_castle
+    def set_board_states(self, board_states):
+        self.bitboards = board_states.bitboards
+        self.occupancies = board_states.occupancies
+        self.side = board_states.side
+        self.enpassant = board_states.enpassant
+        self.castle = board_states.castle
 
     def parse_fen(self, fen):
         parser = FenParser(self)
