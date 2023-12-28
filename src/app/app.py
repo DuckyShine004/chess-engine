@@ -31,7 +31,7 @@ class App:
     def __init__(self):
         self.table_manager = TableManager(self)
         self.bitboard_manager = BitboardManager(self)
-        self.move_manager = MoveManager(self, self.bitboard_manager)
+        self.move_manager = MoveManager(self)
 
         print("Tables initialized")
 
@@ -39,7 +39,7 @@ class App:
         self.bitboard_manager.print_board()
 
         start = Perft.get_time()
-        nodes = Perft.get_perft(self, 4)
+        nodes = Perft.get_perft(self, 3)
 
         print(f"Time taken to execute: {Perft.get_time() - start} ms")
         print(f"Nodes: {nodes}")
