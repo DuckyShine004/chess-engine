@@ -10,9 +10,9 @@ from src.constants.board_constants import ALL_SIDES, SQUARES, MOVE_TYPES
 
 
 class MoveManager:
-    def __init__(self, app, manager):
+    def __init__(self, app):
         self.app = app
-        self.manager = manager
+        self.manager = app.bitboard_manager
 
     def set_attributes_to_parameters(self, parameters):
         self.source_square = parameters.source_square

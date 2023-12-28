@@ -31,7 +31,7 @@ class App:
     def __init__(self):
         self.table_manager = TableManager(self)
         self.bitboard_manager = BitboardManager(self)
-        self.move_manager = MoveManager(self, self.bitboard_manager)
+        self.move_manager = MoveManager(self)
 
         print("Tables initialized")
 
