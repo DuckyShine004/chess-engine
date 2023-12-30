@@ -4,14 +4,23 @@ from src.constants.board_constants import MOVE_TYPES
 from src.constants.parser_constants import INITIAL_BOARD
 
 
-class PositionParser:
+class CommandParser:
     def __init__(self, app):
         self.app = app
         self.index = 9
 
-    def parse(self, command):
+    def parse_position_command(self, command):
         self.parse_start_command(command)
         self.parse_moves_command(command)
+
+    def parse_go_command(self, command):
+        index = command.find("depth")
+
+        if index == -1:
+            return
+
+        index += 6
+        depth = int(command[index:])
 
     def parse_start_command(self, command):
         if "startpos" in command:

@@ -16,7 +16,7 @@ from src.utilities.attack import Attack
 from src.utilities.console import Console
 
 from src.parsers.move_parser import MoveParser
-from src.parsers.position_parser import PositionParser
+from src.parsers.command_parser import CommandParser
 
 from src.generator.move_generator import MoveGenerator
 
@@ -43,6 +43,5 @@ class App:
         # move = self.move_parser.parse("e2e4")
         # self.move_manager.make_move(move, MOVE_TYPES["all"])
 
-        self.position_parser = PositionParser(self)
-        self.position_parser.parse("position startpos moves e2e4 e7e5 g1f3 e8e7 e1e2")
-        self.bitboard_manager.print_board()
+        self.command_parser = CommandParser(self)
+        self.command_parser.parse_go_command("go depth 122341234")
