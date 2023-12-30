@@ -49,7 +49,7 @@ class CommandParser:
         if self.index == -1:
             return
 
-        move_strings = command[self.index :].split(" ")
+        move_strings = command[self.index :].split()
 
         self.parse_move_strings(move_strings)
 

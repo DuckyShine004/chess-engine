@@ -1,3 +1,3 @@
-s = "<a><b><c></c></b></a>"
+s = "this is a string"
 
-print(s.split(">"))
+print(s.split())

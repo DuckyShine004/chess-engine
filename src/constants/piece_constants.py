@@ -67,6 +67,21 @@ QUEEN_ATTACKED_SQUARES = [
     (SQUARES["e8"], SQUARES["d8"]),
 ]
 
+MATERIAL_SCORE = [
+    100,
+    300,
+    350,
+    500,
+    1000,
+    10000,
+    -100,
+    -300,
+    -350,
+    -500,
+    -1000,
+    -10000,
+]
+
 CASTLING_RIGHTS = [
     7,
     15,

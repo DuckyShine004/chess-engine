@@ -9,7 +9,10 @@ from src.data.parameters.move_parameters import MoveParameters
 from src.data_structures.moves import Moves
 
 from src.routines.codec import Codec
+
 from src.perft.perft import Perft
+
+from src.evaluators.rudimentary import Rudimentary
 
 from src.utilities.bit import Bit
 from src.utilities.attack import Attack
@@ -38,18 +41,23 @@ class App:
         self.move_manager = MoveManager(self)
 
         print("Tables initialized")
+        self.bitboard_manager.parse_fen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1 ")
+        self.bitboard_manager.print_board()
+
+        print(Rudimentary.evaluate(self))
 
         self.command_parser = CommandParser(self)
-
-        self.running = True
+        self.running = False
 
     def start_uci(self):
+        self.running = True
+
         while self.running:
             command = input()
             self.handle_uci_commands(command)
 
     def handle_uci_commands(self, command):
-        commands = command.split(" ")
+        commands = command.split()
 
         match commands[0]:
             case "isready":
