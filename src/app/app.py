@@ -41,7 +41,9 @@ class App:
         self.move_manager = MoveManager(self)
 
         print("Tables initialized")
-        self.bitboard_manager.parse_fen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1 ")
+        self.bitboard_manager.parse_fen(
+            "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 1 "
+        )
         self.bitboard_manager.print_board()
 
         print(Rudimentary.evaluate(self))
