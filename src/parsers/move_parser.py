@@ -3,7 +3,6 @@ from src.generator.move_generator import MoveGenerator
 from src.routines.codec import Codec
 
 from src.constants.piece_constants import PIECES
-from src.constants.board_constants import COORDINATES
 
 
 class MoveParser:
@@ -15,8 +14,12 @@ class MoveParser:
         self.target_square = 0
 
     def parse(self, move_string):
-        self.parse_squares(move_string)
+        if not self.parse_squares(move_string):
+            return 0
 
+        return self.parse_moves(move_string)
+
+    def parse_moves(self, move_string):
         for move_count in range(self.moves.count):
             move = self.moves.moves[move_count]
 
@@ -28,8 +31,28 @@ class MoveParser:
         return 0
 
     def parse_squares(self, move_string):
+        if not self.check_files(move_string):
+            return False
+
+        if not self.check_ranks(move_string):
+            return False
+
         self.source_square = (ord(move_string[0]) - ord("a")) + (8 - int(move_string[1])) * 8
         self.target_square = (ord(move_string[2]) - ord("a")) + (8 - int(move_string[3])) * 8
+
+        return True
+
+    def check_files(self, move_string):
+        return self.check_file(move_string[0]) & self.check_file(move_string[2])
+
+    def check_ranks(self, move_string):
+        return self.check_rank(move_string[1]) & self.check_rank(move_string[3])
+
+    def check_file(self, file):
+        return "a" <= file <= "h"
+
+    def check_rank(self, rank):
+        return "1" <= rank <= "8"
 
     def check_valid_source_square(self, move):
         return self.source_square == Codec.get_decoded_source_square(move)

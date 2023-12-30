@@ -16,6 +16,7 @@ from src.utilities.attack import Attack
 from src.utilities.console import Console
 
 from src.parsers.move_parser import MoveParser
+from src.parsers.position_parser import PositionParser
 
 from src.generator.move_generator import MoveGenerator
 
@@ -37,17 +38,11 @@ class App:
         self.move_manager = MoveManager(self)
 
         print("Tables initialized")
+        self.bitboard_manager.parse_fen(INITIAL_BOARD)
 
-        self.bitboard_manager.parse_fen(
-            "r3k2r/pP1pqpb1/bn2pnp1/2pPN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq c6 0 1 "
-        )
+        # move = self.move_parser.parse("e2e4")
+        # self.move_manager.make_move(move, MOVE_TYPES["all"])
+
+        self.position_parser = PositionParser(self)
+        self.position_parser.parse("position startpos moves e2e4 e7e5 g1f3 e8e7 e1e2")
         self.bitboard_manager.print_board()
-
-        self.move_parser = MoveParser(self)
-        move = self.move_parser.parse("b7a8b")
-
-        if move:
-            self.move_manager.make_move(move, MOVE_TYPES["all"])
-            self.bitboard_manager.print_board()
-        else:
-            print("illegal move")
