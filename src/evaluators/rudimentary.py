@@ -1,7 +1,9 @@
 from src.utilities.bit import Bit
 
-from src.constants.piece_constants import SIDES, MATERIAL_SCORE
+from src.constants.piece_constants import SIDES
 from src.constants.board_constants import NUMBER_OF_BITBOARDS
+
+from src.constants.evaluation_constants import MATERIAL_SCORES
 
 
 class Rudimentary:
@@ -17,7 +19,7 @@ class Rudimentary:
                 square = Bit.get_least_significant_first_bit(bitboard)
 
                 # Get the current material's score
-                score += MATERIAL_SCORE[piece]
+                score += MATERIAL_SCORES[piece]
 
                 # Decrement least significant first bit
                 bitboard = Bit.pop_bit(bitboard, square)
