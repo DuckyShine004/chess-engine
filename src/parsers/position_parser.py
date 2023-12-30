@@ -7,46 +7,47 @@ from src.constants.parser_constants import INITIAL_BOARD
 class PositionParser:
     def __init__(self, app):
         self.app = app
+        self.index = 9
 
     def parse(self, command):
-        # We start reading the command string at index 9
-        index = 9
+        self.parse_start_command(command)
+        self.parse_moves_command(command)
 
-        # parse startpos command
-        if "startpos" in command[index:]:
-            # Initialize chess board with start position
+    def parse_start_command(self, command):
+        if "startpos" in command:
             self.app.bitboard_manager.parse_fen(INITIAL_BOARD)
+            return
 
-        # Otherwise
-        else:
-            # Make sure that the fen command is available within the command string
-            index = command.find("fen")
+        self.parse_fen_command(command)
 
-            if index == -1:
-                self.app.bitboard_manager.parse_fen(INITIAL_BOARD)
+    def parse_fen_command(self, command):
+        self.index = command.find("fen")
 
-            # If we did find the fen command, then we shift the pointer again to get the fen string
-            else:
-                index += 4
+        if self.index == -1:
+            self.app.bitboard_manager.parse_fen(INITIAL_BOARD)
+            return
 
-                # Initialize position from fen string
-                self.app.bitboard_manager.parse_fen(command[index:])
+        self.index += 4
+        fen_string = command[self.index :]
 
-        # Parse moves after position
-        index = command.find("moves")
+        self.app.bitboard_manager.parse_fen(fen_string)
 
-        if index != -1:
-            index += 6
+    def parse_moves_command(self, command):
+        self.index = command.find("moves")
 
-            # Parse the move strings
-            move_strings = command[index:].split(" ")
+        if self.index == -1:
+            return
 
-            for move_string in move_strings:
-                move_parser = MoveParser(self.app)
-                move = move_parser.parse(move_string)
+        move_strings = command[self.index :].split(" ")
 
-                # If the current move is not valid, then we skip it
-                if not move:
-                    continue
+        self.parse_move_strings(move_strings)
 
-                self.app.move_manager.make_move(move, MOVE_TYPES["all"])
+    def parse_move_strings(self, move_strings):
+        for move_string in move_strings:
+            move_parser = MoveParser(self.app)
+            move = move_parser.parse(move_string)
+
+            if not move:
+                continue
+
+            self.app.move_manager.make_move(move, MOVE_TYPES["all"])
