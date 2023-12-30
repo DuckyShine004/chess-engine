@@ -13,6 +13,8 @@ class CommandParser:
         self.parse_start_command(command)
         self.parse_moves_command(command)
 
+        self.app.bitboard_manager.print_board()
+
     def parse_go_command(self, command):
         index = command.find("depth")
 

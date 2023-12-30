@@ -38,10 +38,26 @@ class App:
         self.move_manager = MoveManager(self)
 
         print("Tables initialized")
-        self.bitboard_manager.parse_fen(INITIAL_BOARD)
-
-        # move = self.move_parser.parse("e2e4")
-        # self.move_manager.make_move(move, MOVE_TYPES["all"])
 
         self.command_parser = CommandParser(self)
-        self.command_parser.parse_go_command("go depth 122341234")
+
+        self.running = True
+
+    def start_uci(self):
+        while self.running:
+            command = input()
+            commands = command.split(" ")
+
+            match commands[0]:
+                case "isready":
+                    print("readyok")
+                case "ucinewgame":
+                    self.command_parser.parse_position_command("position startpos")
+                case "position":
+                    self.command_parser.parse_position_command(command)
+                case "go":
+                    self.command_parser.parse_go_command(command)
+                case "quit":
+                    break
+                case _:
+                    print("command is not recognized")
