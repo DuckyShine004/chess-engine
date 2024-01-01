@@ -1,4 +1,4 @@
-import getch
+import getch, chess
 from src.data.states.board_states import BoardStates
 
 from managers.table_manager import TableManager
@@ -13,6 +13,7 @@ from src.routines.codec import Codec
 from src.perft.perft import Perft
 
 from src.evaluators.rudimentary import Rudimentary
+from src.evaluators.negamax import Negamax
 
 from src.utilities.bit import Bit
 from src.utilities.attack import Attack
@@ -41,12 +42,8 @@ class App:
         self.move_manager = MoveManager(self)
 
         print("Tables initialized")
-        self.bitboard_manager.parse_fen(
-            "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 1 "
-        )
+        self.bitboard_manager.parse_fen(INITIAL_BOARD)
         self.bitboard_manager.print_board()
-
-        print(Rudimentary.evaluate(self))
 
         self.command_parser = CommandParser(self)
         self.running = False

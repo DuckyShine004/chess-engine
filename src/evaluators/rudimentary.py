@@ -16,7 +16,7 @@ from src.constants.evaluation_constants import (
 
 class Rudimentary:
     @staticmethod
-    def evaluate(app):
+    def get_evaluation(app):
         score = 0
 
         for piece in range(NUMBER_OF_BITBOARDS):
