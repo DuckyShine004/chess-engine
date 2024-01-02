@@ -95,7 +95,7 @@ class Console:
         print(
             f"{COORDINATES[move_parameters.source_square]}"
             f"{COORDINATES[move_parameters.target_square]}"
-            f"{PROMOTION_PIECES.get(move_parameters.promoted_piece, ' ')}"
+            f"{PROMOTION_PIECES.get(move_parameters.promotion_piece, ' ')}"
         )
 
     @staticmethod

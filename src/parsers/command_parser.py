@@ -1,5 +1,7 @@
 from src.parsers.move_parser import MoveParser
 
+from src.evaluators.negamax import Negamax
+
 from src.constants.board_constants import MOVE_TYPES
 from src.constants.parser_constants import INITIAL_BOARD
 
@@ -23,6 +25,8 @@ class CommandParser:
 
         index += 6
         depth = int(command[index:])
+
+        Negamax.search(self.app, depth)
 
     def parse_start_command(self, command):
         if "startpos" in command:
